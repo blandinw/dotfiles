@@ -1,0 +1,80 @@
+#!/usr/bin/env ruby
+
+require 'fileutils'
+include FileUtils
+
+BUNDLE_DIR = File.join(File.expand_path('..', __FILE__), 'bundle')
+BUNDLE_FILE = File.join(File.expand_path('..', __FILE__), 'bndls.txt')
+
+def github(line)
+  re = /\/([^\/]*)$/
+  name = line[re, 1]
+  url = line
+
+  path = File.join(BUNDLE_DIR, name)
+
+  # pull if repo already exists
+  if File.exists?(path)
+    puts "Pulling from #{url}.."
+    cd(path) {`git pull`} 
+    return
+  end
+
+  # url must start with git://
+  unless url =~ /^git/
+    url.gsub!(/^http/, 'git')
+  end
+
+  puts "Cloning from #{url}.."
+  `git clone #{url} #{path}`
+end
+
+def vim(line)
+  unless line =~ /#/ 
+    puts "FATAL: No name found in #{line}!"
+    return
+  end
+
+  re = /^(.*)#(.*)#(.*)$/
+  url  = line[re, 1]
+  name = line[re, 2]
+  type = line[re, 3]
+
+  path = File.join(BUNDLE_DIR, name, type, name + ".vim")
+  unless File.exists? path
+    puts "Downloading #{url}.."
+    `curl -s -o #{path} --create-dirs #{url}` 
+  end
+end
+
+def install(line)
+  methods = {
+    'github' => /github\.com/,
+    'vim' => /download_script/
+  }
+
+  # call corresponding method according to url pattern
+  methods.each do |meth, regex|
+    if regex =~ line
+      return send meth, line
+    end
+  end
+end
+
+# Fetch and install
+File.open(BUNDLE_FILE, "r") do |infile|
+  while (line = infile.gets)
+    install line.strip
+  end
+end
+
+# Build extensions
+pattern = File.join(BUNDLE_DIR, "*", "ruby", "*", "extconf.rb")
+Dir.glob(pattern).each do |path|
+  path.slice!(/\/([^\/]*)$/)
+  cd(path) do
+    puts "Building #{path}..."
+    `/usr/bin/ruby extconf.rb`
+    `make`
+  end
+end

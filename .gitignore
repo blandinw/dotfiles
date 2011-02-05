@@ -1,0 +1,7 @@
+.VimballRecord
+*.swp
+.DS_Store
+bash/local
+*.hg
+.netrwhist
+vim/bundle/*

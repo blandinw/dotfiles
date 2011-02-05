@@ -1,0 +1,19 @@
+"gui
+if has('gui_macvim')
+    " Fullscreen takes up entire screen
+    set fuoptions=maxhorz,maxvert
+
+    set guifont=Monaco:h11
+    " color peaksea
+
+    " Command-Return for fullscreen
+    macmenu Window.Toggle\ Full\ Screen\ Mode key=<D-CR>
+    map <D-F> :Ack<space>
+
+    " Start without the toolbar
+    set guioptions=aAce
+
+    " Default gui color scheme
+    color ir_black
+endif
+

@@ -1,0 +1,94 @@
+filetype off 
+call pathogen#runtime_append_all_bundles()
+call pathogen#helptags()
+set nocp
+
+"appearance
+syntax on
+set number
+set title
+set t_Co=256
+colorscheme xoria256
+
+"indent
+set autoindent smartindent
+set shiftwidth=4 softtabstop=4
+set expandtab
+
+"search
+set ignorecase "Ignore case when searching
+set smartcase
+set hlsearch "Highlight search things
+set incsearch "Make search act like search in modern browsers
+set magic "Set magic on, for regular expressions
+
+"wrap
+set nowrap
+
+"sets how many lines of history VIM has to remember
+set history=300
+
+"autocompletion in menu
+set wildmenu
+
+"backups
+set backup backupext=~ backupdir=~/Backups/vim_backups/
+
+"statusline
+set laststatus=2
+set statusline=\ %F%m%r%h\ %w\ \ Line:\ %l/%L:%c 
+
+set hidden "no need to write to disk when closing file
+
+let g:CommandTMaxHeight = 20
+set wildignore+=*.o,*.obj,.git,*.pyc,app/cache/*,app/logs/*
+map <Leader>p :CommandT<CR>
+
+"switch to last buffer
+map <leader>` :e#<CR> 
+
+"NERDTree
+map <Leader>n :silent :NERDTreeToggle<CR>
+
+"Yankring
+map <Leader>y :silent :YRShow<CR>
+
+"filetype
+filetype on
+filetype plugin on
+filetype indent on
+
+"autocmd
+au FileType javascript set omnifunc=javascriptcomplete#CompleteJS
+au FileType html set omnifunc=htmlcomplete#CompleteTags
+au FileType css set omnifunc=csscomplete#CompleteCSS
+
+"python
+au FileType python set omnifunc=pythoncomplete#Complete
+au FileType python set ft=python.django " For SnipMate
+
+"ruby
+au BufRead,BufNewFile {Gemfile,Rakefile,Vagrantfile,Thorfile,config.ru} set ft=ruby
+au FileType ruby set shiftwidth=2
+au FileType ruby set softtabstop=2
+
+"javascript
+au FileType javascript set shiftwidth=2
+au FileType javascript set softtabstop=2
+
+"coffee
+au BufNewFile,BufRead *.coffee set shiftwidth=2
+au BufNewFile,BufRead *.coffee set softtabstop=2
+
+"nginx
+au BufNewFile,BufRead *.nginx set ft=nginx
+
+"unmap arrow keys
+nmap <right> <nop>
+nmap <left> <nop>
+nmap <up> <nop>
+nmap <down> <nop>
+imap <right> <nop>
+imap <left> <nop>
+imap <up> <nop>
+imap <down> <nop>
