@@ -1,0 +1,3 @@
+--ignore-dir=cache
+--ignore-dir=vendor
+--ignore-dir=logs

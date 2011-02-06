@@ -7,7 +7,7 @@ BUNDLE_DIR = File.join(File.expand_path('..', __FILE__), 'bundle')
 BUNDLE_FILE = File.join(File.expand_path('..', __FILE__), 'bndls.txt')
 
 def github(line)
-  re = /\/([^\/]*)$/
+  re = %r'/([^/]*)$'
   name = line[re, 1]
   url = line
 
@@ -71,7 +71,7 @@ end
 # Build extensions
 pattern = File.join(BUNDLE_DIR, "*", "ruby", "*", "extconf.rb")
 Dir.glob(pattern).each do |path|
-  path.slice!(/\/([^\/]*)$/)
+  path.slice!(%r'/([^/]*)$')
   cd(path) do
     puts "Building #{path}..."
     `/usr/bin/ruby extconf.rb`
