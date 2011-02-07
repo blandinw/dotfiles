@@ -49,6 +49,7 @@ map <leader>` :e#<CR>
 
 "NERDTree
 map <Leader>n :silent :NERDTreeToggle<CR>
+let NERDTreeIgnore=['cache', 'logs', 'vendor']
 
 "Yankring
 map <Leader>y :silent :YRShow<CR>
