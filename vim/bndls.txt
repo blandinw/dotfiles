@@ -9,7 +9,7 @@ git://github.com/tpope/vim-surround.git
 git://github.com/wincent/Command-T.git
 git://github.com/tpope/vim-vividchalk.git
 git://github.com/Raimondi/delimitMate.git
-http://www.vim.org/scripts/download_script.php?src_id=9299#endwise#plugin
+git://github.com/tpope/vim-endwise.git
 http://www.vim.org/scripts/download_script.php?src_id=12917#xoria256#colors
 http://www.vim.org/scripts/download_script.php?src_id=11576#zenburn#colors
 http://www.vim.org/scripts/download_script.php?src_id=12309#peaksea#colors
