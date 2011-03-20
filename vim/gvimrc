@@ -14,6 +14,7 @@ if has('gui_macvim')
     set guioptions=aAce
 
     " Default gui color scheme
-    color ir_black
+    " color ir_black
+    color dawn
 endif
 

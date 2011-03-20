@@ -1,3 +1,5 @@
+#!/usr/bin/env bash
+
 #basics
 export PS1='\n\[\033[0;35m\]\u@\h\[\033[00m\]:\w \n→ '
 export EDITOR='mvim -f'
@@ -16,7 +18,7 @@ export RUBYOPT='rubygems'
 #rvm
 [[ -s "$HOME/.rvm/scripts/rvm" ]] && source "$HOME/.rvm/scripts/rvm"
 
-PATH="$HOME/bin:/usr/local/bin:$PATH"
+PATH="$HOME/bin:/usr/local/bin:/usr/local/sbin:$PATH"
 
 export PATH
 export PYTHONPATH

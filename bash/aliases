@@ -1,3 +1,5 @@
+#!/usr/bin/env bash
+
 alias ls='ls -G'
 alias ll='ls -l'
 alias blt="vim $HOME/dotfiles/bash; source $HOME/dotfiles/bashrc"
@@ -14,6 +16,15 @@ alias gg='git grep'
 alias gl='git log'
 alias gp='git push'
 
+#php
+alias sf='php symfony'
+alias sf2='php app/console'
+
+#ruby/rails
+alias ss='script/server'
+alias sg='shotgun --host 0.0.0.0 config.ru'
+alias gotogem="cd $GEM_HOME/gems"
+
 #python
 alias p='python'
 alias dj='python manage.py'
@@ -22,12 +33,6 @@ alias djsmi='python manage.py schemamigration --initial'
 alias djm='python manage.py migrate'
 alias djmf='python manage.py migrate --fake'
 alias djrs='python manage.py runserver'
-
-
-#ruby/rails
-alias ss='script/server'
-alias sg='shotgun --host 0.0.0.0 config.ru'
-alias gotogem="cd $GEM_HOME/gems"
 
 #java
 alias javassert='java -enableassertions'

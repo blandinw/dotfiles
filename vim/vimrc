@@ -1,4 +1,4 @@
-filetype off 
+filetype off
 call pathogen#runtime_append_all_bundles()
 call pathogen#helptags()
 set nocp
@@ -41,7 +41,8 @@ set statusline=\ %F%m%r%h\ %w\ \ Line:\ %l/%L:%c
 set hidden "no need to write to disk when closing file
 
 let g:CommandTMaxHeight = 20
-set wildignore+=*.o,*.obj,.git,*.pyc,app/cache/*,app/logs/*
+set wildignore+=*.o,*.obj,.git,*.pyc
+set wildignore+=app/cache/*,app/logs/* "symfony2
 map <Leader>p :CommandT<CR>
 
 "switch to last buffer
@@ -60,22 +61,26 @@ filetype plugin on
 filetype indent on
 
 "autocmd
-au FileType javascript set omnifunc=javascriptcomplete#CompleteJS
 au FileType html set omnifunc=htmlcomplete#CompleteTags
 au FileType css set omnifunc=csscomplete#CompleteCSS
 
 "python
 au FileType python set omnifunc=pythoncomplete#Complete
-au FileType python set ft=python.django " For SnipMate
 
 "ruby
 au BufRead,BufNewFile {Gemfile,Rakefile,Vagrantfile,Thorfile,config.ru} set ft=ruby
 au FileType ruby set shiftwidth=2
 au FileType ruby set softtabstop=2
+au FileType eruby set shiftwidth=2
+au FileType eruby set softtabstop=2
+
+"jinja
+au BufNewFile,BufRead {*twig*,*jinja*} set ft=htmljinja
 
 "javascript
-au FileType javascript set shiftwidth=2
-au FileType javascript set softtabstop=2
+au FileType javascript set shiftwidth=4
+au FileType javascript set softtabstop=4
+au FileType javascript set omnifunc=javascriptcomplete#CompleteJS
 
 "coffee
 au BufNewFile,BufRead *.coffee set shiftwidth=2
@@ -84,12 +89,22 @@ au BufNewFile,BufRead *.coffee set softtabstop=2
 "nginx
 au BufNewFile,BufRead *.nginx set ft=nginx
 
+"php
+au FileType php set shiftwidth=4
+au FileType php set tabstop=4
+
+"prolog
+function! PrologRun ()
+    silent! !osascript -e 'tell application "terminal" to do script "clear;cd %:p:h;gprolog --entry-goal \"consult(%:r)\""'
+    silent! !osascript -e 'tell application "terminal" to activate'
+endfunction
+command -nargs=* PrologRun call PrologRun()
+
 "unmap arrow keys
 nmap <right> <nop>
 nmap <left> <nop>
 nmap <up> <nop>
 nmap <down> <nop>
-imap <right> <nop>
 imap <left> <nop>
 imap <up> <nop>
 imap <down> <nop>
