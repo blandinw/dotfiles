@@ -1,22 +1,26 @@
 #!/usr/bin/env sh
 
+echo "Invading ..."
+
+if [ ! -d "$HOME/backups" ]; then
+    mkdir "$HOME/backups"
+fi
+
 cd
-mv .bashrc .bashrc.old
-mv .zshrc .zshrc.old
-mv .vimrc .vimrc.old
-mv .ackrc .ackrc.old
-mv .gvimrc .gvimrc.old
-mv .emacs .emacs.old
-mv .emacs.d .emacs.d.old
+echo "Backuping files to ~/backups ..."
+mv .bashrc ~/backups/.bashrc.`date +%s`
+mv .vimrc ~/backups/.vimrc.`date +%s`
+mv .vim ~/backups/.vim.`date +%s`
+mv .ackrc ~/backups/.ackrc.`date +%s`
+mv .gvimrc ~/backups/.gvimrc.`date +%s`
+mv .emacs.d ~/backups/.emacs.d.`date +%s`
 
 ln -s dotfiles/bashrc .bashrc
-ln -s dotfiles/zshrc .zshrc
 ln -s dotfiles/vim .vim
 ln -s dotfiles/vim/vimrc .vimrc
 ln -s dotfiles/vim/gvimrc .gvimrc
 ln -s dotfiles/ackrc .ackrc
-ln -s dotfiles/emacs/emacs.el .emacs
 ln -s dotfiles/emacs .emacs.d
 
 touch dotfiles/bash/local
-cd -
+echo "Done !"

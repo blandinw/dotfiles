@@ -36,7 +36,7 @@ set backup backupext=~ backupdir=~/Backups/vim_backups/
 
 "statusline
 set laststatus=2
-set statusline=\ %F%m%r%h\ %w\ \ Line:\ %l/%L:%c 
+set statusline=\ %F%m%r%h\ %w\ \ Line:\ %l/%L:%c
 
 set hidden "no need to write to disk when closing file
 
@@ -46,7 +46,7 @@ set wildignore+=app/cache/*,app/logs/* "symfony2
 map <Leader>p :CommandT<CR>
 
 "switch to last buffer
-map <leader>` :e#<CR> 
+map <leader>` :e#<CR>
 
 "NERDTree
 map <Leader>n :silent :NERDTreeToggle<CR>
