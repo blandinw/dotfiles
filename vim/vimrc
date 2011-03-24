@@ -32,7 +32,7 @@ set history=300
 set wildmenu
 
 "backups
-set backup backupext=~ backupdir=~/Backups/vim_backups/
+set backup backupext=~ backupdir=~/backups/vim_backups/
 
 "statusline
 set laststatus=2

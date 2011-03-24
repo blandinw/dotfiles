@@ -2,9 +2,8 @@
 
 echo "Invading ..."
 
-if [ ! -d "$HOME/backups" ]; then
-    mkdir "$HOME/backups"
-fi
+[ ! -d "$HOME/backups" ] && mkdir "$HOME/backups"
+[ ! -d "$HOME/backups/vim_backups" ] && mkdir "$HOME/backups/vim_backups"
 
 cd
 echo "Backuping files to ~/backups ..."
