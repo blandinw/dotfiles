@@ -3,7 +3,7 @@ if has('gui_macvim')
     " Fullscreen takes up entire screen
     set fuoptions=maxhorz,maxvert
 
-    set guifont=Monaco:h11
+    set guifont=Consolas:h13
     " color peaksea
 
     " Command-Return for fullscreen
@@ -15,6 +15,6 @@ if has('gui_macvim')
 
     " Default gui color scheme
     " color ir_black
-    color dawn
+    color slate2
 endif
 

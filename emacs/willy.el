@@ -17,6 +17,11 @@
 (require 'textmate)
 (textmate-mode)
 
+;; zencoding
+(add-to-list 'load-path "~/.emacs.d/vendor/zencoding")
+(require 'zencoding-mode)
+(add-hook 'sgml-mode-hook 'zencoding-mode) ;; Auto-start on any markup modes
+
 ;; aspell
 (setq ispell-program-name "aspell")
 (setq ispell-list-command "list")
