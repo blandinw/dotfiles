@@ -1,0 +1,3 @@
+source ~/.bashrc
+exec $USERWM
+
