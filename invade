@@ -6,13 +6,15 @@ echo "Invading ..."
 [ ! -d "$HOME/backups/vim_backups" ] && mkdir "$HOME/backups/vim_backups"
 
 cd
-echo "Backuping files to ~/backups ..."
-mv .bashrc ~/backups/.bashrc.`date +%s`
-mv .vimrc ~/backups/.vimrc.`date +%s`
-mv .vim ~/backups/.vim.`date +%s`
-mv .ackrc ~/backups/.ackrc.`date +%s`
-mv .gvimrc ~/backups/.gvimrc.`date +%s`
-mv .emacs.d ~/backups/.emacs.d.`date +%s`
+echo "Moving existing files to ~/backups ..."
+mv .bashrc ~/backups/bashrc.`date +%s`
+mv .vimrc ~/backups/vimrc.`date +%s`
+mv .vim ~/backups/vim.`date +%s`
+mv .ackrc ~/backups/ackrc.`date +%s`
+mv .gvimrc ~/backups/gvimrc.`date +%s`
+mv .emacs.d ~/backups/emacs.d.`date +%s`
+mv .xinitrc ~/backups/xinitrc.`date +%s`
+mv .emacs.d ~/backups/emacs.d.`date +%s`
 
 ln -s dotfiles/bashrc .bashrc
 ln -s dotfiles/vim .vim
@@ -20,6 +22,8 @@ ln -s dotfiles/vim/vimrc .vimrc
 ln -s dotfiles/vim/gvimrc .gvimrc
 ln -s dotfiles/ackrc .ackrc
 ln -s dotfiles/emacs .emacs.d
+ln -s dotfiles/xinitrc .xinitrc
+ln -s dotfiles/Xmodmap .Xmodmap
 
 touch dotfiles/bash/local
 echo "Done !"

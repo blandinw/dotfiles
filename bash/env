@@ -20,6 +20,10 @@ export RUBYOPT='rubygems'
 
 PATH="$HOME/bin:/usr/local/bin:/usr/local/sbin:$PATH"
 
+#xmonad
+PATH="$PATH:$HOME/.cabal/bin"
+export USERWM=`which xmonad`
+
 [ -f $HOME/dotfiles/init.lua ] && export LUA_INIT="@$HOME/dotfiles/init.lua"
 
 export PATH

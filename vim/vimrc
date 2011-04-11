@@ -1,6 +1,8 @@
+"pathogen
 filetype off
 call pathogen#runtime_append_all_bundles()
 call pathogen#helptags()
+
 set nocp
 
 "appearance
@@ -40,20 +42,8 @@ set statusline=\ %F%m%r%h\ %w\ \ Line:\ %l/%L:%c
 
 set hidden "no need to write to disk when closing file
 
-let g:CommandTMaxHeight = 20
-set wildignore+=*.o,*.obj,.git,*.pyc
-set wildignore+=app/cache/*,app/logs/* "symfony2
-map <Leader>p :CommandT<CR>
-
 "switch to last buffer
 map <leader>` :e#<CR>
-
-"NERDTree
-map <Leader>n :silent :NERDTreeToggle<CR>
-let NERDTreeIgnore=['cache', 'logs', 'vendor']
-
-"Yankring
-map <Leader>y :silent :YRShow<CR>
 
 "filetype
 filetype on
@@ -86,12 +76,12 @@ au FileType javascript set omnifunc=javascriptcomplete#CompleteJS
 au BufNewFile,BufRead *.coffee set shiftwidth=2
 au BufNewFile,BufRead *.coffee set softtabstop=2
 
-"nginx
-au BufNewFile,BufRead *.nginx set ft=nginx
-
 "php
 au FileType php set shiftwidth=4
 au FileType php set tabstop=4
+
+"haskell
+au BufEnter *.hs compiler ghc
 
 "prolog
 function! PrologRun ()
@@ -108,3 +98,6 @@ nmap <down> <nop>
 imap <left> <nop>
 imap <up> <nop>
 imap <down> <nop>
+
+"load plugins configz
+runtime plugins.vim

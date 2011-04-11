@@ -10,7 +10,7 @@ git://github.com/Raimondi/delimitMate.git
 git://github.com/tpope/vim-endwise.git
 git://github.com/vim-ruby/vim-ruby.git
 git://github.com/pangloss/vim-javascript.git
-http://www.vim.org/scripts/download_script.php?src_id=12990#nginx#syntax
 git://github.com/chrismetcalf/vim-yankring.git
 git://github.com/mattn/zencoding-vim.git
 git://github.com/vim-scripts/SuperTab-continued..git
+git://github.com/lukerandall/haskellmode-vim.git
