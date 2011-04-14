@@ -10,7 +10,7 @@ syntax on
 set number
 set title
 set t_Co=256
-colorscheme slate2
+colorscheme ir_black
 
 "indent
 set autoindent smartindent
@@ -42,8 +42,9 @@ set statusline=\ %F%m%r%h\ %w\ \ Line:\ %l/%L:%c
 
 set hidden "no need to write to disk when closing file
 
-"switch to last buffer
+"neat bindings
 map <leader>` :e#<CR>
+map <C-h> :silent! let @/ = ""<CR>
 
 "filetype
 filetype on

@@ -5,7 +5,6 @@ git://github.com/tomtom/tcomment_vim.git
 git://github.com/msanders/snipmate.vim.git
 git://github.com/tpope/vim-surround.git
 git://github.com/wincent/Command-T.git
-git://github.com/tpope/vim-vividchalk.git
 git://github.com/Raimondi/delimitMate.git
 git://github.com/tpope/vim-endwise.git
 git://github.com/vim-ruby/vim-ruby.git
@@ -14,3 +13,8 @@ git://github.com/chrismetcalf/vim-yankring.git
 git://github.com/mattn/zencoding-vim.git
 git://github.com/vim-scripts/SuperTab-continued..git
 git://github.com/lukerandall/haskellmode-vim.git
+git://github.com/altercation/vim-colors-solarized.git
+git://github.com/wgibbs/vim-irblack.git
+git://github.com/kchmck/vim-coffee-script.git
+git://github.com/tpope/vim-fugitive.git
+git://github.com/rson/vim-conque.git
