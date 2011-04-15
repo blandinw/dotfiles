@@ -9,7 +9,6 @@ set nocp
 syntax on
 set number
 set title
-set t_Co=256
 colorscheme ir_black
 
 "indent
@@ -25,7 +24,7 @@ set incsearch "Make search act like search in modern browsers
 set magic "Set magic on, for regular expressions
 
 "wrap
-set nowrap
+set wrap
 
 "sets how many lines of history VIM has to remember
 set history=300
@@ -40,11 +39,14 @@ set backup backupext=~ backupdir=~/backups/vim_backups/
 set laststatus=2
 set statusline=\ %F%m%r%h\ %w\ \ Line:\ %l/%L:%c
 
+set wildignore+=*.o,*.obj,.git,*.pyc
+set wildignore+=app/cache/*,app/logs/* "symfony2
+
 set hidden "no need to write to disk when closing file
 
 "neat bindings
 map <leader>` :e#<CR>
-map <C-h> :silent! let @/ = ""<CR>
+map <C-h> :silent :let @/ = ""<CR>
 
 "filetype
 filetype on
