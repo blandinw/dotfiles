@@ -56,8 +56,8 @@ end
 
 # Fetch and install
 File.open(BUNDLE_FILE, "r") do |infile|
-  while (line = infile.gets.strip)
-    install line
+  until infile.eof?
+    install infile.gets.strip
   end
 end
 
