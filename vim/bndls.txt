@@ -12,6 +12,5 @@ git://github.com/pangloss/vim-javascript.git
 git://github.com/mattn/zencoding-vim.git
 git://github.com/vim-scripts/SuperTab-continued..git
 git://github.com/altercation/vim-colors-solarized.git
-git://github.com/wgibbs/vim-irblack.git
 git://github.com/tpope/vim-fugitive.git
 git://github.com/rson/vim-conque.git

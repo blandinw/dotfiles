@@ -4,6 +4,7 @@
 #*#
 .DS_Store
 bash/local
+vim/local.vim
 *.hg
 .netrwhist
 vim/bundle/*

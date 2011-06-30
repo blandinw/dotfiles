@@ -107,3 +107,5 @@ imap <down> <nop>
 
 "load plugins configz
 runtime plugins.vim
+
+runtime local.vim

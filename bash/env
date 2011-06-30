@@ -3,6 +3,7 @@
 #basics
 export PS1='\n\[\033[0;35m\]\u@\h\[\033[00m\]:\w \n→ '
 export EDITOR='vim'
+export TERM='xterm-256color'
 export HISTSIZE=10000
 export HISTFILE="$HOME/.histfile"
 shopt -s histappend
