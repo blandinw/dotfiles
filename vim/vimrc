@@ -96,15 +96,6 @@ function! PrologRun ()
 endfunction
 command -nargs=* PrologRun call PrologRun()
 
-"unmap arrow keys
-nmap <right> <nop>
-nmap <left> <nop>
-nmap <up> <nop>
-nmap <down> <nop>
-imap <left> <nop>
-imap <up> <nop>
-imap <down> <nop>
-
 "load plugins configz
 runtime plugins.vim
 
