@@ -41,3 +41,6 @@ alias javassert='java -enableassertions'
 alias tcpmon='java org.apache.axis.utils.tcpmon'
 alias adminclient='java org.apache.axis.client.AdminClient'
 alias javap='java -Dhttp.proxyHost=localhost -Dhttp.proxyPort=8080'
+
+#coffeescript
+alias coffeec='find . -name "*.coffee" | xargs coffee -w -c'
