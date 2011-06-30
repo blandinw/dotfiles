@@ -67,7 +67,7 @@ Dir.glob(pattern).each do |path|
   path.slice!(%r'/([^/]*)$')
   cd(path) do
     puts "Building #{path}..."
-    `/usr/bin/ruby extconf.rb`
+    `ruby extconf.rb`
     `make`
   end
 end
