@@ -7,13 +7,14 @@ map <Leader>b :CommandTBuffer<CR>
 map <Leader>n :silent :NERDTreeToggle<CR>
 let NERDTreeIgnore=['^cache$', '^logs$', '\~$']
 
-" Yankring
-map <Leader>y :silent :YRShow<CR>
-
 " fugitive
 map <Leader>gs :silent :Gstatus<CR>
 map <Leader>gc :silent :Gcommit<CR>
 
-" Haskellmode
-let g:haddock_browser = "open"
-let g:haddock_browser_callformat = "%s %s"
+" custom
+let curr=$PWD
+if (curr =~ 'chouquette')
+    let NERDTreeIgnore+=['\.js$']
+    set wildignore+=*.js
+endif
+
