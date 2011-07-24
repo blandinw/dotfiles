@@ -12,15 +12,12 @@ mv .vimrc ~/backups/vimrc.`date +%s`
 mv .vim ~/backups/vim.`date +%s`
 mv .ackrc ~/backups/ackrc.`date +%s`
 mv .gvimrc ~/backups/gvimrc.`date +%s`
-mv .emacs.d ~/backups/emacs.d.`date +%s`
-mv .emacs.d ~/backups/emacs.d.`date +%s`
 
 ln -s dotfiles/bashrc .bashrc
 ln -s dotfiles/vim .vim
 ln -s dotfiles/vim/vimrc .vimrc
 ln -s dotfiles/vim/gvimrc .gvimrc
 ln -s dotfiles/ackrc .ackrc
-ln -s dotfiles/emacs .emacs.d
 
 touch dotfiles/bash/local
 echo "Done !"
