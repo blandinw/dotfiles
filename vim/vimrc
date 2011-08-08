@@ -9,7 +9,7 @@ set nocp
 syntax on
 set number
 set title
-colorscheme ir_black
+" colorscheme ir_black
 
 "indent
 set autoindent smartindent
@@ -88,13 +88,6 @@ au FileType php set tabstop=4
 
 "haskell
 au BufEnter *.hs compiler ghc
-
-"prolog
-function! PrologRun ()
-    silent! !osascript -e 'tell application "terminal" to do script "clear;cd %:p:h;gprolog --entry-goal \"consult(%:r)\""'
-    silent! !osascript -e 'tell application "terminal" to activate'
-endfunction
-command -nargs=* PrologRun call PrologRun()
 
 "load plugins configz
 runtime plugins.vim

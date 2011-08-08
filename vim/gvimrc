@@ -14,7 +14,7 @@ if has('gui_macvim')
     " Start without the toolbar
     set guioptions=aAce
 
-    set bg=dark
+    set bg=light
     color solarized
 endif
 
