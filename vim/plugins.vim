@@ -17,4 +17,8 @@ if (curr =~ 'chouquette')
     let NERDTreeIgnore+=['\.js$']
     set wildignore+=*.js
 endif
+if (curr =~ 'twitter_oliv')
+    let NERDTreeIgnore+=['\.js$']
+    set wildignore+=*.js
+endif
 

@@ -2,7 +2,7 @@
 if has('gui_macvim')
     " Fullscreen takes up entire screen
     set fuoptions=maxhorz,maxvert
-    set guifont=Inconsolata:h13
+    set guifont=Monaco:h11
 
     " Command-Return for fullscreen
     macmenu Window.Toggle\ Full\ Screen\ Mode key=<D-CR>
@@ -13,6 +13,9 @@ if has('gui_macvim')
 
     " Start without the toolbar
     set guioptions=aAce
+
+    " No blink
+    set gcr=n:blinkon0
 
     set bg=light
     color solarized

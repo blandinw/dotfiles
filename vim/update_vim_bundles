@@ -48,6 +48,11 @@ $methods = {
 }
 
 def install(line)
+  line = line.strip
+  if line.empty? or line[0] == "#"
+    return
+  end
+
   # call corresponding method according to url pattern
   $methods.each do |meth, regex|
     regex =~ line and return send meth, line
@@ -57,7 +62,7 @@ end
 # Fetch and install
 File.open(BUNDLE_FILE, "r") do |infile|
   until infile.eof?
-    install infile.gets.strip
+    install infile.gets
   end
 end
 

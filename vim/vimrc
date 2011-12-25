@@ -1,95 +1,94 @@
-"pathogen
+" pathogen
 filetype off
 call pathogen#runtime_append_all_bundles()
 call pathogen#helptags()
 
 set nocp
 
-"appearance
+" appearance
 syntax on
 set number
 set title
-" colorscheme ir_black
 
-"indent
+" indent
 set autoindent smartindent
-set shiftwidth=4 softtabstop=4
-set expandtab
+set sw=4  " number of spaces inserted when using >> or <<
+set sts=4 " number of spaces inserted when pressing Tab
+set ts=8  " _displayed_ width of a Tab character
+set expandtab " insert spaces instead of tabs
 
-"search
-set ignorecase "Ignore case when searching
+" search
+set ignorecase " Ignore case when searching
 set smartcase
-set hlsearch "Highlight search things
-set incsearch "Make search act like search in modern browsers
-set magic "Set magic on, for regular expressions
+set hlsearch " Highlight search things
+set incsearch " Make search act like search in modern browsers
+set magic " Set magic on, for regular expressions
 
-"wrap
+" wrap
 set wrap
 
-"sets how many lines of history VIM has to remember
+" sets how many lines of history VIM has to remember
 set history=300
 
-"autocompletion in menu
+" autocompletion in menu
 set wildmenu
 set wildignore+=*.o,*.obj,.git,*.pyc
-set wildignore+=app/cache/*,app/logs/* "symfony2
+set wildignore+=app/cache/*,app/logs/* " symfony2
 
-"backups
+" backups
 set backup backupext=~ backupdir=~/backups/vim_backups/
 
-"statusline
+" statusline
 set laststatus=2
 set statusline=\ %F%m%r%h\ %w\ \ Line:\ %l/%L:%c
 
-set hidden "no need to write to disk when closing file
+set hidden " no need to write to disk when closing file
 
-"neat bindings
+" neat bindings
 map <leader>` :e#<CR>
 map <C-h> :silent :let @/ = ""<CR>
 
-"filetype
+" filetype
 filetype on
 filetype plugin on
 filetype indent on
 
-"ruby
+" ruby
 au BufRead,BufNewFile {Gemfile,Rakefile,Vagrantfile,Thorfile,config.ru} set ft=ruby
-au FileType ruby set shiftwidth=2
-au FileType ruby set softtabstop=2
-au FileType eruby set shiftwidth=2
-au FileType eruby set softtabstop=2
+au FileType ruby set sw=2 sts=2
+au FileType eruby set sw=2 sts=2
 
-"python
+" python
 au FileType python set omnifunc=pythoncomplete#Complete
 
-"html
+" html
 au FileType html set omnifunc=htmlcomplete#CompleteTags sw=2 sts=2
 
-"css
+" css
 au FileType css set omnifunc=csscomplete#CompleteCSS
 
-"jinja
+" jinja
 au BufNewFile,BufRead {*twig*,*jinja*} set ft=htmljinja
 
-"javascript
-au FileType javascript set shiftwidth=4
-au FileType javascript set softtabstop=4
+" javascript
+au FileType javascript set sw=2 sts=2
 au FileType javascript set omnifunc=javascriptcomplete#CompleteJS
 au BufNewFile,BufRead *.ejs set ft=html
 au BufNewFile,BufRead *.jst set ft=html
 
-"coffee
-au BufNewFile,BufRead *.coffee set shiftwidth=2
-au BufNewFile,BufRead *.coffee set softtabstop=2
+" coffee
+au BufNewFile,BufRead *.coffee set sw=2 sts=2
 
-"php
-au FileType php set shiftwidth=4
-au FileType php set tabstop=4
+" php
+au FileType php set sw=2 sts=2
 
-"haskell
+" java
+au FileType java set sw=2 sts=2
+
+" haskell
 au BufEnter *.hs compiler ghc
 
-"load plugins configz
+" load plugin-specific configz
 runtime plugins.vim
 
 runtime local.vim

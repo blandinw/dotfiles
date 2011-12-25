@@ -8,10 +8,8 @@ export HISTSIZE=10000
 export HISTFILE="$HOME/.histfile"
 shopt -s histappend
 
-#python/django
-PATH="${PATH}:/Library/Frameworks/Python.framework/Versions/2.6/bin"
-PYTHONPATH='/Library/Python/2.6/site-packages/'
-# /usr/local/lib/python
+#python
+PATH="/usr/local/share/python:${PATH}"
 
 #ruby
 export RUBYOPT='rubygems'
