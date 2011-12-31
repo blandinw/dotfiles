@@ -26,6 +26,7 @@ set magic " Set magic on, for regular expressions
 
 " wrap
 set wrap
+set scrolloff=10
 
 " sets how many lines of history VIM has to remember
 set history=300
@@ -83,10 +84,14 @@ au BufNewFile,BufRead *.coffee set sw=2 sts=2
 au FileType php set sw=2 sts=2
 
 " java
-au FileType java set sw=2 sts=2
+au FileType java set sw=4 sts=4
 
 " haskell
 au BufEnter *.hs compiler ghc
+
+" markdown
+au FileType * set scrolloff=10
+au FileType markdown set scrolloff=999
 
 " load plugin-specific configz
 runtime plugins.vim
