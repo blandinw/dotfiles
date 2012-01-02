@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+set -o vi
 
 #basics
 export PS1='\n\[\033[0;35m\]\u@\h\[\033[00m\]:\w \n→ '
