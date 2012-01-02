@@ -15,9 +15,6 @@ git://github.com/altercation/vim-colors-solarized.git
 git://github.com/mattn/zencoding-vim.git
 git://github.com/tpope/vim-ragtag.git
 
-# java
-git://github.com/chaquotay/ftl-vim-syntax.git
-
 # js
 git://github.com/kchmck/vim-coffee-script.git
 git://github.com/pangloss/vim-javascript.git
