@@ -1,14 +1,14 @@
-# FIXME clean this mess
+# utils
 git://github.com/scrooloose/nerdtree.git
 git://github.com/tomtom/tcomment_vim.git
 git://github.com/msanders/snipmate.vim.git
 git://github.com/tpope/vim-surround.git
 git://github.com/wincent/Command-T.git
-git://github.com/Raimondi/delimitMate.git
 git://github.com/vim-scripts/SuperTab-continued..git
-git://github.com/juvenn/mustache.vim.git
+git://github.com/Raimondi/delimitMate.git
+git://github.com/mileszs/ack.vim.git
 
-# color
+# colors
 git://github.com/altercation/vim-colors-solarized.git
 
 # html

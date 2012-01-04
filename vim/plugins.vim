@@ -7,14 +7,3 @@ map <Leader>b :CommandTBuffer<CR>
 map <Leader>n :silent :NERDTreeToggle<CR>
 let NERDTreeIgnore=['^cache$', '^logs$', '\~$']
 
-" custom
-let curr=$PWD
-if (curr =~ 'chouquette')
-    let NERDTreeIgnore+=['\.js$']
-    set wildignore+=*.js
-endif
-if (curr =~ 'twitter_oliv')
-    let NERDTreeIgnore+=['\.js$']
-    set wildignore+=*.js
-endif
-

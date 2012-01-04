@@ -1,3 +1,4 @@
 --ignore-dir=cache
 --ignore-dir=vendor
 --ignore-dir=logs
+--type-add=coffee=.coffee
