@@ -17,13 +17,13 @@ if has('gui_macvim')
 
     " No blinking cursor
     au FileType * set number
-                    \ guifont=Monaco:h11
+                    \ guifont=Inconsolata:h13
                     \ gcr=n:block-blinkon0,i:ver15-blinkon0
     au FileType markdown set nonumber
-                    \ guifont=Monaco:h11
+                    \ guifont=Inconsolata:h13
                     \ gcr=n:block-blinkon0,i:hor8-blinkon0
 
-    set bg=light
+    set bg=dark
     color solarized
 endif
 

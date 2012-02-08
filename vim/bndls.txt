@@ -27,8 +27,5 @@ git://github.com/tpope/vim-rails.git
 git://github.com/vim-ruby/vim-ruby.git
 git://github.com/tpope/vim-endwise.git
 
-# lisp
-git://github.com/vim-scripts/slimv.vim.git
-
 # markdown
 git://github.com/tpope/vim-markdown.git
