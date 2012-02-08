@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-alias ls='ls -G'
+alias ls='ls -p -G'
 alias ll='ls -l'
 alias blt="vim $HOME/dotfiles/bash; source $HOME/dotfiles/bashrc"
 alias t100='tail -n100'
