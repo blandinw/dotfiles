@@ -1,11 +1,27 @@
+# vim
 .VimballRecord
 *.swp
 *~
-#*#
-.DS_Store
+.netrwhist
+*#
+vim/bundle/*
+
+# version control
+*.hg
+.svn
+
+# local files
 bash/local
 vim/local.vim
-*.hg
-.netrwhist
-vim/bundle/*
-emacs/vendor/slime/*
+/mutt/localrc
+
+# misc
+.DS_Store
+caches
+*.pyc
+*offlineimap*
+*.o
+*.hi
+*.errors
+*i386-darwin
+

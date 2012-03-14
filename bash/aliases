@@ -1,14 +1,15 @@
 #!/usr/bin/env bash
 
+# general
 alias ls='ls -p -G'
 alias ll='ls -l'
 alias blt="vim $HOME/dotfiles/bash; source $HOME/dotfiles/bashrc"
-alias t100='tail -n100'
+alias t200='tail -n200'
 
-#screen
-alias scrv="screen -S screenvim -t vim"
+# mail
+alias ackmail="ack "
 
-#git
+# git
 alias gst='git status'
 alias gb='git branch'
 alias gc='git commit'
@@ -18,29 +19,23 @@ alias gg='git grep'
 alias gl='git log'
 alias gp='git push'
 
-#php
+# php
 alias sf='php symfony'
 alias sf2='php app/console'
 
-#ruby/rails
+# ruby
 alias ss='script/server'
 alias sg='shotgun --host 0.0.0.0 config.ru'
 alias gotogem="cd $GEM_HOME/gems"
 
-#python
+# python
 alias p='python'
-alias dj='python manage.py'
-alias djsm='python manage.py schemamigration --auto'
-alias djsmi='python manage.py schemamigration --initial'
-alias djm='python manage.py migrate'
-alias djmf='python manage.py migrate --fake'
-alias djrs='python manage.py runserver'
 
-#java
+# java
 alias javassert='java -enableassertions'
 alias tcpmon='java org.apache.axis.utils.tcpmon'
 alias adminclient='java org.apache.axis.client.AdminClient'
 alias javap='java -Dhttp.proxyHost=localhost -Dhttp.proxyPort=8080'
 
-#coffeescript
+# coffeescript
 alias coffeec='find . -name "*.coffee" | xargs coffee -w -c'

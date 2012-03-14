@@ -10,6 +10,8 @@ syntax on
 set number
 set title
 set linespace=1
+set bg=light
+color solarized
 
 " indent
 set autoindent smartindent

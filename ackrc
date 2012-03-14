@@ -2,3 +2,4 @@
 --ignore-dir=vendor
 --ignore-dir=logs
 --type-add=coffee=.coffee
+--smart-case

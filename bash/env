@@ -5,9 +5,11 @@ set -o vi
 export PS1='\n\[\033[0;35m\]\u@\h\[\033[00m\]:\w \n→ '
 export EDITOR='vim'
 export TERM='xterm-256color'
+export LANG='en_GB.UTF-8'
 export HISTSIZE=10000
 export HISTFILE="$HOME/.histfile"
 shopt -s histappend
+export USERWM=`which xmonad`
 
 #python
 PATH="/usr/local/share/python:${PATH}"

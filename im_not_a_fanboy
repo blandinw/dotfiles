@@ -29,9 +29,9 @@ defaults write NSGlobalDomain NSAutomaticSpellingCorrectionEnabled -bool false
 defaults write NSGlobalDomain NSAutomaticWindowAnimationsEnabled -bool false
 
 # Disable disk image verification
-# defaults write com.apple.frameworks.diskimages skip-verify -bool true
-# defaults write com.apple.frameworks.diskimages skip-verify-locked -bool true
-# defaults write com.apple.frameworks.diskimages skip-verify-remote -bool true
+defaults write com.apple.frameworks.diskimages skip-verify -bool true
+defaults write com.apple.frameworks.diskimages skip-verify-locked -bool true
+defaults write com.apple.frameworks.diskimages skip-verify-remote -bool true
 
 # Automatically open a new Finder window when a volume is mounted
 defaults write com.apple.frameworks.diskimages auto-open-ro-root -bool true
@@ -57,7 +57,7 @@ defaults write com.apple.Mail DisableSendAnimations -bool true
 defaults write NSGlobalDomain NSQuitAlwaysKeepsWindows -bool false
 
 # Enable Dashboard dev mode (allows keeping widgets on the desktop)
-defaults write com.apple.dashboard devmode -bool true
+# defaults write com.apple.dashboard devmode -bool true
 
 # Reset Launchpad
 rm ~/Library/Application\ Support/Dock/*.db
@@ -73,3 +73,6 @@ for app in Safari Finder Dock Mail; do killall "$app"; done
 
 # Fix for the ancient UTF-8 bug in QuickLook (http://mths.be/bbo)
 echo "0x08000100:0" > ~/.CFUserTextEncoding
+
+# Disable OS X Lion animations when opening new window
+defaults write NSGlobalDomain NSAutomaticWindowAnimationsEnabled -bool NO

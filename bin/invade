@@ -1,0 +1,27 @@
+#!/usr/bin/env sh
+
+echo "Invading ..."
+
+[ ! -d "$HOME/backups" ] && mkdir "$HOME/backups"
+[ ! -d "$HOME/backups/vim_backups" ] && mkdir "$HOME/backups/vim_backups"
+
+cd
+echo "Moving existing files to ~/backups ..."
+
+# for each config files, backup old one and replace it
+for rcfile in $(find dotfiles -name "*rc" -and ! -ipath "*x11*") "dotfiles/vim" "dotfiles/mutt"; do
+    base=`basename $rcfile`
+    timestamp=`date +%s`
+
+    mv .$base ~/backups/$base.$timestamp
+    ln -s $rcfile .$base
+done
+
+# mutt caches
+[ ! -d "$HOME/.mutt/caches/headers" ] && mkdir -p "$HOME/backups/cache"
+
+# creating empty local config files
+touch dotfiles/bash/local
+touch dotfiles/vim/local.vim
+
+echo "Done !"
