@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -o vi
 
-#basics
+# basics
 export PS1='\n\[\033[0;35m\]\u@\h\[\033[00m\]:\w \n→ '
 export EDITOR='vim'
 export TERM='xterm-256color'
@@ -11,13 +11,14 @@ export HISTFILE="$HOME/.histfile"
 shopt -s histappend
 export USERWM=`which xmonad`
 
-#python
+# python
 PATH="/usr/local/share/python:${PATH}"
 
-#ruby
+# ruby
 export RUBYOPT='rubygems'
 
-#rvm
+# rvm
+PATH=$PATH:$HOME/.rvm/bin # Add RVM to PATH for scripting
 [[ -s "$HOME/.rvm/scripts/rvm" ]] && source "$HOME/.rvm/scripts/rvm"
 
 PATH="$HOME/bin:/usr/local/bin:/usr/local/sbin:$PATH"

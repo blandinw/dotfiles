@@ -67,6 +67,9 @@ au FileType python set omnifunc=pythoncomplete#Complete
 " html
 au FileType html set omnifunc=htmlcomplete#CompleteTags sw=2 sts=2
 
+" haml
+au BufNewFile,BufRead *.hamlc set ft=haml
+
 " css
 au FileType css set omnifunc=csscomplete#CompleteCSS
 
@@ -80,10 +83,13 @@ au BufNewFile,BufRead *.ejs set ft=html
 au BufNewFile,BufRead *.jst set ft=html
 
 " coffee
-au BufNewFile,BufRead *.coffee set sw=2 sts=2
+au BufNewFile,BufRead *.coffee set sw=2 sts=2 ts=2
 
 " php
 au FileType php set sw=2 sts=2
+
+" go
+au FileType go set noexpandtab sw=4 ts=4 sts=0
 
 " java
 au FileType java set sw=4 sts=4

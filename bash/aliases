@@ -4,19 +4,20 @@
 alias ls='ls -p -G'
 alias ll='ls -l'
 alias blt="vim $HOME/dotfiles/bash; source $HOME/dotfiles/bashrc"
-alias t200='tail -n200'
-
-# mail
-alias ackmail="ack "
+alias t250='tail -n250'
+alias xee='open -a xee'
 
 # git
+alias g='git status'
 alias gst='git status'
 alias gb='git branch'
 alias gc='git commit'
+alias gd='git diff'
 alias gca='git commit -a'
 alias gcaa='git commit -a --amend -C HEAD'
 alias gg='git grep'
-alias gl='git log'
+alias glo='git log'
+alias gl='git pull'
 alias gp='git push'
 
 # php
@@ -27,6 +28,8 @@ alias sf2='php app/console'
 alias ss='script/server'
 alias sg='shotgun --host 0.0.0.0 config.ru'
 alias gotogem="cd $GEM_HOME/gems"
+alias be='bundle exec'
+alias reindex='rails runner script/reindex.rb'
 
 # python
 alias p='python'

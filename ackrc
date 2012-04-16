@@ -1,5 +1,8 @@
 --ignore-dir=cache
---ignore-dir=vendor
 --ignore-dir=logs
+--ignore-dir=tmp
 --type-add=coffee=.coffee
+--type-add=scss=.scss
+--type-add=less=.less
+--type-add=hamlc=.hamlc
 --smart-case

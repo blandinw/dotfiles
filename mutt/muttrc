@@ -40,13 +40,12 @@ set assumed_charset="cp1252""
 set mbox_type=Maildir
 set folder="~/Mail"
 set spoolfile=+INBOX
-mailboxes +INBOX "+[Google Mail].Sent Mail" "+[Google Mail].All Mail"
+mailboxes "+Gmail.All Mail"
 set check_new = yes
 set mail_check = 5
 set mail_check_recent = no
 set timeout=60
 
-set trash="+[Google Mail].Bin"
 unset record
 
 set smtp_url=smtps://$my_user@smtp.gmail.com
