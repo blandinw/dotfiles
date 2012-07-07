@@ -5,4 +5,5 @@
 --type-add=scss=.scss
 --type-add=less=.less
 --type-add=hamlc=.hamlc
+--type-add=haml=.haml
 --smart-case

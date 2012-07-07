@@ -68,6 +68,9 @@ chflags nohidden ~/Library
 # Disable local Time Machine backups
 # sudo tmutil disablelocal
 
+# Disable Spotlight's indexing
+# sudo launchctl unload -w /System/Library/LaunchDaemons/com.apple.metadata.mds.plist
+
 # Kill affected applications
 for app in Safari Finder Dock Mail; do killall "$app"; done
 

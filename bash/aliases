@@ -6,6 +6,8 @@ alias ll='ls -l'
 alias blt="vim $HOME/dotfiles/bash; source $HOME/dotfiles/bashrc"
 alias t250='tail -n250'
 alias xee='open -a xee'
+alias findswp='find . -name "*.swp"'
+alias rmswp='find . -name "*.swp" -exec rm {} \;'
 
 # git
 alias g='git status'
