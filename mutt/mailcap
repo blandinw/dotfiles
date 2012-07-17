@@ -1,6 +1,0 @@
-application/octet-stream ; echo %s "Can be anything..."
-text/html                ; /usr/local/bin/lynx -dump %s ; nametemplate=%s.html ; copiousoutput
-application/pdf          ; /usr/bin/open -W %s
-image/*                  ; /usr/bin/open -W -a Xee %s
-audio/*                  ; /usr/bin/open -W %s
-video/*                  ; /usr/bin/open -W %s

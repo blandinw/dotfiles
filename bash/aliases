@@ -8,6 +8,7 @@ alias t250='tail -n250'
 alias xee='open -a xee'
 alias findswp='find . -name "*.swp"'
 alias rmswp='find . -name "*.swp" -exec rm {} \;'
+alias vi='vim --noplugin'
 
 # git
 alias g='git status'
@@ -29,6 +30,7 @@ alias sf2='php app/console'
 # ruby
 alias ss='script/server'
 alias sg='shotgun --host 0.0.0.0 config.ru'
+alias sgbg='shotgun --host 0.0.0.0 config.ru &> /dev/null &'
 alias gotogem="cd $GEM_HOME/gems"
 alias be='bundle exec'
 alias reindex='rails runner script/reindex.rb'

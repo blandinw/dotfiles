@@ -29,3 +29,6 @@ git://github.com/tpope/vim-endwise.git
 
 # markdown
 git://github.com/tpope/vim-markdown.git
+
+# clojure
+git://github.com/vim-scripts/VimClojure.git

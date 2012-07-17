@@ -94,7 +94,6 @@ au FileType go set noexpandtab sw=4 ts=4 sts=0
 " java
 au FileType java set sw=4 sts=4
 
-" load plugin-specific configz
+" load other configz
 runtime plugins.vim
-
 runtime local.vim
