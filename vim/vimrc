@@ -13,6 +13,16 @@ set linespace=1
 set bg=light
 color solarized
 
+" neat mapings
+inoremap <esc> <nop>
+inoremap jk <esc>
+nnoremap - <C-w><C-w>
+nnoremap <leader>` :e#<cr>
+nnoremap <silent> <C-h> :let @/ = ""<cr>
+nnoremap <leader>ve :vs $MYVIMRC<cr>
+nnoremap <leader>vs :so $MYVIMRC<cr>
+command! W :w
+
 " indent
 set autoindent smartindent
 set sw=4  " number of spaces inserted when using >> or <<
@@ -46,11 +56,6 @@ set laststatus=2
 set statusline=\ %F%m%r%h\ %w\ \ Line:\ %l/%L:%c
 
 set hidden " no need to write to disk when closing file
-
-" neat bindings
-map <leader>` :e#<CR>
-map <C-h> :silent :let @/ = ""<CR>
-command! W :w
 
 " filetype
 filetype on
@@ -91,10 +96,33 @@ au FileType php set sw=2 sts=2
 
 " go
 au FileType go set noexpandtab sw=4 ts=4 sts=0
+au FileType go :inoremap <buffer> {<cr> {<cr><cr>}<c-c>kS
+au FileType go :inoremap <buffer> (<cr> (<cr><cr>)<c-c>kS
 
 " java
 au FileType java set sw=4 sts=4
 
+" Plugins
+" -------
+" CtrlP
+let g:ctrlp_max_height = 25
+let g:ctrlp_map = '<leader>p'
+" nnoremap <leader>p :CtrlP<cr>
+nnoremap <leader>b :CtrlPBuffer<cr>
+nnoremap <leader>c :CommandTFlush<cr>
+
+" NERDTree
+nnoremap <silent> <leader>n :NERDTreeToggle<cr>
+let NERDTreeIgnore=['^cache$', '^logs$', '\~$']
+
+" VimClojure
+let vimclojure#SetupKeyMapCloseResultBuffer = 0
+nmap <buffer> <unique> <silent> <LocalLeader>o <Plug>ClojureCloseResultBuffer.
+let g:vimclojure#HighlightBuiltins = 1
+let g:vimclojure#ParenRainbow = 1
+let vimclojure#SplitPos = "right"
+let vimclojure#WantNailgun = 1
+"let vimclojure#NailgunClient = "/usr/local/bin/ng"
+
 " load other configz
-runtime plugins.vim
 runtime local.vim

@@ -1,6 +1,7 @@
 # vim
 .VimballRecord
 *.swp
+*.swo
 *~
 .netrwhist
 *#

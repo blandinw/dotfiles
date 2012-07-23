@@ -9,10 +9,6 @@ export HISTSIZE=10000
 export HISTFILE="$HOME/.histfile"
 # export USERWM=`which xmonad`
 
-# python
-PATH="/usr/local/share/python:${PATH}"
-export PYTHONPATH
-
 # ruby
 export RUBYOPT='rubygems'
 PATH=$PATH:$HOME/.rvm/bin # Add RVM to PATH for scripting
@@ -21,7 +17,7 @@ PATH=$PATH:$HOME/.rvm/bin # Add RVM to PATH for scripting
 # paths :D
 export NODE_PATH
 export CLASSPATH
-export PATH="$HOME/bin:/usr/local/bin:/usr/local/sbin:$PATH"
+export PATH="$HOME/dotfiles/bin:$HOME/bin:/usr/local/bin:/usr/local/go/bin:/usr/local/sbin:$PATH"
 
 # shell specific settings
 if [ ! -z $BASH_VERSION ]; then
