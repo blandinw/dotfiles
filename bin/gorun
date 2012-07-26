@@ -1,0 +1,21 @@
+#!/bin/bash
+
+GOOS=`go env GOOS`
+GOARCH=`go env GOARCH`
+if [ $# -lt 1 ]; then
+    echo "Usage: gorun [pkg1, ...] <main.go> [arg1, ...]"
+    return
+fi
+
+# build given packages
+until [[ $1 =~ \.go$ ]]; do
+    GOPATH=$PWD go build -o pkg/"$GOOS"_"$GOARCH"/$1.a $1
+    shift
+done
+
+main=$1
+shift
+
+# build main and run it with args
+GOPATH=$PWD go build -o dist/${main/.go/} $main
+dist/${main/.go/} $*
