@@ -48,3 +48,6 @@ alias javap='java -Dhttp.proxyHost=localhost -Dhttp.proxyPort=8080'
 # coffeescript
 alias coffeec='find . -name "*.coffee" | xargs coffee -w -c'
 
+function uri () {
+    ruby -e "require 'uri';puts URI.encode(\"$1\".strip)"
+}

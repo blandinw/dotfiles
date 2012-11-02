@@ -1,28 +1,20 @@
-"gui
+" gui
 if has('gui_macvim')
     " Fullscreen takes up entire screen
-    set fuoptions=maxvert
-    " set fuoptions=maxhorz,maxvert
+    " set fuoptions=maxvert
+    set fuoptions=maxhorz,maxvert
 
     " Command-Return for fullscreen
     macmenu Window.Toggle\ Full\ Screen\ Mode key=<D-CR>
-    map <D-F> :Ack<space>
 
     set lines=65
     set columns=80
 
     " Start without the toolbar
     set guioptions=aAce
+    set guifont=Terminus\ (TTF):h12
+    set noantialias
 
-    " No blinking cursor
-    au FileType * set number
-                    \ guifont=Inconsolata:h15
-                    \ gcr=n:block-blinkon0,i:ver15-blinkon0
-    au FileType markdown set nonumber
-                    \ guifont=Inconsolata:h15
-                    \ gcr=n:block-blinkon0,i:hor8-blinkon0
-
-    " set guifont=Inconsolata:h15
     set bg=light
     color solarized
 endif

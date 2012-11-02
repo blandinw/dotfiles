@@ -7,9 +7,14 @@ if [ $# -lt 1 ]; then
     return
 fi
 
+# create dirs
+mkdir -p dist
+mkdir -p pkg
+
 # build given packages
 until [[ $1 =~ \.go$ ]]; do
-    GOPATH=$PWD go build -o pkg/"$GOOS"_"$GOARCH"/$1.a $1
+    echo "Building $1..."
+    GOPATH=$PWD:$GOPATH go build -o pkg/"$GOOS"_"$GOARCH"/$1.a $1
     shift
 done
 
@@ -17,5 +22,5 @@ main=$1
 shift
 
 # build main and run it with args
-GOPATH=$PWD go build -o dist/${main/.go/} $main
-dist/${main/.go/} $*
+echo "Running $main"
+GOPATH=$PWD:$GOPATH go build -o dist/${main/.go/} $main && dist/${main/.go/} $*

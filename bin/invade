@@ -20,4 +20,12 @@ echo "Creating local config files..."
 touch dotfiles/bash/local
 touch dotfiles/vim/local.vim
 
+bundle_dir=$HOME/dotfiles/vim/bundle
+if [ ! -e $bundle_dir/ctrlp.vim.git ]; then
+    echo "Installing ctrlp for vim..."
+    mkdir -p $bundle_dir
+    cd $bundle_dir
+    git clone git://github.com/kien/ctrlp.vim.git
+fi
+
 echo "Done !"

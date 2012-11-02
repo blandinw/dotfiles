@@ -71,6 +71,10 @@ chflags nohidden ~/Library
 # Disable Spotlight's indexing
 # sudo launchctl unload -w /System/Library/LaunchDaemons/com.apple.metadata.mds.plist
 
+# Disable XCode font aliasing
+defaults write com.apple.dt.Xcode AppleAntiAliasingThreshold 24
+defaults write com.apple.dt.Xcode NSFontDefaultScreenFontSubstitutionEnabled -bool YES
+
 # Kill affected applications
 for app in Safari Finder Dock Mail; do killall "$app"; done
 

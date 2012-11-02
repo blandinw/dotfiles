@@ -16,12 +16,17 @@ color solarized
 " neat mapings
 inoremap <esc> <nop>
 inoremap jk <esc>
-nnoremap - <C-w><C-w>
+nnoremap - <C-w>w
+nnoremap _ <C-w>W
 nnoremap <leader>` :e#<cr>
 nnoremap <silent> <C-h> :let @/ = ""<cr>
 nnoremap <leader>ve :vs $MYVIMRC<cr>
 nnoremap <leader>vs :so $MYVIMRC<cr>
 command! W :w
+
+" iterm2 compat
+imap [1;5A <c-up>
+imap [1;5B <c-down>
 
 " indent
 set autoindent smartindent
@@ -47,6 +52,8 @@ set history=300
 set wildmenu
 set wildignore+=*.o,*.obj,.git,*.pyc
 set wildignore+=app/cache/*,app/logs/* " symfony2
+set wildignore+=.DS_Store,*.swp,*.swo
+set wildignore+=*.class
 
 " backups
 set backup backupext=~ backupdir=~/backups/vim_backups/
@@ -78,15 +85,16 @@ au BufNewFile,BufRead *.hamlc set ft=haml
 
 " css
 au FileType css set omnifunc=csscomplete#CompleteCSS
+au FileType scss set omnifunc=csscomplete#CompleteCSS
 
 " jinja
 au BufNewFile,BufRead {*twig*,*jinja*} set ft=htmljinja
 
 " javascript
-au FileType javascript set sw=2 sts=2
 au FileType javascript set omnifunc=javascriptcomplete#CompleteJS
+                     \ sw=2 sts=2
 au BufNewFile,BufRead *.ejs set ft=html
-au BufNewFile,BufRead *.jst set ft=html
+au BufNewFile,BufRead *.jst set ft=html | SyntasticToggleMode
 
 " coffee
 au BufNewFile,BufRead *.coffee set sw=2 sts=2 ts=2
@@ -96,33 +104,46 @@ au FileType php set sw=2 sts=2
 
 " go
 au FileType go set noexpandtab sw=4 ts=4 sts=0
-au FileType go :inoremap <buffer> {<cr> {<cr><cr>}<c-c>kS
-au FileType go :inoremap <buffer> (<cr> (<cr><cr>)<c-c>kS
 
 " java
 au FileType java set sw=4 sts=4
 
-" Plugins
-" -------
-" CtrlP
+" Clojure
+au BufRead,BufNewFile *.jar,*.war,*.ear,*.sar,*.rar set filetype=zip
+au BufRead,BufNewFile *.clj nmap <buffer> <unique> <silent> <LocalLeader>o <Plug>ClojureCloseResultBuffer.
+au FileType clojure set sw=2 sts=2
+let g:vimclojure#HighlightBuiltins = 1
+let g:vimclojure#ParenRainbow = 1
+let vimclojure#SetupKeyMapCloseResultBuffer = 0
+let vimclojure#FuzzyIndent = 1
+let vimclojure#SplitPos = "bottom"
+let vimclojure#SplitSize = 10
+let vimclojure#WantNailgun = 1
+"let vimclojure#NailgunClient = "/usr/local/bin/ng"
+
+" ctrlp
 let g:ctrlp_max_height = 25
 let g:ctrlp_map = '<leader>p'
 " nnoremap <leader>p :CtrlP<cr>
 nnoremap <leader>b :CtrlPBuffer<cr>
-nnoremap <leader>c :CommandTFlush<cr>
+
+"delimitMate
+let delimitMate_expand_cr = 1
+let delimitMate_smart_quotes = 0
+let delimitMate_balance_matchpairs = 1
+let delimitMate_excluded_ft = "vimclojure.clojure"
+let delimitMate_smart_quotes = 0
+au FileType clojure let b:delimitMate_quotes = "\""
 
 " NERDTree
 nnoremap <silent> <leader>n :NERDTreeToggle<cr>
+nnoremap <silent> <leader>f :NERDTreeFind<cr>
 let NERDTreeIgnore=['^cache$', '^logs$', '\~$']
 
-" VimClojure
-let vimclojure#SetupKeyMapCloseResultBuffer = 0
-nmap <buffer> <unique> <silent> <LocalLeader>o <Plug>ClojureCloseResultBuffer.
-let g:vimclojure#HighlightBuiltins = 1
-let g:vimclojure#ParenRainbow = 1
-let vimclojure#SplitPos = "right"
-let vimclojure#WantNailgun = 1
-"let vimclojure#NailgunClient = "/usr/local/bin/ng"
+" Syntastic
+" let g:syntastic_mode_map = { 'mode': 'active',
+"                            \ 'active_filetypes': ['ruby', 'php'],
+"                            \ 'passive_filetypes': ['puppet', 'ejs'] }
 
 " load other configz
 runtime local.vim
