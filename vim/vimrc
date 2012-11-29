@@ -1,6 +1,6 @@
 " pathogen
 call pathogen#infect()
-" call pathogen#helptags()
+call pathogen#helptags()
 
 set nocp
 set noesckeys
@@ -18,11 +18,18 @@ inoremap <esc> <nop>
 inoremap jk <esc>
 nnoremap - <C-w>w
 nnoremap _ <C-w>W
-nnoremap <leader>` :e#<cr>
-nnoremap <silent> <C-h> :let @/ = ""<cr>
+nnoremap <silent><leader>` :e#<cr>
+nnoremap <silent><C-h> :let @/ = ""<cr>
 nnoremap <leader>ve :vs $MYVIMRC<cr>
 nnoremap <leader>vs :so $MYVIMRC<cr>
+nnoremap <silent><leader>s :w<cr>:so %<cr>
 command! W :w
+nnoremap <leader>c :cn<cr>
+command! AspellEN :!aspell -l en -c %
+command! AspellFR :!aspell -l fr -c %
+
+" quickly :source a range
+vnoremap <leader>s :w! /tmp/sourced.vim \| :so /tmp/sourced.vim \| :!rm /tmp/sourced.vim &>/dev/null<cr><cr>
 
 " iterm2 compat
 imap [1;5A <c-up>
@@ -52,8 +59,9 @@ set history=300
 set wildmenu
 set wildignore+=*.o,*.obj,.git,*.pyc
 set wildignore+=app/cache/*,app/logs/* " symfony2
+set wildignore+=tmp/cache " rails
 set wildignore+=.DS_Store,*.swp,*.swo
-set wildignore+=*.class
+set wildignore+=*.class,*.scssc
 
 " backups
 set backup backupext=~ backupdir=~/backups/vim_backups/
@@ -79,6 +87,7 @@ au FileType python set omnifunc=pythoncomplete#Complete
 
 " html
 au FileType html set omnifunc=htmlcomplete#CompleteTags sw=2 sts=2
+let g:user_zen_leader_key = '<C-,>'
 
 " haml
 au BufNewFile,BufRead *.hamlc set ft=haml
@@ -108,10 +117,20 @@ au FileType go set noexpandtab sw=4 ts=4 sts=0
 " java
 au FileType java set sw=4 sts=4
 
-" Clojure
+" markdown
+nnoremap <leader>m :!markdown % \| browser<cr><cr>
+inoremap <leader>m :!markdown % \| browser<cr><cr>
+
+" haskell
+au BufEnter *.hs compiler ghc
+let g:haddock_browser="/usr/bin/open"
+let g:haddock_browser_callformat = "%s %s"
+
+" clojure
 au BufRead,BufNewFile *.jar,*.war,*.ear,*.sar,*.rar set filetype=zip
 au BufRead,BufNewFile *.clj nmap <buffer> <unique> <silent> <LocalLeader>o <Plug>ClojureCloseResultBuffer.
 au FileType clojure set sw=2 sts=2
+au FileType clojure let b:delimitMate_quotes = "\""
 let g:vimclojure#HighlightBuiltins = 1
 let g:vimclojure#ParenRainbow = 1
 let vimclojure#SetupKeyMapCloseResultBuffer = 0
@@ -119,6 +138,7 @@ let vimclojure#FuzzyIndent = 1
 let vimclojure#SplitPos = "bottom"
 let vimclojure#SplitSize = 10
 let vimclojure#WantNailgun = 1
+let vimclojure#NailgunPort = "2114"
 "let vimclojure#NailgunClient = "/usr/local/bin/ng"
 
 " ctrlp
@@ -127,18 +147,29 @@ let g:ctrlp_map = '<leader>p'
 " nnoremap <leader>p :CtrlP<cr>
 nnoremap <leader>b :CtrlPBuffer<cr>
 
-"delimitMate
+" delimitMate
 let delimitMate_expand_cr = 1
-let delimitMate_smart_quotes = 0
 let delimitMate_balance_matchpairs = 1
 let delimitMate_excluded_ft = "vimclojure.clojure"
 let delimitMate_smart_quotes = 0
-au FileType clojure let b:delimitMate_quotes = "\""
 
 " NERDTree
 nnoremap <silent> <leader>n :NERDTreeToggle<cr>
 nnoremap <silent> <leader>f :NERDTreeFind<cr>
 let NERDTreeIgnore=['^cache$', '^logs$', '\~$']
+
+" neocomplcache
+let g:neocomplcache_enable_at_startup = 1
+let g:neocomplcache_enable_smart_case = 1
+let g:neocomplcache_min_syntax_length = 3
+let g:endwise_no_mappings=1
+imap <unique><expr><CR> neocomplcache#smart_close_popup()
+                     \. "\<Plug>delimitMateCR\<Plug>DiscretionaryEnd"
+inoremap <expr><TAB> pumvisible() ? "\<C-n>" : "\<TAB>"
+inoremap <expr><C-h> neocomplcache#smart_close_popup()."\<C-h>"
+inoremap <expr><BS> neocomplcache#smart_close_popup()."\<C-h>"
+inoremap <expr><C-y> neocomplcache#close_popup()
+inoremap <expr><C-e> neocomplcache#cancel_popup()
 
 " Syntastic
 " let g:syntastic_mode_map = { 'mode': 'active',

@@ -1,0 +1,11 @@
+#!/bin/bash
+
+if [ $# -lt 1 ]; then
+    echo "usage: "$(basename $0)" executable"
+    exit 1
+fi
+
+SCRIPT_NAME=$1
+shift
+
+ln -s "$PWD/$SCRIPT_NAME" "$HOME/dotfiles/bin/$(basename $SCRIPT_NAME)"

@@ -29,9 +29,9 @@ defaults write NSGlobalDomain NSAutomaticSpellingCorrectionEnabled -bool false
 defaults write NSGlobalDomain NSAutomaticWindowAnimationsEnabled -bool false
 
 # Disable disk image verification
-defaults write com.apple.frameworks.diskimages skip-verify -bool true
-defaults write com.apple.frameworks.diskimages skip-verify-locked -bool true
-defaults write com.apple.frameworks.diskimages skip-verify-remote -bool true
+# defaults write com.apple.frameworks.diskimages skip-verify -bool true
+# defaults write com.apple.frameworks.diskimages skip-verify-locked -bool true
+# defaults write com.apple.frameworks.diskimages skip-verify-remote -bool true
 
 # Automatically open a new Finder window when a volume is mounted
 defaults write com.apple.frameworks.diskimages auto-open-ro-root -bool true
@@ -69,17 +69,17 @@ chflags nohidden ~/Library
 # sudo tmutil disablelocal
 
 # Disable Spotlight's indexing
-# sudo launchctl unload -w /System/Library/LaunchDaemons/com.apple.metadata.mds.plist
+sudo launchctl unload -w /System/Library/LaunchDaemons/com.apple.metadata.mds.plist
 
 # Disable XCode font aliasing
-defaults write com.apple.dt.Xcode AppleAntiAliasingThreshold 24
-defaults write com.apple.dt.Xcode NSFontDefaultScreenFontSubstitutionEnabled -bool YES
+# defaults write com.apple.dt.Xcode AppleAntiAliasingThreshold 24
+# defaults write com.apple.dt.Xcode NSFontDefaultScreenFontSubstitutionEnabled -bool YES
 
 # Kill affected applications
 for app in Safari Finder Dock Mail; do killall "$app"; done
 
 # Fix for the ancient UTF-8 bug in QuickLook (http://mths.be/bbo)
-echo "0x08000100:0" > ~/.CFUserTextEncoding
+# echo "0x08000100:0" > ~/.CFUserTextEncoding
 
 # Disable OS X Lion animations when opening new window
 defaults write NSGlobalDomain NSAutomaticWindowAnimationsEnabled -bool NO

@@ -24,17 +24,19 @@ alias glo='git log'
 alias gl='git pull'
 alias gp='git push'
 
-# php
-alias sf='php symfony'
-alias sf2='php app/console'
-
 # ruby
 alias ss='script/server'
 alias sg='shotgun --host 0.0.0.0 config.ru'
 alias sgbg='shotgun --host 0.0.0.0 config.ru &> /dev/null &'
-alias gotogem="cd $GEM_HOME/gems"
-alias be='bundle exec'
+alias b='bundle exec'
 alias reindex='rails runner script/reindex.rb'
+alias rb='rbenv'
+alias rbrh='rbenv rehash'
+if which rbenv > /dev/null; then eval "$(rbenv init -)"; fi
+alias remove_all_gems='gem list | cut -d" " -f1 | xargs gem uninstall -aIx'
+alias rvmrc='rvm rvmrc'
+alias r='rvm default do'
+alias ng-serverjruby='JRUBY_OPTS="" jruby --ng-server'
 
 # python
 alias p='python'
@@ -45,9 +47,13 @@ alias tcpmon='java org.apache.axis.utils.tcpmon'
 alias adminclient='java org.apache.axis.client.AdminClient'
 alias javap='java -Dhttp.proxyHost=localhost -Dhttp.proxyPort=8080'
 
+# php
+alias sf='php symfony'
+alias sf2='php app/console'
+
 # coffeescript
 alias coffeec='find . -name "*.coffee" | xargs coffee -w -c'
 
 function uri () {
-    ruby -e "require 'uri';puts URI.encode(\"$1\".strip)"
+    echo $1 | ruby -p -e 'require "uri";$_=URI.encode($_.strip)'
 }

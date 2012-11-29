@@ -9,15 +9,18 @@ export HISTSIZE=10000
 export HISTFILE="$HOME/.histfile"
 # export USERWM=`which xmonad`
 
+# java
+# export JAVA_OPTS='-d32 -client -Xms64m'
+
 # ruby
 export RUBYOPT='rubygems'
-PATH=$PATH:$HOME/.rvm/bin # Add RVM to PATH for scripting
-[[ -s "$HOME/.rvm/scripts/rvm" ]] && source "$HOME/.rvm/scripts/rvm"
+# export JRUBYOPTS='--ng'
+# export RBXOPT=-X19
 
 # paths :D
 export NODE_PATH
 export CLASSPATH
-export PATH="$HOME/dotfiles/bin:$HOME/bin:/usr/local/bin:/usr/local/go/bin:/usr/local/sbin:$PATH"
+export PATH="$HOME/dotfiles/bin:$HOME/bin:$HOME/.cabal/bin:/usr/local/bin:/usr/local/share/npm/bin:/usr/local/go/bin:/usr/local/sbin:$PATH"
 
 # shell specific settings
 if [ ! -z $BASH_VERSION ]; then
