@@ -11,7 +11,7 @@ def main
     end
   end
 
-  # Build extensions
+  # Build extensions (extconf.rb)
   pattern = File.join(BUNDLE_DIR, "*", "ruby", "*", "extconf.rb")
   Dir.glob(pattern).each do |path|
     path.slice!(%r,/([^/]*)$,)
@@ -19,6 +19,17 @@ def main
       puts "> Building #{path}"
       %x{ ruby extconf.rb }
       %x{ make }
+    end
+  end
+
+  # Build install.sh
+  pattern = File.join(BUNDLE_DIR, "*", "install.sh")
+  Dir.glob(pattern).each do |path|
+    path.slice!(%r,/([^/]*)$,)
+    p path
+    cd(path) do
+      puts "> Building #{path}"
+      %x{ bash install.sh }
     end
   end
 end

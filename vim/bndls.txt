@@ -6,9 +6,8 @@ git://github.com/tpope/vim-surround.git
 git://github.com/kien/ctrlp.vim.git
 git://github.com/Raimondi/delimitMate.git
 git://github.com/mileszs/ack.vim.git
-git://github.com/Shougo/neocomplcache.git
-git://github.com/Shougo/vimproc.git
 git://github.com/vim-scripts/Align.git
+git://github.com/Valloric/YouCompleteMe.git
 
 # colors
 git://github.com/altercation/vim-colors-solarized.git
@@ -33,10 +32,10 @@ git://github.com/tpope/vim-endwise.git
 git://github.com/tpope/vim-markdown.git
 
 # clojure
-git://github.com/vim-scripts/VimClojure.git
+git://github.com/guns/vim-clojure-static.git
+git://github.com/tpope/vim-foreplay.git
 git://github.com/vim-scripts/paredit.vim.git
+git://github.com/kien/rainbow_parentheses.vim.git
 
 # haskell
 git://github.com/lukerandall/haskellmode-vim.git
-git://github.com/eagletmt/ghcmod-vim.git
-git://github.com/ujihisa/neco-ghc.git

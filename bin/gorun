@@ -1,11 +1,14 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 GOOS=$(go env GOOS)
 GOARCH=$(go env GOARCH)
 if [ $# -lt 1 ]; then
     echo "Usage: gorun [pkg1, ...] <main.go> [arg1, ...]"
-    return
+    exit 1
 fi
+
+set -e
+set -x
 
 # create dirs
 mkdir -p dist
@@ -22,5 +25,4 @@ main=$1
 shift
 
 # build main and run it with args
-echo "Running $main"
 GOPATH=$PWD:$GOPATH go build -o dist/${main/.go/} $main && dist/${main/.go/} $*

@@ -1,31 +1,37 @@
 #!/usr/bin/env sh
 
-echo "Creating backup directories..."
-[ ! -d "$HOME/backups" ] && mkdir "$HOME/backups"
-[ ! -d "$HOME/backups/vim_backups" ] && mkdir "$HOME/backups/vim_backups"
+DOTFILES="$HOME/dotfiles"
+BACKUPS="$HOME/backups"
+if test ! -e $DOTFILES; then
+    echo "error: dotfiles/ needs to reside in $HOME"
+    exit 1
+fi
+
+set -e
+set -x
+
+mkdir -p "$BACKUPS/vim_backups"
 
 cd
-echo "Moving existing files to ~/backups and invading..."
-for rcfile in $(find dotfiles -name "*rc" -and ! -ipath "*x11*") "dotfiles/vim" "dotfiles/mutt"; do
-    base=`basename $rcfile`
-    timestamp=`date +%s`
+for rcfile in vim vim/vimrc bashrc ackrc ctags zshrc tmux.conf ; do
+    base=$(basename $rcfile)
+    timestamp=$(date +%s)
 
     if [ -e .$base ]; then
-        mv .$base ~/backups/$base.$timestamp
-        ln -s $rcfile .$base
+        mv .$base "$BACKUPS/$base.$timestamp"
     fi
+    ln -s "$DOTFILES/$rcfile" ".$base"
 done
 
-echo "Creating local config files..."
 touch dotfiles/bash/local
 touch dotfiles/vim/local.vim
 
-bundle_dir=$HOME/dotfiles/vim/bundle
-if [ ! -e $bundle_dir/ctrlp.vim.git ]; then
-    echo "Installing ctrlp for vim..."
-    mkdir -p $bundle_dir
-    cd $bundle_dir
-    git clone git://github.com/kien/ctrlp.vim.git
+# Vim
+BUNDLE_DIR=$DOTFILES/vim/bundle
+if test ! -e $BUNDLE_DIR/ctrlp.vim.git; then
+    mkdir -p $BUNDLE_DIR
+    git clone git://github.com/kien/ctrlp.vim.git $BUNDLE_DIR/ctrlp.vim.git
 fi
 
-echo "Done !"
+set +x
+echo "> Invasion successful!"

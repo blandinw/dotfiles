@@ -10,10 +10,10 @@ syntax on
 set number
 set title
 set linespace=1
-set bg=light
+set bg=dark
 color solarized
 
-" neat mapings
+" neat mappings
 inoremap <esc> <nop>
 inoremap jk <esc>
 nnoremap - <C-w>w
@@ -24,11 +24,12 @@ nnoremap <leader>ve :vs $MYVIMRC<cr>
 nnoremap <leader>vs :so $MYVIMRC<cr>
 nnoremap <silent><leader>s :w<cr>:so %<cr>
 command! W :w
-nnoremap <leader>c :cn<cr>
+nnoremap <silent><leader>c :cn<cr>
+nnoremap <silent><leader>l :lclose<cr>
 command! AspellEN :!aspell -l en -c %
 command! AspellFR :!aspell -l fr -c %
 
-" quickly :source a range
+" quickly :source a range of VimL
 vnoremap <leader>s :w! /tmp/sourced.vim \| :so /tmp/sourced.vim \| :!rm /tmp/sourced.vim &>/dev/null<cr><cr>
 
 " iterm2 compat
@@ -62,6 +63,7 @@ set wildignore+=app/cache/*,app/logs/* " symfony2
 set wildignore+=tmp/cache " rails
 set wildignore+=.DS_Store,*.swp,*.swo
 set wildignore+=*.class,*.scssc
+set wildignore+=temp,node_modules " yeoman
 
 " backups
 set backup backupext=~ backupdir=~/backups/vim_backups/
@@ -87,7 +89,9 @@ au FileType python set omnifunc=pythoncomplete#Complete
 
 " html
 au FileType html set omnifunc=htmlcomplete#CompleteTags sw=2 sts=2
-let g:user_zen_leader_key = '<C-,>'
+let g:user_zen_leader_key = '<leader>,'
+let g:html_indent_script1 = 'inc'
+let g:html_indent_style1 = 'inc'
 
 " haml
 au BufNewFile,BufRead *.hamlc set ft=haml
@@ -108,11 +112,19 @@ au BufNewFile,BufRead *.jst set ft=html | SyntasticToggleMode
 " coffee
 au BufNewFile,BufRead *.coffee set sw=2 sts=2 ts=2
 
+" prolog
+function! PrologRun()
+    !osascript -e 'tell application "terminal" to do script "clear;cd \"%:p:h\";gprolog --entry-goal \"consult(%:r)\""'
+    !osascript -e 'tell application "terminal" to activate'
+endfunction
+command! -nargs=* PrologRun call PrologRun()
+
 " php
 au FileType php set sw=2 sts=2
 
 " go
 au FileType go set noexpandtab sw=4 ts=4 sts=0
+nnoremap <silent><leader>gf :!go fmt %<cr>l
 
 " java
 au FileType java set sw=4 sts=4
@@ -128,53 +140,63 @@ let g:haddock_browser_callformat = "%s %s"
 
 " clojure
 au BufRead,BufNewFile *.jar,*.war,*.ear,*.sar,*.rar set filetype=zip
-au BufRead,BufNewFile *.clj nmap <buffer> <unique> <silent> <LocalLeader>o <Plug>ClojureCloseResultBuffer.
+au BufRead,BufNewFile *.clj nmap <buffer><unique><silent><LocalLeader>o <Plug>ClojureCloseResultBuffer.
 au FileType clojure set sw=2 sts=2
 au FileType clojure let b:delimitMate_quotes = "\""
-let g:vimclojure#HighlightBuiltins = 1
-let g:vimclojure#ParenRainbow = 1
-let vimclojure#SetupKeyMapCloseResultBuffer = 0
-let vimclojure#FuzzyIndent = 1
-let vimclojure#SplitPos = "bottom"
-let vimclojure#SplitSize = 10
-let vimclojure#WantNailgun = 1
-let vimclojure#NailgunPort = "2114"
-"let vimclojure#NailgunClient = "/usr/local/bin/ng"
+au FileType clojure nnoremap <buffer><C-]> :call GoToCljTag()<cr>
+au FileType clojure nnoremap <buffer><leader>ry :call VimClojureRunTests2()<cr>
+au VimEnter * RainbowParenthesesToggle
+au Syntax * RainbowParenthesesLoadRound
+let g:clojure_maxlines = 100
+let g:clojure_fuzzy_indent = 1
+nnoremap cme :call ForeplayMacroExpand()<cr>
+nnoremap cpe :Eval<cr>
+nnoremap crt :Eval (clojure.test/run-tests)<cr>
+
+function! ForeplayMacroExpand()
+  normal! ^
+  let start = searchpair('(', '', ')', 'bcrn')
+  let end = searchpair('(', '', ')', 'rn')
+  let form = join(getline(start, end), "\n")
+  let expr = "(macroexpand '". form .")"
+  let result = foreplay#session_eval(expr)
+  call append(end, result)
+endfunction
+
+" may not be needed with Foreplay
+function! GoToCljTag()
+  ruby <<
+  cw = Vim.evaluate %q{expand("<cword>")}
+  ma = cw.match %r,/([^/]+)$,
+  cw = ma[1] if ma
+
+  Vim.command "tag #{cw}"
+.
+endfunction
 
 " ctrlp
 let g:ctrlp_max_height = 25
 let g:ctrlp_map = '<leader>p'
-" nnoremap <leader>p :CtrlP<cr>
 nnoremap <leader>b :CtrlPBuffer<cr>
 
 " delimitMate
 let delimitMate_expand_cr = 1
 let delimitMate_balance_matchpairs = 1
-let delimitMate_excluded_ft = "vimclojure.clojure"
+let delimitMate_excluded_ft = "clojure"
 let delimitMate_smart_quotes = 0
 
 " NERDTree
-nnoremap <silent> <leader>n :NERDTreeToggle<cr>
-nnoremap <silent> <leader>f :NERDTreeFind<cr>
+nnoremap <silent><leader>n :NERDTreeToggle<cr>
+nnoremap <silent><leader>f :NERDTreeFind<cr>
 let NERDTreeIgnore=['^cache$', '^logs$', '\~$']
-
-" neocomplcache
-let g:neocomplcache_enable_at_startup = 1
-let g:neocomplcache_enable_smart_case = 1
-let g:neocomplcache_min_syntax_length = 3
-let g:endwise_no_mappings=1
-imap <unique><expr><CR> neocomplcache#smart_close_popup()
-                     \. "\<Plug>delimitMateCR\<Plug>DiscretionaryEnd"
-inoremap <expr><TAB> pumvisible() ? "\<C-n>" : "\<TAB>"
-inoremap <expr><C-h> neocomplcache#smart_close_popup()."\<C-h>"
-inoremap <expr><BS> neocomplcache#smart_close_popup()."\<C-h>"
-inoremap <expr><C-y> neocomplcache#close_popup()
-inoremap <expr><C-e> neocomplcache#cancel_popup()
 
 " Syntastic
 " let g:syntastic_mode_map = { 'mode': 'active',
 "                            \ 'active_filetypes': ['ruby', 'php'],
 "                            \ 'passive_filetypes': ['puppet', 'ejs'] }
 
+" eclim
+nnoremap <silent><leader>ej :JavaDocPreview<cr>
+
 " load other configz
-runtime local.vim
+source $HOME/.vim/local.vim

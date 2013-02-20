@@ -2,7 +2,7 @@
 
 # general
 alias ls='ls -p -G'
-alias ll='ls -l'
+alias ll='ls -l -h'
 alias blt="vim $HOME/dotfiles/bash; source $HOME/dotfiles/bashrc"
 alias t250='tail -n250'
 alias xee='open -a xee'
@@ -10,6 +10,8 @@ alias findswp='find . -name "*.swp"'
 alias rmswp='find . -name "*.swp" -exec rm {} \;'
 alias vi='vim --noplugin'
 alias notes='vim ~/notes.md'
+alias hosts='sudo vim /etc/hosts'
+alias flushcache='dscacheutil -flushcache'
 
 # git
 alias g='git status'
@@ -40,12 +42,14 @@ alias ng-serverjruby='JRUBY_OPTS="" jruby --ng-server'
 
 # python
 alias p='python'
+alias json='python -m json.tool'
 
 # java
 alias javassert='java -enableassertions'
 alias tcpmon='java org.apache.axis.utils.tcpmon'
 alias adminclient='java org.apache.axis.client.AdminClient'
-alias javap='java -Dhttp.proxyHost=localhost -Dhttp.proxyPort=8080'
+alias javaproxy='java -Dhttp.proxyHost=localhost -Dhttp.proxyPort=8080'
+alias eclimd='$ECLIPSE_HOME/eclimd'
 
 # php
 alias sf='php symfony'

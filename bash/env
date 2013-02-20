@@ -11,6 +11,7 @@ export HISTFILE="$HOME/.histfile"
 
 # java
 # export JAVA_OPTS='-d32 -client -Xms64m'
+export JAVA_TOOL_OPTIONS='-Dfile.encoding=UTF8'
 
 # ruby
 export RUBYOPT='rubygems'
