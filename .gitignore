@@ -13,6 +13,13 @@ vim/eclim
 *.hg
 .svn
 
+# emacs
+/emacs/elpa
+/emacs/eshell
+/emacs/ac-comphist.dat
+/emacs/evil-paredit
+/emacs/url
+
 # local files
 bash/local
 vim/local.vim

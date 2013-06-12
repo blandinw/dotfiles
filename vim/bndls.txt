@@ -33,9 +33,10 @@ git://github.com/tpope/vim-markdown.git
 
 # clojure
 git://github.com/guns/vim-clojure-static.git
-git://github.com/tpope/vim-foreplay.git
-git://github.com/vim-scripts/paredit.vim.git
+git://github.com/tpope/vim-fireplace.git
+https://bitbucket.org/kovisoft/paredit
 git://github.com/kien/rainbow_parentheses.vim.git
+# https://bitbucket.org/kovisoft/slimv
 
 # haskell
 git://github.com/lukerandall/haskellmode-vim.git

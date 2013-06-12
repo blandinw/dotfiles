@@ -4,12 +4,19 @@ BUNDLE_DIR = File.expand_path('../bundle', __FILE__)
 BUNDLE_FILE = File.expand_path('../bndls.txt', __FILE__)
 
 def main
-  # Fetch and install
-  File.open(BUNDLE_FILE, "r") do |infile|
-    until infile.eof?
-      install infile.gets
+  build_flag   = ARGV.include?('--build') || ARGV.include?('--build-only')
+  install_flag = !ARGV.include?('--build-only')
+
+  if install_flag
+    # Fetch and install
+    File.open(BUNDLE_FILE, "r") do |infile|
+      until infile.eof?
+        install infile.gets
+      end
     end
   end
+
+  return unless build_flag
 
   # Build extensions (extconf.rb)
   pattern = File.join(BUNDLE_DIR, "*", "ruby", "*", "extconf.rb")
@@ -26,10 +33,9 @@ def main
   pattern = File.join(BUNDLE_DIR, "*", "install.sh")
   Dir.glob(pattern).each do |path|
     path.slice!(%r,/([^/]*)$,)
-    p path
     cd(path) do
       puts "> Building #{path}"
-      %x{ bash install.sh }
+      %x{ bash install.sh --clang-completer }
     end
   end
 end
@@ -39,8 +45,22 @@ include FileUtils
 
 METHODS = {
   :github => /github\.com/,
-  :vim => /download_script/
+  :vim => /download_script/,
+  :bitbucket => /bitbucket\./
 }
+
+CMDZ = {
+  git: {
+    pull: 'git pull',
+    clone: 'git clone',
+    validate: lambda {|url| url.gsub(/^http/, 'git')},
+  },
+  mercurial: {
+    pull: 'hg pull',
+    clone: 'hg clone',
+  }
+}
+
 def install(line)
   line.strip!
 
@@ -54,7 +74,17 @@ def install(line)
   end
 end
 
-def github(line)
+def github line
+  install_scm :git, line
+end
+
+def bitbucket line
+  install_scm :mercurial, line
+end
+
+def install_scm scm, line
+  raise "SCM not found" unless CMDZ.has_key? scm
+
   re = %r,/([^/]*)$,
   name = line[re, 1]
   url = line
@@ -64,18 +94,19 @@ def github(line)
   # pull if repo already exists
   if File.exists?(path)
     puts "> Pulling #{url}"
-    cd(path) { %x{ git pull } } 
+    cd(path) { %x{ #{CMDZ[scm][:pull]} } }
     return
   end
 
-  # url must start with git://
-  url.gsub!(/^http/, 'git') if url =~ /^git/
+  if validate = CMDZ[scm][:validate]
+    url = validate.call(url)
+  end
 
   puts "> Cloning #{url}"
-  %x{ git clone #{url} #{path} }
+  %x{ #{CMDZ[scm][:clone]} #{url} #{path} }
 end
 
-def vim(line)
+def vim line
   line =~ /#/ or raise SyntaxError, "FATAL: No name found in #{line}!"
 
   re = /^(.*)#(.*)#(.*)$/

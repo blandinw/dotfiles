@@ -19,13 +19,13 @@ inoremap jk <esc>
 nnoremap - <C-w>w
 nnoremap _ <C-w>W
 nnoremap <silent><leader>` :e#<cr>
-nnoremap <silent><C-h> :let @/ = ""<cr>
+nnoremap <silent><C-h> :let @/ = '  *$'<cr>
 nnoremap <leader>ve :vs $MYVIMRC<cr>
 nnoremap <leader>vs :so $MYVIMRC<cr>
 nnoremap <silent><leader>s :w<cr>:so %<cr>
 command! W :w
 nnoremap <silent><leader>c :cn<cr>
-nnoremap <silent><leader>l :lclose<cr>
+nnoremap <silent><leader>l :lclose \| :cclose<cr>
 command! AspellEN :!aspell -l en -c %
 command! AspellFR :!aspell -l fr -c %
 
@@ -80,7 +80,7 @@ filetype plugin on
 filetype indent on
 
 " ruby
-au BufRead,BufNewFile {Gemfile,Rakefile,Vagrantfile,Thorfile,config.ru} set ft=ruby
+au BufRead,BufNewFile {Gemfile,Rakefile,Vagrantfile,Thorfile,config.ru,*.podspec,Podfile} set ft=ruby
 au FileType ruby set sw=2 sts=2
 au FileType eruby set sw=2 sts=2
 
@@ -124,7 +124,6 @@ au FileType php set sw=2 sts=2
 
 " go
 au FileType go set noexpandtab sw=4 ts=4 sts=0
-nnoremap <silent><leader>gf :!go fmt %<cr>l
 
 " java
 au FileType java set sw=4 sts=4
@@ -138,32 +137,37 @@ au BufEnter *.hs compiler ghc
 let g:haddock_browser="/usr/bin/open"
 let g:haddock_browser_callformat = "%s %s"
 
+" makefile\
+au FileType make set ts=2
+
 " clojure
+au FileType clojure let b:delimitMate_quotes = "\""
 au BufRead,BufNewFile *.jar,*.war,*.ear,*.sar,*.rar set filetype=zip
 au BufRead,BufNewFile *.clj nmap <buffer><unique><silent><LocalLeader>o <Plug>ClojureCloseResultBuffer.
 au FileType clojure set sw=2 sts=2
-au FileType clojure let b:delimitMate_quotes = "\""
 au FileType clojure nnoremap <buffer><C-]> :call GoToCljTag()<cr>
 au FileType clojure nnoremap <buffer><leader>ry :call VimClojureRunTests2()<cr>
 au VimEnter * RainbowParenthesesToggle
 au Syntax * RainbowParenthesesLoadRound
 let g:clojure_maxlines = 100
 let g:clojure_fuzzy_indent = 1
-nnoremap cme :call ForeplayMacroExpand()<cr>
+au FileType clojure let g:clojure_fuzzy_indent_patterns += ['^fn', '^run*', '^fresh', '^project', '^facts\?', '^context']
+au FileType clojure nnoremap <buffer><leader>ry :call VimClojureRunTests2()<cr>
+nnoremap cme :call FireplaceMacroExpand()<cr>
 nnoremap cpe :Eval<cr>
 nnoremap crt :Eval (clojure.test/run-tests)<cr>
 
-function! ForeplayMacroExpand()
+function! FireplaceMacroExpand()
   normal! ^
   let start = searchpair('(', '', ')', 'bcrn')
   let end = searchpair('(', '', ')', 'rn')
   let form = join(getline(start, end), "\n")
-  let expr = "(macroexpand '". form .")"
-  let result = foreplay#session_eval(expr)
-  call append(end, result)
+  let expr = "(do (import java.io.StringWriter)(use '[clojure.walk :only (macroexpand-all)])(let [w (StringWriter.)] (clojure.pprint/pprint (macroexpand-all '". form .") w) (.toString w)))"
+  let result = fireplace#session_eval(expr)
+  call append(end, split(result, '\\n'))
 endfunction
 
-" may not be needed with Foreplay
+" may not be needed with Fireplace
 function! GoToCljTag()
   ruby <<
   cw = Vim.evaluate %q{expand("<cword>")}
@@ -182,7 +186,6 @@ nnoremap <leader>b :CtrlPBuffer<cr>
 " delimitMate
 let delimitMate_expand_cr = 1
 let delimitMate_balance_matchpairs = 1
-let delimitMate_excluded_ft = "clojure"
 let delimitMate_smart_quotes = 0
 
 " NERDTree
@@ -197,6 +200,7 @@ let NERDTreeIgnore=['^cache$', '^logs$', '\~$']
 
 " eclim
 nnoremap <silent><leader>ej :JavaDocPreview<cr>
+au FileType java nnoremap gf :JavaSearch<cr>
 
 " load other configz
 source $HOME/.vim/local.vim
