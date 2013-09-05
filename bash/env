@@ -21,11 +21,10 @@ export RUBYOPT='rubygems'
 # paths :D
 export NODE_PATH
 export CLASSPATH
-export PATH="$HOME/dotfiles/bin:$HOME/bin:$HOME/.cabal/bin:/usr/local/bin:/usr/local/share/npm/bin:/usr/local/go/bin:/usr/local/sbin:$PATH"
+export PATH="$HOME/dotfiles/bin:$HOME/bin:$HOME/Library/Haskell/bin:/usr/local/bin:/usr/local/share/npm/bin:/usr/local/go/bin:/usr/local/sbin:$PATH"
 
 # shell specific settings
 if [ ! -z $BASH_VERSION ]; then
     shopt -s histappend
-    export PS1='\n\[\033[0;35m\]\u@\h\[\033[00m\]:\w \n→ '
+    export PS1='\n\[\033[0;35m\]\u@\h\[\033[00m\]:\w \nλ '
 fi
-

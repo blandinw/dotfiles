@@ -14,11 +14,11 @@ vim/eclim
 .svn
 
 # emacs
-/emacs/elpa
-/emacs/eshell
-/emacs/ac-comphist.dat
-/emacs/evil-paredit
-/emacs/url
+/emacs.d/elpa
+/emacs.d/eshell
+/emacs.d/ac-comphist.dat
+/emacs.d/evil-paredit
+/emacs.d/url
 
 # local files
 bash/local

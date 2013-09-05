@@ -11,15 +11,17 @@ alias findswp='find . -name "*.swp"'
 alias rmswp='find . -name "*.swp" -exec rm {} \;'
 alias vi='vim --noplugin'
 alias notes='vim ~/notes.md'
-alias flushcache='dscacheutil -flushcache'
+alias flushcache='dscacheutil -flushcache && sudo killall -HUP mDNSResponder'
 alias hosts='sudo vim /etc/hosts && flushcache'
-alias tmuxw='tmux new -s w'
 alias sed_trailing_spaces="sed -E -i '.sed' -e 's/[[:space:]]+$//'" # bsd
 alias e=emacs
+alias v=vagrant
+alias tmuxw='tmux new -s w'
 
 # git
 alias g='git status'
 alias gst='git status'
+alias ga='git add'
 alias gb='git branch'
 alias gc='git commit'
 alias gck='git checkout'

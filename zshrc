@@ -12,7 +12,7 @@ setopt share_history
 
 # hack to get multiline prompt
 precmd() {  print -rP "%{$fg[magenta]%}%n@%M:%{$reset_color%}%~" }
-PROMPT='→ '
+PROMPT='λ '
 
 # bindings
 bindkey '^R' 'history-incremental-search-backward'

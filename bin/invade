@@ -2,9 +2,11 @@
 
 DOTFILES="$HOME/dotfiles"
 BACKUPS="$HOME/backups"
-if test ! -e $DOTFILES; then
-    echo "error: dotfiles/ needs to reside in $HOME"
-    exit 1
+SYMLINKS='vim vim/vimrc bashrc ackrc ctags zshrc tmux.conf emacs.d'
+
+if [ ! -e $DOTFILES ]; then
+  echo "error: dotfiles/ needs to reside in $HOME"
+  exit 1
 fi
 
 set -e
@@ -13,14 +15,15 @@ set -x
 mkdir -p "$BACKUPS/vim_backups"
 
 cd
-for rcfile in vim vim/vimrc bashrc ackrc ctags zshrc tmux.conf ; do
-    base=$(basename $rcfile)
-    timestamp=$(date +%s)
+for rcfile in $SYMLINKS; do
+  base=$(basename $rcfile)
+  timestamp=$(date +%s)
 
-    if [ -e .$base ]; then
-        mv .$base "$BACKUPS/$base.$timestamp"
-    fi
-    ln -s "$DOTFILES/$rcfile" ".$base"
+  if [ -e ".$base" ]; then
+    mv ".$base" "$BACKUPS/$base.$timestamp"
+  fi
+
+  ln -s "$DOTFILES/$rcfile" ".$base"
 done
 
 touch dotfiles/bash/local
@@ -28,9 +31,9 @@ touch dotfiles/vim/local.vim
 
 # Vim
 BUNDLE_DIR=$DOTFILES/vim/bundle
-if test ! -e $BUNDLE_DIR/ctrlp.vim.git; then
-    mkdir -p $BUNDLE_DIR
-    git clone git://github.com/kien/ctrlp.vim.git $BUNDLE_DIR/ctrlp.vim.git
+if [ ! -e $BUNDLE_DIR/ctrlp.vim.git ]; then
+  mkdir -p $BUNDLE_DIR
+  git clone git://github.com/kien/ctrlp.vim.git $BUNDLE_DIR/ctrlp.vim.git
 fi
 
 set +x
