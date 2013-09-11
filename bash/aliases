@@ -16,6 +16,8 @@ alias hosts='sudo vim /etc/hosts && flushcache'
 alias sed_trailing_spaces="sed -E -i '.sed' -e 's/[[:space:]]+$//'" # bsd
 alias e=emacs
 alias v=vagrant
+alias a=ansible
+alias ap=ansible-playbook
 alias tmuxw='tmux new -s w'
 
 # git

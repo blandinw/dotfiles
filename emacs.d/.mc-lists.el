@@ -3,12 +3,17 @@
 
 (setq mc/cmds-to-run-for-all
       '(
+        coffee-dedent-line-backspace
         evil-insert
         evil-normal-state
         ))
 
 (setq mc/cmds-to-run-once
       '(
+        autopair-newline
+        coffee-newline-and-indent
+        describe-key
+        eval-expression
         evil-backward-char
         evil-forward-char
         evil-forward-word-begin

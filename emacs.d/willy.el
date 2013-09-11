@@ -64,6 +64,11 @@
         (switch-to-buffer-other-window buf)
       (term "zsh"))))
 
+(defvar loaded-theme)
+(defun wly/load-theme (theme-name)
+  (load-theme theme-name t)
+  (setq loaded-theme theme-name))
+
 (defun ensure-package (package-name)
   (unless (package-installed-p package-name)
     (package-refresh-contents)
@@ -118,22 +123,29 @@
 (require 'auto-complete)
 (require 'nrepl)
 (require 'find-file-in-project)
+(require 'multiple-cursors)
 
-(define-key input-decode-map "\e3" "#")
-(define-key input-decode-map "\e[18~" (kbd "<C-S-backspace>"))
+;; xterm compat
+(define-key input-decode-map "\e3"     "#")
+(define-key input-decode-map "\e[18~"  (kbd "<C-S-backspace>"))
 (define-key input-decode-map "\e[9;98" (kbd "C-S-("))
-(define-key input-decode-map "\eOA" (kbd "<up>"))
-(define-key input-decode-map "\eOB" (kbd "<down>"))
-(define-key input-decode-map "\eOC" (kbd "<right>"))
-(define-key input-decode-map "\eOD" (kbd "<left>"))
-(define-key input-decode-map "\e[A" (kbd "<C-up>"))
-(define-key input-decode-map "\e[B" (kbd "<C-down>"))
-(define-key input-decode-map "\e[C" (kbd "<C-right>"))
-(define-key input-decode-map "\e[D" (kbd "<C-left>"))
+(define-key input-decode-map "\e[8;8L" (kbd "C-S-L"))
+(define-key input-decode-map "\eOA"    (kbd "<up>"))
+(define-key input-decode-map "\eOB"    (kbd "<down>"))
+(define-key input-decode-map "\eOC"    (kbd "<right>"))
+(define-key input-decode-map "\eOD"    (kbd "<left>"))
+(define-key input-decode-map "\e[A"    (kbd "<C-up>"))
+(define-key input-decode-map "\e[B"    (kbd "<C-down>"))
+(define-key input-decode-map "\e[C"    (kbd "<C-right>"))
+(define-key input-decode-map "\e[D"    (kbd "<C-left>"))
+(define-key input-decode-map "\e[1;7A" (kbd "<M-up>"))
+(define-key input-decode-map "\e[1;7B" (kbd "<M-down>"))
 
 ;; javascript
 (defun js-hook ()
-  (local-set-key (kbd "RET") 'newline-and-indent))
+  (local-set-key (kbd "RET") 'newline-and-indent)
+  (auto-complete-mode t)
+  (autopair-mode t))
 
 ;; scss
 (defun scss-hook ()
@@ -142,7 +154,8 @@
         css-indent-offset 2
         tab-width 2)
   (autopair-mode t)
-  (electric-pair-mode -1))
+  (electric-pair-mode -1)
+  (flycheck-mode -1))
 
 (defun shell-hook ()
   (setq tab-width 2
@@ -215,7 +228,14 @@
   (local-set-key (kbd "RET") 'newline-and-indent)
   (paredit-mode)
   (evil-paredit-mode)
-  (rainbow-delimiters-mode))
+  (rainbow-delimiters-mode)
+
+  ;; fancy
+  (font-lock-add-keywords
+   'emacs-lisp-mode `(("(\\(lambda\\)[\[[:space:]]"
+                    (0 (progn (compose-region (match-beginning 1)
+                                              (match-end 1) "λ")
+                              nil))))))
 
 (defun nrepl-hook ()
   (require 'nrepl-ritz))
@@ -274,7 +294,7 @@
 (define-key evil-insert-state-map (kbd "<enter>") 'evil-ret-and-indent)
 (define-key evil-normal-state-map (kbd "-") 'evil-window-next)
 (define-key evil-normal-state-map (kbd "_") 'evil-window-prev)
-(define-key evil-normal-state-map "\\`" 'wly/switch-to-prev-buffer)
+(define-key evil-normal-state-map "\\`" 'evil-buffer)
 (define-key evil-normal-state-map "\\b" 'ido-switch-buffer)
 (define-key evil-normal-state-map "\\p" 'ffip)
 (define-key evil-normal-state-map "\\s" 'wly/switch-to-or-open-shell)
@@ -295,12 +315,47 @@
                                            (kill-buffer "*nrepl*")))
 (define-key evil-normal-state-map (kbd "M-.") 'nrepl-jump)
 
-(define-key evil-visual-state-map (kbd "C-<up>") 'mc/mark-previous-like-this)
-(define-key evil-visual-state-map (kbd "C-<down>") 'mc/mark-next-like-this)
 (define-key nrepl-mode-map (kbd "M-s") 'paredit-splice-sexp)
+(define-key evil-normal-state-map "\\t" '(lambda ()
+                                           (interactive)
+                                           (wly/load-theme (if (eq 'solarized-dark loaded-theme)
+                                                               'solarized-light
+                                                             'solarized-dark))))
+
+(defun to-emacs-state-keeping-region (f)
+  (let ((mrk (mark))
+        (pnt (point)))
+    (evil-emacs-state)
+    (set-mark mrk)
+    (goto-char pnt)
+    (funcall f)))
+
+(define-key evil-visual-state-map (kbd "C-<up>") '(lambda ()
+                                                    (interactive)
+                                                    (to-emacs-state-keeping-region
+                                                     (lambda ()
+                                                       (mc/mark-previous-like-this 1)))))
+(define-key evil-visual-state-map (kbd "C-<down>") '(lambda ()
+                                                      (interactive)
+                                                      (to-emacs-state-keeping-region
+                                                       (lambda ()
+                                                         (mc/mark-next-like-this 1)))))
+(define-key evil-visual-state-map (kbd "C-S-L") '(lambda ()
+                                                   (interactive)
+                                                   (to-emacs-state-keeping-region
+                                                    (lambda ()
+                                                      (mc/edit-lines)))))
+(define-key evil-emacs-state-map (kbd "C-<up>") 'mc/mark-previous-like-this)
+(define-key evil-emacs-state-map (kbd "M-<down>") 'mc/unmark-previous-like-this)
+(define-key evil-emacs-state-map (kbd "C-<down>") 'mc/mark-next-like-this)
+(define-key evil-emacs-state-map (kbd "M-<up>") 'mc/unmark-next-like-this)
+(define-key mc/keymap (kbd "C-g") '(lambda ()
+                                     (interactive)
+                                     (mc/keyboard-quit)
+                                     (evil-normal-state)))
 
 ;; post
-(load-theme 'solarized-dark t)
+(wly/load-theme 'solarized-dark)
 (setq whitespace-action '(auto-cleanup)
       whitespace-style '(trailing space-before-tab space-after-tab indentation empty lines-tail))
 
