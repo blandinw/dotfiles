@@ -14,15 +14,19 @@ alias notes='vim ~/notes.md'
 alias flushcache='dscacheutil -flushcache && sudo killall -HUP mDNSResponder'
 alias hosts='sudo vim /etc/hosts && flushcache'
 alias sed_trailing_spaces="sed -E -i '.sed' -e 's/[[:space:]]+$//'" # bsd
-alias e=emacs
+alias tmuxw='tmux new -s w'
+alias ed='emacs --daemon'
+alias e='emacsclient -nw'
 alias v=vagrant
+alias d=docker
 alias a=ansible
 alias ap=ansible-playbook
-alias tmuxw='tmux new -s w'
 
 # git
 alias g='git status'
 alias gst='git status'
+alias gf='git fetch'
+alias gm='git merge'
 alias ga='git add'
 alias gb='git branch'
 alias gc='git commit'
@@ -34,6 +38,9 @@ alias gg='git grep'
 alias glo='git log'
 alias gl='git pull'
 alias gp='git push'
+
+# clojure
+alias cljs='lein trampoline cljsbuild'
 
 # ruby
 alias ss='script/server'
@@ -51,6 +58,7 @@ alias ng-serverjruby='JRUBY_OPTS="" jruby --ng-server'
 # python
 alias p='python'
 alias json='python -m json.tool'
+alias venv='source bin/activate'
 
 # java
 alias javassert='java -enableassertions'
@@ -68,4 +76,23 @@ alias coffeec='find . -name "*.coffee" | xargs coffee -w -c'
 
 function uri () {
     echo $1 | ruby -p -e 'require "uri";$_=URI.encode($_.strip)'
+}
+
+function mergedeveloptag () {
+  sh <<EOF
+    set -e -x
+
+    last=$(git tag -l | tail -n1)
+    if [ -z $last ]; then
+      echo "No tags found"
+      exit 1
+    fi
+    echo "unfinished"
+    exit 1
+
+    git merge develop
+    git tag $next
+
+    set +e
+EOF
 }

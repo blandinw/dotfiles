@@ -1,0 +1,9 @@
+# -*- mode: snippet -*-
+# name: React.createClass
+# key: rcc
+# --
+$1 = React.createClass({
+  displayName: '$1'
+  render: ->
+    $0
+})

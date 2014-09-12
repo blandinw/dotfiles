@@ -3,18 +3,35 @@ source ~/.bashrc
 # settings
 autoload -U colors && colors
 autoload -U compinit && compinit
+autoload -Uz vcs_info
 
-export SAVEHIST=1000
+# vcs_info
+zstyle ':vcs_info:*' actionformats '%F{242}%s%f:%F{111}%b%f'
+zstyle ':vcs_info:*' formats '%F{242}%s%f:%F{111}%b%f'
+zstyle ':vcs_info:(sv[nk]|bzr):*' branchformat '%b%F{1}:%F{3}%r'
+
+export SAVEHIST=10000
 export HISTSIZE=10000
 export HISTFILE=~/.zsh_history
+
+setopt prompt_subst
 setopt inc_append_history
 setopt share_history
 
+fpath=(~/_w/forks/zsh-completions/src $fpath)
+
 # hack to get multiline prompt
-precmd() {  print -rP "%{$fg[magenta]%}%n@%M:%{$reset_color%}%~" }
-PROMPT='λ '
+precmd() {
+  vcs_info
+}
+RPROMPT='${vcs_info_msg_0_}'
+PROMPT='\
+%B%F{075}%n@%m%f%b%F{10}:%f%F{242}%~%f \
+
+%F{248}λ%f '
 
 # bindings
 bindkey '^R' 'history-incremental-search-backward'
 
-PATH=$PATH:$HOME/.rvm/bin # Add RVM to PATH for scripting
+### Added by the Heroku Toolbelt
+export PATH="/usr/local/heroku/bin:$PATH"

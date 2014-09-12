@@ -13,7 +13,7 @@
 (setq-default line-number-mode t
               column-number-mode t
               tab-width 2
-              c-basic-offset 4
+              c-basic-offset 2
               indent-tabs-mode nil)
 
 (setq system-uses-terminfo nil
@@ -51,12 +51,6 @@
     (insert-file-contents filename)
     (buffer-string)))
 
-(defun wly/nrepl ()
-  (interactive)
-  (let* ((file-path (expand-file-name "~/.lein/repl-port"))
-         (port (file-string file-path)))
-    (nrepl "localhost" port)))
-
 (defun wly/switch-to-or-open-shell ()
   (interactive)
   (let ((buf (find-buffer-visiting "*terminal*")))
@@ -81,21 +75,17 @@
         (ensure-packages (cdr packages)))
     nil))
 
-(defmacro ret-indent ()
-  '(local-set-key (kbd "RET") 'newline-and-indent))
-
 ;; packages
 (require 'package)
 (add-to-list 'package-archives '("melpa" . "http://melpa.milkbox.net/packages/") t)
 (add-to-list 'package-archives '("marmalade" . "http://marmalade-repo.org/packages/"))
 (package-initialize)
 (ensure-packages '(ack
-                   autopair
                    auto-complete
                    clojure-mode
                    clojure-test-mode
+                   cider
                    coffee-mode
-                   color-theme-solarized
                    elixir-mode
                    erlang
                    evil
@@ -105,29 +95,33 @@
                    ido-ubiquitous
                    js3
                    key-chord
-                   lein
                    linum
                    markdown-mode
                    nginx-mode
-                   nrepl
-                   nrepl-ritz
                    paredit
+                   smartparens
                    rainbow-delimiters
                    ruby-end
                    scss-mode
                    undo-tree
-                   zencoding-mode))
+                   emmet-mode))
 
 (require 'evil)
 (require 'evil-paredit)
 (require 'auto-complete)
-(require 'nrepl)
+(require 'cider)
 (require 'find-file-in-project)
-(require 'multiple-cursors)
+(require 'uniquify)
+(require 'smartparens-config)
+(require 'yasnippet)
+(require 'css-mode)
+(require 'scss-mode)
+;; (require 'sh-mode)
 
 ;; xterm compat
 (define-key input-decode-map "\e3"     "#")
 (define-key input-decode-map "\e[18~"  (kbd "<C-S-backspace>"))
+(define-key input-decode-map "\e[9;97" (kbd "C-;"))
 (define-key input-decode-map "\e[9;98" (kbd "C-S-("))
 (define-key input-decode-map "\e[8;8L" (kbd "C-S-L"))
 (define-key input-decode-map "\eOA"    (kbd "<up>"))
@@ -144,66 +138,105 @@
 ;; javascript
 (defun js-hook ()
   (local-set-key (kbd "RET") 'newline-and-indent)
-  (auto-complete-mode t)
-  (autopair-mode t))
+  (smartparens-mode 1)
+  (auto-complete-mode t))
 
 ;; scss
-(defun scss-hook ()
+(defun css-hook ()
   (local-set-key (kbd "RET") 'newline-and-indent)
-  (setq scss-compile-at-save nil
-        css-indent-offset 2
+  (setq css-indent-offset 2
         tab-width 2)
-  (autopair-mode t)
-  (electric-pair-mode -1)
+  (smartparens-mode 1)
+  (emmet-mode t)
   (flycheck-mode -1))
 
+(defun scss-hook ()
+  (css-hook)
+  (setq scss-compile-at-save nil))
+
+(defvar sh-basic-offset)
+(defvar sh-indentation)
 (defun shell-hook ()
+  (smartparens-mode 1)
   (setq tab-width 2
         sh-basic-offset 2
-        sh-indentation 2)
-  (electric-pair-mode t))
+        sh-indentation 2))
 
 (defun html-hook ()
+  (smartparens-mode 1)
   (local-set-key (kbd "RET") 'newline-and-indent)
-  (zencoding-mode t)
-  (flycheck-mode -1)
-  (electric-pair-mode t))
+  (emmet-mode t)
+  (flycheck-mode -1))
+
+(defun cc-hook ()
+  (smartparens-mode 1)
+  (local-set-key (kbd "C-c C-k") 'compile)
+  (local-set-key (kbd "RET") 'newline-and-indent))
+
+(defun go-hook ()
+  (smartparens-mode 1)
+  (local-set-key (kbd "RET") 'newline-and-indent))
+
+(defun rust-hook ()
+  (smartparens-mode 1)
+  (local-set-key (kbd "RET") 'newline-and-indent))
 
 (defun coffee-hook ()
-  (setq tab-width 2)
-  (electric-pair-mode t))
+  (smartparens-mode 1)
+  (setq tab-width 2))
 
 (defun ruby-hook ()
-  (autopair-mode t)
-  (ruby-end-mode t))
+  (local-set-key (kbd "RET") 'newline-and-indent)
+  (smartparens-mode 1))
 
 (defun sgml-hook ()
-  (zencoding-mode t))
+  (smartparens-mode 1)
+  (emmet-mode t))
 
 (defun clojure-hook ()
   (local-set-key (kbd "RET") 'newline-and-indent)
 
-  (paredit-mode)
-  (evil-paredit-mode)
-  (rainbow-delimiters-mode)
+  (paredit-mode 1)
+  (evil-paredit-mode 1)
+  (rainbow-delimiters-mode 1)
+
   (define-clojure-indent
     (defprotocol 'defun)
+    ;; compojure
+    (GET 'defun)
+    (POST 'defun)
+    (PUT 'defun)
+    (DELETE 'defun)
     (defroutes 'defun)
-    (GET 2)
-    (POST 2)
-    (PUT 2)
-    (DELETE 2)
-    (HEAD 2)
-    (ANY 2)
-    (context 2)
-    (against-background 1)
-    (background 0)
-    (fact 1)
-    (facts 1)
-    (fnk 1)
+    (context 'defun)
+    (against-background 'defun)
+    (background 'defun)
+    (fact 'defun)
+    (facts 'defun)
+    (fnk 'defun)
+    (match 'defun)
     (delta 'defun)
     (defcontroller 'defun)
-    (doarr 'doseq))
+    (nlp 'defun)
+    (defsm 'defun)
+    (doarr 'defun)
+    (if-not-let 'defun)
+    (try-nil 'defun)
+    ;; httpcheck
+    (with 'defun)
+    (checking 'defun)
+    ;; riemann
+    (where 'defun)
+    (expired 'defun)
+    (streams 'defun)
+    ;; CLJS
+    (.service 'defun)
+    (this-as 'defun)
+    ;; core.async
+    (go-try 'defun)
+    ;; clojure.test.check
+    (for-all 'defun)
+    )
 
   ;; fancy
   (font-lock-add-keywords
@@ -224,11 +257,26 @@
                                               (match-end 1) "∈")
                               nil))))))
 
+(defun clojurescript-hook ()
+  (setq inferior-lisp-program (expand-file-name "script/browser-repl"
+                                                (getenv "CLOJURESCRIPT_HOME"))))
+
+
+
+(defun byte-compile-current-buffer ()
+  "`byte-compile' current buffer if it's emacs-lisp-mode and compiled file exists."
+  (interactive)
+  (when (and (eq major-mode 'emacs-lisp-mode)
+             (file-exists-p (byte-compile-dest-file buffer-file-name)))
+    (byte-compile-file buffer-file-name)))
+
 (defun elisp-hook ()
   (local-set-key (kbd "RET") 'newline-and-indent)
-  (paredit-mode)
-  (evil-paredit-mode)
-  (rainbow-delimiters-mode)
+
+  (rainbow-delimiters-mode 1)
+
+  (paredit-mode 1)
+  (evil-paredit-mode 1)
 
   ;; fancy
   (font-lock-add-keywords
@@ -237,11 +285,28 @@
                                               (match-end 1) "λ")
                               nil))))))
 
-(defun nrepl-hook ()
-  (require 'nrepl-ritz))
+(defun cider-hook ()
+  (cider-turn-on-eldoc-mode))
+
+(eval-after-load 'cider
+  '(progn (setq cider-repl-pop-to-buffer-on-connect nil
+                cider-popup-stacktraces t
+                cider-repl-popup-stacktraces t
+                cider-auto-select-error-buffer t
+                cider-repl-wrap-history t
+                cider-repl-history-size 1000
+                cider-repl-history-file "/tmp/cider-repl-history")))
+
+(defun cider-repl-hook ()
+  (rainbow-delimiters-mode 1)
+  (paredit-mode 1)
+  (evil-paredit-mode 1))
+
+(defun cider-popup-buffer-hook ()
+  (evil-local-set-key 'normal (kbd "q") 'cider-popup-buffer-quit-function))
 
 (defun elixir-hook ()
-  (autopair-mode t)
+  (smartparens-mode 1)
   (flycheck-mode -1)
 
   ;; end
@@ -250,43 +315,57 @@
   (set (make-variable-buffer-local 'ruby-end-check-statement-modifiers) nil)
   (ruby-end-mode t))
 
+(autoload 'ghc-init "ghc" nil t)
+(autoload 'ghc-debug "ghc" nil t)
 (defun haskell-hook ()
+  (smartparens-mode 1)
   (turn-on-haskell-indentation)
   (define-key haskell-mode-map (kbd "C-c C-b") 'haskell-interactive-switch)
   (define-key haskell-mode-map (kbd "C-c C-t") 'haskell-process-do-type)
   (define-key haskell-mode-map (kbd "C-c C-l") 'haskell-process-load-file)
+  (ghc-init)
   (message "haskell mode loaded."))
 
-(add-to-list* 'ffip-patterns '("*.coffee"
+(add-to-list* 'ffip-patterns '("Vagrantfile"
+                               "Dockerfile"
+                               "*.coffee"
+                               "*.cljs"
+                               "*.edn"
                                "*.scss"
                                "*.jst"
                                "*.jsx"
+                               "*.go"
                                "*.json"
                                "*.java"
                                "*.yml"
                                "*.j2"
                                "*.cfg"
                                "*.markdown"
+                               "*.properties"
                                "*.md"
+                               "*.rs"
                                "*.ex"
                                "*.exs"))
 
 (defun build-find-excludes (patterns)
-  (mapconcat '(lambda (pat)
+  (mapconcat #'(lambda (pat)
                 (format "-not -regex \"%s\"" pat))
              patterns
              " "))
 
-(setq ffip-find-options (build-find-excludes '(".*.tmp.*"
-                                               ".*autodoc.*"
-                                               ".*node_modules.*"
-                                               ".*app/components.*"
-                                               ".*/cabal-dev/.*"
-                                               ".*/dist/.*"))
+(add-to-list* 'ffip-prune-patterns '("cabal-dev"
+                                     ".cabal-sandbox"
+                                     ".tmp"
+                                     "dist"
+                                     "node_modules"))
+(setq ffip-find-options (build-find-excludes '(;;".*.git.*"
+                                               ))
       ffip-full-paths t
       ffip-limit 1024)
 
-;; evil
+;; -----------------------------------------------------------------------------
+;; Evil bindings
+
 (evil-mode t)
 (key-chord-mode t)
 (evil-ex-define-cmd "W" 'evil-write)
@@ -309,81 +388,71 @@
                                            (interactive)
                                            (comment-or-uncomment-region (line-beginning-position)
                                                                         (line-end-position))))
-(define-key evil-normal-state-map "\\n" '(lambda ()
-                                           (interactive)
-                                           (wly/nrepl)
-                                           (kill-buffer "*nrepl*")))
-(define-key evil-normal-state-map (kbd "M-.") 'nrepl-jump)
+(define-key evil-normal-state-map (kbd "M-.") 'cider-jump)
 
-(define-key nrepl-mode-map (kbd "M-s") 'paredit-splice-sexp)
 (define-key evil-normal-state-map "\\t" '(lambda ()
                                            (interactive)
                                            (wly/load-theme (if (eq 'solarized-dark loaded-theme)
                                                                'solarized-light
                                                              'solarized-dark))))
 
-(defun to-emacs-state-keeping-region (f)
-  (let ((mrk (mark))
-        (pnt (point)))
-    (evil-emacs-state)
-    (set-mark mrk)
-    (goto-char pnt)
-    (funcall f)))
+;; -----------------------------------------------------------------------------
+;; Stuff
 
-(define-key evil-visual-state-map (kbd "C-<up>") '(lambda ()
-                                                    (interactive)
-                                                    (to-emacs-state-keeping-region
-                                                     (lambda ()
-                                                       (mc/mark-previous-like-this 1)))))
-(define-key evil-visual-state-map (kbd "C-<down>") '(lambda ()
-                                                      (interactive)
-                                                      (to-emacs-state-keeping-region
-                                                       (lambda ()
-                                                         (mc/mark-next-like-this 1)))))
-(define-key evil-visual-state-map (kbd "C-S-L") '(lambda ()
-                                                   (interactive)
-                                                   (to-emacs-state-keeping-region
-                                                    (lambda ()
-                                                      (mc/edit-lines)))))
-(define-key evil-emacs-state-map (kbd "C-<up>") 'mc/mark-previous-like-this)
-(define-key evil-emacs-state-map (kbd "M-<down>") 'mc/unmark-previous-like-this)
-(define-key evil-emacs-state-map (kbd "C-<down>") 'mc/mark-next-like-this)
-(define-key evil-emacs-state-map (kbd "M-<up>") 'mc/unmark-next-like-this)
-(define-key mc/keymap (kbd "C-g") '(lambda ()
-                                     (interactive)
-                                     (mc/keyboard-quit)
-                                     (evil-normal-state)))
-
-;; post
-(wly/load-theme 'solarized-dark)
+(wly/load-theme 'solarized-light)
 (setq whitespace-action '(auto-cleanup)
       whitespace-style '(trailing space-before-tab space-after-tab indentation empty lines-tail))
 
 (setq ido-enable-flex-matching t)
 (ido-mode t)
-
-(global-auto-complete-mode t)
-(add-to-list* 'ac-modes '(coffee-mode scss-mode elixir-mode))
-
+(yas-global-mode 1)
 (setq ispell-program-name "aspell")
 (setq ispell-list-command "list")
 (setq ack-default-directory-function '(lambda (&rest args)
                                         (ffip-project-root)))
+(global-set-key (kbd "RET") 'newline-and-indent)
 
-(add-hook 'after-init-hook #'global-flycheck-mode)
+;; -----------------------------------------------------------------------------
+;; Smartparens
+
+(sp-with-modes sp--lisp-modes
+  (sp-local-pair "(" nil :bind "M-("))
+
+;; -----------------------------------------------------------------------------
+;; Autocomplete
+
+(global-auto-complete-mode t)
+(add-to-list* 'ac-modes '(coffee-mode
+                          scss-mode
+                          cider-mode
+                          cider-repl-mode
+                          rust-mode
+                          haskell-mode
+                          elixir-mode))
+
+;; (add-hook 'after-init-hook #'global-flycheck-mode)
+(add-hook 'after-save-hook 'byte-compile-current-buffer)
 (add-hook 'emacs-lisp-mode-hook 'elisp-hook)
 (add-hook 'clojure-mode-hook 'clojure-hook)
+(add-hook 'clojurescript-mode-hook 'clojurescript-hook)
+(add-hook 'cider-mode-hook 'cider-hook)
+(add-hook 'cider-repl-mode-hook 'cider-repl-hook)
+(add-hook 'cider-popup-buffer-mode-hook 'cider-popup-buffer-hook)
 (add-hook 'elixir-mode-hook 'elixir-hook)
 (add-hook 'haskell-mode-hook 'haskell-hook)
-(add-hook 'nrepl-interaction-mode-hook 'nrepl-hook)
 (add-hook 'sgml-mode-hook 'sgml-hook) ;; Auto-starts on any markup modes
 (add-hook 'ruby-mode-hook 'ruby-hook)
 (add-hook 'coffee-mode-hook 'coffee-hook)
 (add-hook 'javascript-mode-hook 'js-hook)
+(add-hook 'js3-mode-hook 'js-hook)
+(add-hook 'css-mode-hook 'css-hook)
 (add-hook 'scss-mode-hook 'scss-hook)
 (add-hook 'html-mode-hook 'html-hook)
 (add-hook 'sh-mode-hook 'shell-hook)
 (add-hook 'web-mode-hook 'html-hook)
+(add-hook 'c-mode-common-hook 'cc-hook)
+(add-hook 'go-mode-hook 'go-hook)
+(add-hook 'rust-mode-hook 'rust-hook)
 
 (autoload 'js3-mode "js3" nil t)
 (autoload 'markdown-mode "markdown-mode" "Major mode for editing Markdown files" t)
@@ -393,10 +462,20 @@
 (add-to-list 'auto-mode-alist '("\\.md$" . markdown-mode))
 (add-to-list 'auto-mode-alist '("\\.podspec$" . ruby-mode))
 (add-to-list 'auto-mode-alist '("\\.js$" . js3-mode))
+(add-to-list 'auto-mode-alist '("\\.json$" . json-mode))
 (add-to-list 'auto-mode-alist '("\\.jsx$" . js3-mode))
+(add-to-list 'auto-mode-alist '("\\.tac$" . python-mode))
+(add-to-list 'auto-mode-alist '("zshrc$" . sh-mode))
 
 (custom-set-variables
- '(haskell-process-type 'cabal-dev)
+ '(sp-base-key-bindings 'paredit)
+ '(sp-autoskip-closing-pair 'always)
+ '(uniquify-buffer-name-style 'forward)
+ '(haskell-process-type 'cabal-repl)
+ '(js-indent-level 2)
  '(js3-indent-on-enter-key t)
  '(js3-enter-indents-newline t)
  '(safe-local-variable-values '((erlang-indent-level . 4))))
+
+(provide 'willy)
+;;; willy.el ends here

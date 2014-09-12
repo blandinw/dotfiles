@@ -6,6 +6,7 @@
         coffee-dedent-line-backspace
         evil-insert
         evil-normal-state
+        sp--self-insert-command
         ))
 
 (setq mc/cmds-to-run-once

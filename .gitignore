@@ -5,15 +5,16 @@
 *~
 .netrwhist
 *#
-vim/bundle/*
-vim/plugin/eclim.vim
-vim/eclim
+/vim/bundle/*
+/vim/plugin/eclim.vim
+/vim/eclim
 
 # version control
 *.hg
 .svn
 
 # emacs
+*.elc
 /emacs.d/elpa
 /emacs.d/eshell
 /emacs.d/ac-comphist.dat
@@ -21,8 +22,8 @@ vim/eclim
 /emacs.d/url
 
 # local files
-bash/local
-vim/local.vim
+/bash/local
+/vim/local.vim
 /mutt/localrc
 
 # misc
@@ -34,4 +35,3 @@ caches
 *.hi
 *.errors
 *i386-darwin
-

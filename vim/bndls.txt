@@ -13,7 +13,7 @@ git://github.com/Valloric/YouCompleteMe.git
 git://github.com/altercation/vim-colors-solarized.git
 
 # html
-git://github.com/mattn/zencoding-vim.git
+git://github.com/mattn/emmet-vim.git
 git://github.com/tpope/vim-ragtag.git
 
 # js

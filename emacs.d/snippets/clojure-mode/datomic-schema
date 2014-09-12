@@ -1,0 +1,10 @@
+# -*- mode: snippet -*-
+# name: Datomic schema elem
+# key: dtm
+# --
+{:db/id #db/id[:db.part/db]
+ :db/ident :$1
+ :db/valueType :db.type/${2:string}
+ :db/cardinality :db.cardinality/${3:one}
+ :db/doc "$4"
+ :db.install/_attribute :db.part/db}

@@ -2,7 +2,7 @@
 
 DOTFILES="$HOME/dotfiles"
 BACKUPS="$HOME/backups"
-SYMLINKS='vim vim/vimrc bashrc ackrc ctags zshrc tmux.conf emacs.d'
+SYMLINKS='vim vim/vimrc bashrc ackrc ctags zshrc emacs.d'
 
 if [ ! -e $DOTFILES ]; then
   echo "error: dotfiles/ needs to reside in $HOME"
@@ -20,11 +20,17 @@ for rcfile in $SYMLINKS; do
   timestamp=$(date +%s)
 
   if [ -e ".$base" ]; then
-    mv ".$base" "$BACKUPS/$base.$timestamp"
+    dest="$BACKUPS/$base.$timestamp"
+    mv ".$base" $dest
+    echo "> Moved .$base to $dest"
   fi
 
   ln -s "$DOTFILES/$rcfile" ".$base"
 done
+
+# custom symlinks
+ln -s "$DOTFILES/tmux" ~/.tmux
+ln -s "$DOTFILES/tmux/tmux.conf" ~/.tmux.conf
 
 touch dotfiles/bash/local
 touch dotfiles/vim/local.vim
