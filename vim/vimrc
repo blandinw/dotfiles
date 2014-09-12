@@ -11,7 +11,7 @@ set number
 set title
 set linespace=1
 set bg=light
-color solarized
+silent! color solarized
 
 " neat mappings
 inoremap <esc> <nop>
@@ -147,8 +147,11 @@ au BufRead,BufNewFile *.clj nmap <buffer><unique><silent><LocalLeader>o <Plug>Cl
 au FileType clojure set sw=2 sts=2
 au FileType clojure nnoremap <buffer><C-]> :call GoToCljTag()<cr>
 au FileType clojure nnoremap <buffer><leader>ry :call VimClojureRunTests2()<cr>
-au VimEnter * RainbowParenthesesToggle
-au Syntax * RainbowParenthesesLoadRound
+
+if exists("*RainbowParenthesesToggle")
+    au VimEnter * RainbowParenthesesToggle
+    au Syntax * RainbowParenthesesLoadRound
+endif
 let g:clojure_maxlines = 100
 let g:clojure_fuzzy_indent = 1
 au FileType clojure let g:clojure_fuzzy_indent_patterns += ['^fn', '^run*', '^fresh', '^project', '^facts\?', '^context']
