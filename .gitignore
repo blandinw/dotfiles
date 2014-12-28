@@ -9,6 +9,11 @@
 /vim/plugin/eclim.vim
 /vim/eclim
 
+# local files
+/bash/local
+/vim/local.vim
+/mutt/localrc
+
 # version control
 *.hg
 .svn
@@ -20,11 +25,8 @@
 /emacs.d/ac-comphist.dat
 /emacs.d/evil-paredit
 /emacs.d/url
-
-# local files
-/bash/local
-/vim/local.vim
-/mutt/localrc
+/emacs.d/projectile-bookmarks.eld
+/emacs.d/projectile.cache
 
 # misc
 .DS_Store

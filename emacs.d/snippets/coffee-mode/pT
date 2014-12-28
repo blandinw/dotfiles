@@ -1,0 +1,6 @@
+# -*- mode: snippet -*-
+# name: propTypes
+# key: pT
+# --
+propTypes:
+  $1: React.PropTypes.${2:object}.${3:isRequired}

@@ -1,8 +1,7 @@
-source ~/.bashrc
-
 # settings
 autoload -U colors && colors
 autoload -U compinit && compinit
+autoload -U bashcompinit && bashcompinit # for autocomp
 autoload -Uz vcs_info
 
 # vcs_info
@@ -10,8 +9,10 @@ zstyle ':vcs_info:*' actionformats '%F{242}%s%f:%F{111}%b%f'
 zstyle ':vcs_info:*' formats '%F{242}%s%f:%F{111}%b%f'
 zstyle ':vcs_info:(sv[nk]|bzr):*' branchformat '%b%F{1}:%F{3}%r'
 
-export SAVEHIST=10000
-export HISTSIZE=10000
+source ~/.bashrc
+
+export SAVEHIST=50000
+export HISTSIZE=50000
 export HISTFILE=~/.zsh_history
 
 setopt prompt_subst
@@ -32,6 +33,3 @@ PROMPT='\
 
 # bindings
 bindkey '^R' 'history-incremental-search-backward'
-
-### Added by the Heroku Toolbelt
-export PATH="/usr/local/heroku/bin:$PATH"

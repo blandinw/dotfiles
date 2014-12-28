@@ -2,8 +2,9 @@
 # name: React.createClass
 # key: rcc
 # --
-$1 = React.createClass({
+$1Class = React.createClass({
   displayName: '$1'
   render: ->
     $0
 })
+$1 = React.createFactory($1Class)

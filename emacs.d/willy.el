@@ -80,40 +80,80 @@
 (add-to-list 'package-archives '("melpa" . "http://melpa.milkbox.net/packages/") t)
 (add-to-list 'package-archives '("marmalade" . "http://marmalade-repo.org/packages/"))
 (package-initialize)
-(ensure-packages '(ack
+(ensure-packages '(ac-cider
+                   ac-emmet
+                   ac-octave
+                   ack
                    auto-complete
+                   cider
                    clojure-mode
                    clojure-test-mode
-                   cider
+                   clojurescript-mode
+                   cmake-mode
                    coffee-mode
+                   color-theme
+                   color-theme-solarized
+                   dash
+                   dockerfile-mode
                    elixir-mode
+                   emmet-mode
+                   epl
                    erlang
                    evil
-                   find-file-in-project
+                   f
                    flycheck
+                   flymake-easy
+                   flymake-haskell-multi
+                   fringe-helper
+                   fuel
+                   ghc
+                   git-commit-mode
+                   git-rebase-mode
+                   go-autocomplete
+                   go-mode
+                   goto-chg
+                   goto-last-change
                    haskell-mode
                    ido-ubiquitous
+                   inf-ruby
+                   javap-mode
                    js3
+                   json-mode
+                   json-reformat
+                   json-snatcher
                    key-chord
+                   let-alist
                    linum
+                   magit
                    markdown-mode
                    nginx-mode
+                   notmuch
                    paredit
-                   smartparens
+                   pkg-info
+                   popup
+                   projectile
+                   queue
                    rainbow-delimiters
                    ruby-end
+                   rust-mode
+                   s
                    scss-mode
+                   smartparens
+                   toml-mode
+                   tree-mode
                    undo-tree
-                   emmet-mode))
+                   web-mode
+                   yaml-mode
+                   yasnippet))
 
 (require 'evil)
 (require 'evil-paredit)
 (require 'auto-complete)
 (require 'cider)
-(require 'find-file-in-project)
 (require 'uniquify)
 (require 'smartparens-config)
 (require 'yasnippet)
+(require 'projectile)
 (require 'css-mode)
 (require 'scss-mode)
 ;; (require 'sh-mode)
@@ -148,7 +188,9 @@
         tab-width 2)
   (smartparens-mode 1)
   (emmet-mode t)
-  (flycheck-mode -1))
+  (flycheck-mode -1)
+  (define-key evil-insert-state-map (kbd "C-j") 'emmet-expand-yas)
+  (local-set-key (kbd "C-j") 'emmet-expand-yas))
 
 (defun scss-hook ()
   (css-hook)
@@ -215,13 +257,6 @@
     (facts 'defun)
     (fnk 'defun)
     (match 'defun)
-    (delta 'defun)
-    (defcontroller 'defun)
-    (nlp 'defun)
-    (defsm 'defun)
-    (doarr 'defun)
-    (if-not-let 'defun)
-    (try-nil 'defun)
     ;; httpcheck
     (with 'defun)
     (checking 'defun)
@@ -236,6 +271,26 @@
     (go-try 'defun)
     ;; clojure.test.check
     (for-all 'defun)
+    ;; wit
+    (delta 'defun)
+    (defcontroller 'defun)
+    (nlp 'defun)
+    (defsm 'defun)
+    (doarr 'defun)
+    (if-not-let 'defun)
+    (try-nil 'defun)
+    (stubbing-goog 'defun)
+    (stubbing-stack 'defun)
+    (dom/a 'defun)
+    (div 'defun)
+    (img 'defun)
+    (input 'defun)
+    (label 'defun)
+    (li 'defun)
+    (span 'defun)
+    (textarea 'defun)
+    (ul 'defun)
+
     )
 
   ;; fancy
@@ -326,43 +381,6 @@
   (ghc-init)
   (message "haskell mode loaded."))
 
-(add-to-list* 'ffip-patterns '("Vagrantfile"
-                               "Dockerfile"
-                               "*.coffee"
-                               "*.cljs"
-                               "*.edn"
-                               "*.scss"
-                               "*.jst"
-                               "*.jsx"
-                               "*.go"
-                               "*.json"
-                               "*.java"
-                               "*.yml"
-                               "*.j2"
-                               "*.cfg"
-                               "*.markdown"
-                               "*.properties"
-                               "*.md"
-                               "*.rs"
-                               "*.ex"
-                               "*.exs"))
-
-(defun build-find-excludes (patterns)
-  (mapconcat #'(lambda (pat)
-                (format "-not -regex \"%s\"" pat))
-             patterns
-             " "))
-
-(add-to-list* 'ffip-prune-patterns '("cabal-dev"
-                                     ".cabal-sandbox"
-                                     ".tmp"
-                                     "dist"
-                                     "node_modules"))
-(setq ffip-find-options (build-find-excludes '(;;".*.git.*"
-                                               ))
-      ffip-full-paths t
-      ffip-limit 1024)
-
 ;; -----------------------------------------------------------------------------
 ;; Evil bindings
 
@@ -374,8 +392,9 @@
 (define-key evil-normal-state-map (kbd "-") 'evil-window-next)
 (define-key evil-normal-state-map (kbd "_") 'evil-window-prev)
 (define-key evil-normal-state-map "\\`" 'evil-buffer)
-(define-key evil-normal-state-map "\\b" 'ido-switch-buffer)
-(define-key evil-normal-state-map "\\p" 'ffip)
+(define-key evil-normal-state-map "\\b" 'projectile-switch-to-buffer)
+(define-key evil-normal-state-map "\\p" 'projectile-find-file)
+(define-key evil-normal-state-map "\\g" 'magit-status)
 (define-key evil-normal-state-map "\\s" 'wly/switch-to-or-open-shell)
 (define-key evil-normal-state-map "\\ve" (lambda ()
                                           (interactive)
@@ -406,10 +425,11 @@
 (setq ido-enable-flex-matching t)
 (ido-mode t)
 (yas-global-mode 1)
+(projectile-global-mode 1)
 (setq ispell-program-name "aspell")
 (setq ispell-list-command "list")
 (setq ack-default-directory-function '(lambda (&rest args)
-                                        (ffip-project-root)))
+                                        (projectile-project-root)))
 (global-set-key (kbd "RET") 'newline-and-indent)
 
 ;; -----------------------------------------------------------------------------
@@ -417,6 +437,8 @@
 
 (sp-with-modes sp--lisp-modes
   (sp-local-pair "(" nil :bind "M-("))
+
+(sp-local-pair 'rust-mode "'" nil :actions nil)
 
 ;; -----------------------------------------------------------------------------
 ;; Autocomplete
@@ -468,6 +490,7 @@
 (add-to-list 'auto-mode-alist '("zshrc$" . sh-mode))
 
 (custom-set-variables
+ '(sp-autoescape-string-quote nil)
  '(sp-base-key-bindings 'paredit)
  '(sp-autoskip-closing-pair 'always)
  '(uniquify-buffer-name-style 'forward)
