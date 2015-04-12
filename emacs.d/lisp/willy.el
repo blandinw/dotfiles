@@ -4,18 +4,6 @@
 
 (defalias 'vi 'evil-mode)
 
-;; pre
-(menu-bar-mode -1)
-(tool-bar-mode -1)
-(linum-mode -1)
-(global-whitespace-mode t)
-
-(setq-default line-number-mode t
-              column-number-mode t
-              tab-width 2
-              c-basic-offset 2
-              indent-tabs-mode nil)
-
 (setq system-uses-terminfo nil
       backup-by-copying t ;; don't clobber symlinks
       backup-directory-alist
@@ -87,7 +75,6 @@
                    auto-complete
                    cider
                    clojure-mode
-                   clojure-test-mode
                    clojurescript-mode
                    cmake-mode
                    coffee-mode
@@ -100,6 +87,7 @@
                    epl
                    erlang
                    evil
+                   evil-paredit
                    f
                    flycheck
                    flymake-easy
@@ -117,7 +105,7 @@
                    ido-ubiquitous
                    inf-ruby
                    javap-mode
-                   js3
+                   js3-mode
                    json-mode
                    json-reformat
                    json-snatcher
@@ -174,6 +162,19 @@
 (define-key input-decode-map "\e[D"    (kbd "<C-left>"))
 (define-key input-decode-map "\e[1;7A" (kbd "<M-up>"))
 (define-key input-decode-map "\e[1;7B" (kbd "<M-down>"))
+
+;; pre
+(menu-bar-mode -1)
+(tool-bar-mode -1)
+(linum-mode -1)
+(global-whitespace-mode t)
+
+(setq-default line-number-mode t
+              column-number-mode t
+              tab-width 2
+              c-basic-offset 2
+              indent-tabs-mode nil)
+
 
 ;; javascript
 (defun js-hook ()
@@ -290,7 +291,6 @@
     (span 'defun)
     (textarea 'defun)
     (ul 'defun)
-
     )
 
   ;; fancy
@@ -398,7 +398,7 @@
 (define-key evil-normal-state-map "\\s" 'wly/switch-to-or-open-shell)
 (define-key evil-normal-state-map "\\ve" (lambda ()
                                           (interactive)
-                                          (find-file "~/.emacs.d/willy.el")))
+                                          (find-file "~/.emacs.d/lisp/willy.el")))
 (define-key evil-normal-state-map "\\z" 'evil-emacs-state)
 (define-key evil-normal-state-map "\\m" 'to-markdown)
 (define-key evil-normal-state-map (kbd "C-z") 'suspend-frame)
@@ -407,7 +407,7 @@
                                            (interactive)
                                            (comment-or-uncomment-region (line-beginning-position)
                                                                         (line-end-position))))
-(define-key evil-normal-state-map (kbd "M-.") 'cider-jump)
+(define-key evil-normal-state-map (kbd "M-.") 'cider-find-var)
 
 (define-key evil-normal-state-map "\\t" '(lambda ()
                                            (interactive)

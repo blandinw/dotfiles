@@ -1,4 +1,4 @@
-(add-to-list 'load-path "~/.emacs.d")
+(add-to-list 'load-path "~/.emacs.d/lisp")
 (load "willy.el")
 (custom-set-variables
  ;; custom-set-variables was added by Custom.

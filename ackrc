@@ -8,4 +8,5 @@
 --type-add=hamlc=.hamlc
 --type-add=haml=.haml
 --type-add=jst=.jst
+--type-add=edn=.edn
 --smart-case

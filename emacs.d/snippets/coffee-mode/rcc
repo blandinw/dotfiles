@@ -1,6 +1,7 @@
 # -*- mode: snippet -*-
 # name: React.createClass
 # key: rcc
+# expand-env: ((yas-indent-line 'fixed) (yas-wrap-around-region 'nil))
 # --
 $1Class = React.createClass({
   displayName: '$1'
