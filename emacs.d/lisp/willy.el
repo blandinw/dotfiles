@@ -109,6 +109,7 @@
                    nginx-mode
                    notmuch
                    paredit
+                   php-mode
                    pkg-info
                    popup
                    projectile
@@ -137,13 +138,9 @@
 (require 'uniquify)
 (require 'yasnippet)
 
-;; javascript
-(defun js-hook ()
-  (local-set-key (kbd "RET") 'newline-and-indent)
-  (smartparens-mode 1)
-  (auto-complete-mode t))
+;; -----------------------------------------------------------------------------
+;; Hooks
 
-;; scss
 (defun css-hook ()
   (local-set-key (kbd "RET") 'newline-and-indent)
   (setq css-indent-offset 2
@@ -153,6 +150,14 @@
   (flycheck-mode -1)
   (define-key evil-insert-state-map (kbd "C-j") 'emmet-expand-yas)
   (local-set-key (kbd "C-j") 'emmet-expand-yas))
+
+(defun js-hook ()
+  (local-set-key (kbd "RET") 'newline-and-indent)
+  (smartparens-mode 1)
+  (auto-complete-mode t))
+
+(defun php-hook ()
+  (setq c-basic-offset 2))
 
 (defun scss-hook ()
   (css-hook)
@@ -252,6 +257,8 @@
     (span 'defun)
     (textarea 'defun)
     (ul 'defun)
+    (as-channel 'defun)
+    (query 'defun)
     )
 
   ;; fancy
@@ -295,9 +302,9 @@
   ;; fancy
   (font-lock-add-keywords
    'emacs-lisp-mode `(("(\\(lambda\\)[\[[:space:]]"
-                    (0 (progn (compose-region (match-beginning 1)
-                                              (match-end 1) "λ")
-                              nil))))))
+                       (0 (progn (compose-region (match-beginning 1)
+                                                 (match-end 1) "λ")
+                                 nil))))))
 
 (defun cider-hook ()
   (cider-turn-on-eldoc-mode))
@@ -329,8 +336,6 @@
   (set (make-variable-buffer-local 'ruby-end-check-statement-modifiers) nil)
   (ruby-end-mode t))
 
-(autoload 'ghc-init "ghc" nil t)
-(autoload 'ghc-debug "ghc" nil t)
 (defun haskell-hook ()
   (smartparens-mode 1)
   (turn-on-haskell-indentation)
@@ -350,6 +355,7 @@
 (add-hook 'cider-popup-buffer-mode-hook 'cider-popup-buffer-hook)
 (add-hook 'elixir-mode-hook 'elixir-hook)
 (add-hook 'haskell-mode-hook 'haskell-hook)
+(add-hook 'php-mode-hook 'php-hook)
 (add-hook 'sgml-mode-hook 'sgml-hook) ;; Auto-starts on any markup modes
 (add-hook 'ruby-mode-hook 'ruby-hook)
 (add-hook 'coffee-mode-hook 'coffee-hook)
@@ -365,6 +371,8 @@
 (add-hook 'rust-mode-hook 'rust-hook)
 
 (autoload 'js3-mode "js3" nil t)
+(autoload 'ghc-init "ghc" nil t)
+(autoload 'ghc-debug "ghc" nil t)
 (autoload 'markdown-mode "markdown-mode" "Major mode for editing Markdown files" t)
 
 (add-to-list 'auto-mode-alist '("\\.html$" . web-mode))
@@ -412,8 +420,8 @@
 (define-key evil-normal-state-map "\\g" 'magit-status)
 (define-key evil-normal-state-map "\\s" 'wly/switch-to-or-open-shell)
 (define-key evil-normal-state-map "\\ve" (lambda ()
-                                          (interactive)
-                                          (find-file "~/.emacs.d/lisp/willy.el")))
+                                           (interactive)
+                                           (find-file "~/.emacs.d/lisp/willy.el")))
 (define-key evil-normal-state-map "\\z" 'evil-emacs-state)
 (define-key evil-normal-state-map "\\m" 'to-markdown)
 (define-key evil-normal-state-map (kbd "C-z") 'suspend-frame)
@@ -442,7 +450,6 @@
  column-number-mode t
  custom-file "~/.emacs.d/custom.el"
  delete-old-versions t
- evil-want-C-u-scroll t
  ido-enable-flex-matching t
  indent-tabs-mode nil
  inhibit-startup-echo-area-message t
@@ -496,6 +503,8 @@
 
 ;; -----------------------------------------------------------------------------
 ;; Allow local customizations
+
+(load custom-file)
 
 (let ((local (locate-library "local")))
   (when local (load local)))
