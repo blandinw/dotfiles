@@ -1,24 +1,14 @@
-;; system
-(add-to-list 'load-path "~/.emacs.d/vendor")
-(add-to-list 'load-path "~/.emacs.d/evil-paredit")
+;; -----------------------------------------------------------------------------
+;; Base
 
 (defalias 'vi 'evil-mode)
 
-(setq system-uses-terminfo nil
-      backup-by-copying t ;; don't clobber symlinks
-      backup-directory-alist
-      '(("." . "~/backups/emacs.backups")) ;; don't litter my fs tree
-      delete-old-versions t
-      kept-new-versions 6
-      kept-old-versions 2
-      version-control t ;; use versioned backups
-      inhibit-startup-message t
-      inhibit-startup-echo-area-message t
-      kill-buffer-query-functions (remq 'process-kill-buffer-query-function
-                                        kill-buffer-query-functions)
-      evil-want-C-u-scroll t)
+(add-to-list 'load-path "~/.emacs.d/vendor")
+(add-to-list 'load-path "~/.emacs.d/evil-paredit")
 
-;; custom functions and macros
+;; -----------------------------------------------------------------------------
+;; Custom functions
+
 (defun add-to-list* (the-list elems)
   (if elems
       (progn
@@ -63,7 +53,9 @@
         (ensure-packages (cdr packages)))
     nil))
 
-;; packages
+;; -----------------------------------------------------------------------------
+;; Packages
+
 (require 'package)
 (add-to-list 'package-archives '("melpa" . "http://melpa.milkbox.net/packages/") t)
 (add-to-list 'package-archives '("marmalade" . "http://marmalade-repo.org/packages/"))
@@ -134,47 +126,16 @@
                    yaml-mode
                    yasnippet))
 
-(require 'evil)
-(require 'evil-paredit)
 (require 'auto-complete)
 (require 'cider)
-(require 'uniquify)
-(require 'smartparens-config)
-(require 'yasnippet)
-(require 'projectile)
 (require 'css-mode)
+(require 'evil)
+(require 'evil-paredit)
+(require 'projectile)
 (require 'scss-mode)
-;; (require 'sh-mode)
-
-;; xterm compat
-(define-key input-decode-map "\e3"     "#")
-(define-key input-decode-map "\e[18~"  (kbd "<C-S-backspace>"))
-(define-key input-decode-map "\e[9;97" (kbd "C-;"))
-(define-key input-decode-map "\e[9;98" (kbd "C-S-("))
-(define-key input-decode-map "\e[8;8L" (kbd "C-S-L"))
-(define-key input-decode-map "\eOA"    (kbd "<up>"))
-(define-key input-decode-map "\eOB"    (kbd "<down>"))
-(define-key input-decode-map "\eOC"    (kbd "<right>"))
-(define-key input-decode-map "\eOD"    (kbd "<left>"))
-(define-key input-decode-map "\e[A"    (kbd "<C-up>"))
-(define-key input-decode-map "\e[B"    (kbd "<C-down>"))
-(define-key input-decode-map "\e[C"    (kbd "<C-right>"))
-(define-key input-decode-map "\e[D"    (kbd "<C-left>"))
-(define-key input-decode-map "\e[1;7A" (kbd "<M-up>"))
-(define-key input-decode-map "\e[1;7B" (kbd "<M-down>"))
-
-;; pre
-(menu-bar-mode -1)
-(tool-bar-mode -1)
-(linum-mode -1)
-(global-whitespace-mode t)
-
-(setq-default line-number-mode t
-              column-number-mode t
-              tab-width 2
-              c-basic-offset 2
-              indent-tabs-mode nil)
-
+(require 'smartparens-config)
+(require 'uniquify)
+(require 'yasnippet)
 
 ;; javascript
 (defun js-hook ()
@@ -316,8 +277,6 @@
   (setq inferior-lisp-program (expand-file-name "script/browser-repl"
                                                 (getenv "CLOJURESCRIPT_HOME"))))
 
-
-
 (defun byte-compile-current-buffer ()
   "`byte-compile' current buffer if it's emacs-lisp-mode and compiled file exists."
   (interactive)
@@ -381,77 +340,6 @@
   (ghc-init)
   (message "haskell mode loaded."))
 
-;; -----------------------------------------------------------------------------
-;; Evil bindings
-
-(evil-mode t)
-(key-chord-mode t)
-(evil-ex-define-cmd "W" 'evil-write)
-(key-chord-define evil-insert-state-map (kbd "jk") 'evil-normal-state)
-(define-key evil-insert-state-map (kbd "<enter>") 'evil-ret-and-indent)
-(define-key evil-normal-state-map (kbd "-") 'evil-window-next)
-(define-key evil-normal-state-map (kbd "_") 'evil-window-prev)
-(define-key evil-normal-state-map "\\`" 'evil-buffer)
-(define-key evil-normal-state-map "\\b" 'projectile-switch-to-buffer)
-(define-key evil-normal-state-map "\\p" 'projectile-find-file)
-(define-key evil-normal-state-map "\\g" 'magit-status)
-(define-key evil-normal-state-map "\\s" 'wly/switch-to-or-open-shell)
-(define-key evil-normal-state-map "\\ve" (lambda ()
-                                          (interactive)
-                                          (find-file "~/.emacs.d/lisp/willy.el")))
-(define-key evil-normal-state-map "\\z" 'evil-emacs-state)
-(define-key evil-normal-state-map "\\m" 'to-markdown)
-(define-key evil-normal-state-map (kbd "C-z") 'suspend-frame)
-(define-key evil-visual-state-map "gc" 'comment-or-uncomment-region)
-(define-key evil-normal-state-map "gcc" '(lambda ()
-                                           (interactive)
-                                           (comment-or-uncomment-region (line-beginning-position)
-                                                                        (line-end-position))))
-(define-key evil-normal-state-map (kbd "M-.") 'cider-find-var)
-
-(define-key evil-normal-state-map "\\t" '(lambda ()
-                                           (interactive)
-                                           (wly/load-theme (if (eq 'solarized-dark loaded-theme)
-                                                               'solarized-light
-                                                             'solarized-dark))))
-
-;; -----------------------------------------------------------------------------
-;; Stuff
-
-(wly/load-theme 'solarized-light)
-(setq whitespace-action '(auto-cleanup)
-      whitespace-style '(trailing space-before-tab space-after-tab indentation empty lines-tail))
-
-(setq ido-enable-flex-matching t)
-(ido-mode t)
-(yas-global-mode 1)
-(projectile-global-mode 1)
-(setq ispell-program-name "aspell")
-(setq ispell-list-command "list")
-(setq ack-default-directory-function '(lambda (&rest args)
-                                        (projectile-project-root)))
-(global-set-key (kbd "RET") 'newline-and-indent)
-
-;; -----------------------------------------------------------------------------
-;; Smartparens
-
-(sp-with-modes sp--lisp-modes
-  (sp-local-pair "(" nil :bind "M-("))
-
-(sp-local-pair 'rust-mode "'" nil :actions nil)
-
-;; -----------------------------------------------------------------------------
-;; Autocomplete
-
-(global-auto-complete-mode t)
-(add-to-list* 'ac-modes '(coffee-mode
-                          scss-mode
-                          cider-mode
-                          cider-repl-mode
-                          rust-mode
-                          haskell-mode
-                          elixir-mode))
-
 ;; (add-hook 'after-init-hook #'global-flycheck-mode)
 (add-hook 'after-save-hook 'byte-compile-current-buffer)
 (add-hook 'emacs-lisp-mode-hook 'elisp-hook)
@@ -489,16 +377,128 @@
 (add-to-list 'auto-mode-alist '("\\.tac$" . python-mode))
 (add-to-list 'auto-mode-alist '("zshrc$" . sh-mode))
 
-(custom-set-variables
- '(sp-autoescape-string-quote nil)
- '(sp-base-key-bindings 'paredit)
- '(sp-autoskip-closing-pair 'always)
- '(uniquify-buffer-name-style 'forward)
- '(haskell-process-type 'cabal-repl)
- '(js-indent-level 2)
- '(js3-indent-on-enter-key t)
- '(js3-enter-indents-newline t)
- '(safe-local-variable-values '((erlang-indent-level . 4))))
+;; -----------------------------------------------------------------------------
+;; Keys: xterm compatibility
+
+(define-key input-decode-map "\e3"     "#")
+(define-key input-decode-map "\e[18~"  (kbd "<C-S-backspace>"))
+(define-key input-decode-map "\e[9;97" (kbd "C-;"))
+(define-key input-decode-map "\e[9;98" (kbd "C-S-("))
+(define-key input-decode-map "\e[8;8L" (kbd "C-S-L"))
+(define-key input-decode-map "\eOA"    (kbd "<up>"))
+(define-key input-decode-map "\eOB"    (kbd "<down>"))
+(define-key input-decode-map "\eOC"    (kbd "<right>"))
+(define-key input-decode-map "\eOD"    (kbd "<left>"))
+(define-key input-decode-map "\e[A"    (kbd "<C-up>"))
+(define-key input-decode-map "\e[B"    (kbd "<C-down>"))
+(define-key input-decode-map "\e[C"    (kbd "<C-right>"))
+(define-key input-decode-map "\e[D"    (kbd "<C-left>"))
+(define-key input-decode-map "\e[1;7A" (kbd "<M-up>"))
+(define-key input-decode-map "\e[1;7B" (kbd "<M-down>"))
+
+;; -----------------------------------------------------------------------------
+;; Keys: Evil bindings
+
+(evil-mode t)
+(key-chord-mode t)
+(evil-ex-define-cmd "W" 'evil-write)
+(key-chord-define evil-insert-state-map (kbd "jk") 'evil-normal-state)
+(define-key evil-insert-state-map (kbd "<enter>") 'evil-ret-and-indent)
+(define-key evil-normal-state-map (kbd "-") 'evil-window-next)
+(define-key evil-normal-state-map (kbd "_") 'evil-window-prev)
+(define-key evil-normal-state-map "\\`" 'evil-buffer)
+(define-key evil-normal-state-map "\\b" 'projectile-switch-to-buffer)
+(define-key evil-normal-state-map "\\p" 'projectile-find-file)
+(define-key evil-normal-state-map "\\g" 'magit-status)
+(define-key evil-normal-state-map "\\s" 'wly/switch-to-or-open-shell)
+(define-key evil-normal-state-map "\\ve" (lambda ()
+                                          (interactive)
+                                          (find-file "~/.emacs.d/lisp/willy.el")))
+(define-key evil-normal-state-map "\\z" 'evil-emacs-state)
+(define-key evil-normal-state-map "\\m" 'to-markdown)
+(define-key evil-normal-state-map (kbd "C-z") 'suspend-frame)
+(define-key evil-visual-state-map "gc" 'comment-or-uncomment-region)
+(define-key evil-normal-state-map "gcc" '(lambda ()
+                                           (interactive)
+                                           (comment-or-uncomment-region (line-beginning-position)
+                                                                        (line-end-position))))
+(define-key evil-normal-state-map (kbd "M-.") 'cider-find-var)
+
+(define-key evil-normal-state-map "\\t" '(lambda ()
+                                           (interactive)
+                                           (wly/load-theme (if (eq 'solarized-dark loaded-theme)
+                                                               'solarized-light
+                                                             'solarized-dark))))
+
+(global-set-key (kbd "RET") 'newline-and-indent)
+
+;; -----------------------------------------------------------------------------
+;; Customizations
+
+(setq
+ ack-default-directory-function '(lambda (&rest args) (projectile-project-root))
+ backup-by-copying t ;; don't clobber symlinks
+ backup-directory-alist '(("." . "~/backups/emacs.backups")) ;; don't litter my fs tree
+ column-number-mode t
+ custom-file "~/.emacs.d/custom.el"
+ delete-old-versions t
+ evil-want-C-u-scroll t
+ ido-enable-flex-matching t
+ indent-tabs-mode nil
+ inhibit-startup-echo-area-message t
+ inhibit-startup-message t
+ ispell-program-name "aspell"
+ ispell-list-command "list"
+ kept-new-versions 6
+ kept-old-versions 2
+ kill-buffer-query-functions (remq 'process-kill-buffer-query-function kill-buffer-query-functions)
+ line-number-mode t
+ system-uses-terminfo nil
+ tab-width 2
+ version-control t ;; use versioned backups
+ whitespace-action '(auto-cleanup)
+ whitespace-style '(trailing space-before-tab space-after-tab indentation empty lines-tail)
+ )
+
+(put 'dired-find-alternate-file 'disabled nil)
+
+(global-auto-complete-mode t)
+(global-whitespace-mode t)
+(ido-mode t)
+(linum-mode -1)
+(menu-bar-mode -1)
+(projectile-global-mode 1)
+(tool-bar-mode -1)
+(yas-global-mode 1)
+
+(wly/load-theme 'solarized-light)
+
+;; -----------------------------------------------------------------------------
+;; Smartparens
+
+(sp-with-modes sp--lisp-modes
+  (sp-local-pair "(" nil :bind "M-("))
+
+(sp-local-pair 'rust-mode "'" nil :actions nil)
+
+;; -----------------------------------------------------------------------------
+;; Autocomplete
+
+(add-to-list* 'ac-modes '(
+                          cider-mode
+                          cider-repl-mode
+                          coffee-mode
+                          elixir-mode
+                          haskell-mode
+                          rust-mode
+                          scss-mode
+                          ))
+
+;; -----------------------------------------------------------------------------
+;; Allow local customizations
+
+(let ((local (locate-library "local")))
+  (when local (load local)))
 
 (provide 'willy)
 ;;; willy.el ends here

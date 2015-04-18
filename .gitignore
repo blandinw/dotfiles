@@ -27,6 +27,7 @@
 /emacs.d/url
 /emacs.d/projectile-bookmarks.eld
 /emacs.d/projectile.cache
+/emacs.d/lisp/local.el
 
 # misc
 .DS_Store
