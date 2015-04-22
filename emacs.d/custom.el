@@ -12,10 +12,16 @@
  '(js3-indent-on-enter-key t)
  '(safe-local-variable-values (quote ((eval font-lock-add-keywords nil (\` (((\, (concat "(" (regexp-opt (quote ("sp-do-move-op" "sp-do-move-cl" "sp-do-put-op" "sp-do-put-cl" "sp-do-del-op" "sp-do-del-cl")) t) "\\_>")) 1 (quote font-lock-variable-name-face))))) (erlang-indent-level . 4))))
  '(send-mail-function (quote mailclient-send-it))
+ '(sh-basic-offset 2)
+ '(sh-indentation 2)
  '(sp-autoescape-string-quote nil)
  '(sp-autoskip-closing-pair (quote always))
  '(sp-base-key-bindings (quote paredit))
- '(uniquify-buffer-name-style (quote forward) nil (uniquify)))
+ '(uniquify-buffer-name-style (quote forward) nil (uniquify))
+ '(web-mode-markup-indent-offset 2)
+ '(web-mode-css-indent-offset 2)
+ '(web-mode-code-indent-offset 2)
+ '(web-mode-attr-indent-offset 2))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.

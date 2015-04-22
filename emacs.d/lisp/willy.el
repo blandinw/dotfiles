@@ -16,6 +16,13 @@
         (add-to-list* the-list (cdr elems)))
     (eval the-list)))
 
+(defun byte-compile-current-buffer ()
+  "`byte-compile' current buffer if it's emacs-lisp-mode and compiled file exists."
+  (interactive)
+  (when (and (eq major-mode 'emacs-lisp-mode)
+             (file-exists-p (byte-compile-dest-file buffer-file-name)))
+    (byte-compile-file buffer-file-name)))
+
 (defun to-markdown ()
   (interactive)
   (shell-command (concat "marked --gfm " buffer-file-name " | browser")))
@@ -128,6 +135,7 @@
                    yasnippet))
 
 (require 'auto-complete)
+(require 'auto-complete-config)
 (require 'cider)
 (require 'css-mode)
 (require 'evil)
@@ -141,69 +149,25 @@
 ;; -----------------------------------------------------------------------------
 ;; Hooks
 
-(defun css-hook ()
-  (local-set-key (kbd "RET") 'newline-and-indent)
-  (setq css-indent-offset 2
-        tab-width 2)
-  (smartparens-mode 1)
-  (emmet-mode t)
-  (flycheck-mode -1)
-  (define-key evil-insert-state-map (kbd "C-j") 'emmet-expand-yas)
-  (local-set-key (kbd "C-j") 'emmet-expand-yas))
-
-(defun js-hook ()
-  (local-set-key (kbd "RET") 'newline-and-indent)
-  (smartparens-mode 1)
-  (auto-complete-mode t))
-
-(defun php-hook ()
-  (setq c-basic-offset 2))
-
-(defun scss-hook ()
-  (css-hook)
-  (setq scss-compile-at-save nil))
-
-(defvar sh-basic-offset)
-(defvar sh-indentation)
-(defun shell-hook ()
-  (smartparens-mode 1)
-  (setq tab-width 2
-        sh-basic-offset 2
-        sh-indentation 2))
-
-(defun html-hook ()
-  (smartparens-mode 1)
-  (local-set-key (kbd "RET") 'newline-and-indent)
-  (emmet-mode t)
-  (flycheck-mode -1))
-
 (defun cc-hook ()
   (smartparens-mode 1)
   (local-set-key (kbd "C-c C-k") 'compile)
   (local-set-key (kbd "RET") 'newline-and-indent))
 
-(defun go-hook ()
-  (smartparens-mode 1)
-  (local-set-key (kbd "RET") 'newline-and-indent))
+(defun cider-hook ()
+  (cider-turn-on-eldoc-mode))
 
-(defun rust-hook ()
-  (smartparens-mode 1)
-  (local-set-key (kbd "RET") 'newline-and-indent))
+(defun cider-repl-hook ()
+  (rainbow-delimiters-mode 1)
+  (paredit-mode 1)
+  (evil-paredit-mode 1))
 
-(defun coffee-hook ()
-  (smartparens-mode 1)
-  (setq tab-width 2))
-
-(defun ruby-hook ()
-  (local-set-key (kbd "RET") 'newline-and-indent)
-  (smartparens-mode 1))
-
-(defun sgml-hook ()
-  (smartparens-mode 1)
-  (emmet-mode t))
+(defun cider-popup-buffer-hook ()
+  (evil-local-set-key 'normal (kbd "q") 'cider-popup-buffer-quit-function))
 
 (defun clojure-hook ()
   (local-set-key (kbd "RET") 'newline-and-indent)
+  (define-key evil-normal-state-map (kbd "M-.") 'cider-find-var)
 
   (paredit-mode 1)
   (evil-paredit-mode 1)
@@ -284,15 +248,32 @@
   (setq inferior-lisp-program (expand-file-name "script/browser-repl"
                                                 (getenv "CLOJURESCRIPT_HOME"))))
 
-(defun byte-compile-current-buffer ()
-  "`byte-compile' current buffer if it's emacs-lisp-mode and compiled file exists."
-  (interactive)
-  (when (and (eq major-mode 'emacs-lisp-mode)
-             (file-exists-p (byte-compile-dest-file buffer-file-name)))
-    (byte-compile-file buffer-file-name)))
+(defun coffee-hook ()
+  (smartparens-mode 1)
+  (setq tab-width 2))
+
+(defun css-hook ()
+  (local-set-key (kbd "RET") 'newline-and-indent)
+  (setq css-indent-offset 2
+        tab-width 2)
+  (smartparens-mode 1)
+  (emmet-mode t)
+  (flycheck-mode -1)
+  (define-key evil-insert-state-map (kbd "C-j") 'emmet-expand-yas)
+  (local-set-key (kbd "C-j") 'emmet-expand-yas))
 
 (defun elisp-hook ()
   (local-set-key (kbd "RET") 'newline-and-indent)
+  (local-set-key (kbd "C-c C-k") 'eval-buffer)
+
+  (setq ac-sources (append '(
+                             ac-source-features
+                             ac-source-functions
+                             ac-source-symbols
+                             ac-source-variables
+                             ac-source-yasnippet
+                             )
+                           ac-sources))
 
   (rainbow-delimiters-mode 1)
 
@@ -306,26 +287,6 @@
                                                  (match-end 1) "λ")
                                  nil))))))
 
-(defun cider-hook ()
-  (cider-turn-on-eldoc-mode))
-
-(eval-after-load 'cider
-  '(progn (setq cider-repl-pop-to-buffer-on-connect nil
-                cider-popup-stacktraces t
-                cider-repl-popup-stacktraces t
-                cider-auto-select-error-buffer t
-                cider-repl-wrap-history t
-                cider-repl-history-size 1000
-                cider-repl-history-file "/tmp/cider-repl-history")))
-
-(defun cider-repl-hook ()
-  (rainbow-delimiters-mode 1)
-  (paredit-mode 1)
-  (evil-paredit-mode 1))
-
-(defun cider-popup-buffer-hook ()
-  (evil-local-set-key 'normal (kbd "q") 'cider-popup-buffer-quit-function))
-
 (defun elixir-hook ()
   (smartparens-mode 1)
   (flycheck-mode -1)
@@ -336,6 +297,10 @@
   (set (make-variable-buffer-local 'ruby-end-check-statement-modifiers) nil)
   (ruby-end-mode t))
 
+(defun go-hook ()
+  (smartparens-mode 1)
+  (local-set-key (kbd "RET") 'newline-and-indent))
+
 (defun haskell-hook ()
   (smartparens-mode 1)
   (turn-on-haskell-indentation)
@@ -345,45 +310,105 @@
   (ghc-init)
   (message "haskell mode loaded."))
 
-;; (add-hook 'after-init-hook #'global-flycheck-mode)
+(defun html-hook ()
+  (smartparens-mode 1)
+  (emmet-mode t)
+  (flycheck-mode -1)
+  (local-set-key (kbd "RET") 'newline-and-indent))
+
+(defun js-hook ()
+  (smartparens-mode 1)
+  (define-key evil-normal-state-map (kbd "M-.") 'find-tag)
+  (local-set-key (kbd "RET") 'newline-and-indent))
+
+(defun php-hook ()
+  (define-key evil-normal-state-map (kbd "M-.") 'find-tag))
+
+(defun ruby-hook ()
+  (local-set-key (kbd "RET") 'newline-and-indent)
+  (smartparens-mode 1))
+
+(defun rust-hook ()
+  (smartparens-mode 1)
+  (local-set-key (kbd "RET") 'newline-and-indent))
+
+(defun scss-hook ()
+  (css-hook)
+  (setq scss-compile-at-save nil))
+
+(defun sgml-hook ()
+  (smartparens-mode 1)
+  (emmet-mode t))
+
+(defvar sh-basic-offset)
+(defvar sh-indentation)
+(defun shell-hook ()
+  (smartparens-mode 1))
+
+(defun web-hook ()
+  (let ((cur (web-mode-language-at-pos)))
+    (when (string= cur "javascript")
+      (js-hook))
+    (when (string= cur "html")
+      (html-hook))))
+
 (add-hook 'after-save-hook 'byte-compile-current-buffer)
-(add-hook 'emacs-lisp-mode-hook 'elisp-hook)
+(add-hook 'cider-mode-hook 'cider-hook)
+(add-hook 'cider-popup-buffer-mode-hook 'cider-popup-buffer-hook)
+(add-hook 'cider-repl-mode-hook 'cider-repl-hook)
 (add-hook 'clojure-mode-hook 'clojure-hook)
 (add-hook 'clojurescript-mode-hook 'clojurescript-hook)
-(add-hook 'cider-mode-hook 'cider-hook)
-(add-hook 'cider-repl-mode-hook 'cider-repl-hook)
-(add-hook 'cider-popup-buffer-mode-hook 'cider-popup-buffer-hook)
-(add-hook 'elixir-mode-hook 'elixir-hook)
-(add-hook 'haskell-mode-hook 'haskell-hook)
-(add-hook 'php-mode-hook 'php-hook)
-(add-hook 'sgml-mode-hook 'sgml-hook) ;; Auto-starts on any markup modes
-(add-hook 'ruby-mode-hook 'ruby-hook)
-(add-hook 'coffee-mode-hook 'coffee-hook)
-(add-hook 'javascript-mode-hook 'js-hook)
-(add-hook 'js3-mode-hook 'js-hook)
-(add-hook 'css-mode-hook 'css-hook)
-(add-hook 'scss-mode-hook 'scss-hook)
-(add-hook 'html-mode-hook 'html-hook)
-(add-hook 'sh-mode-hook 'shell-hook)
-(add-hook 'web-mode-hook 'html-hook)
 (add-hook 'c-mode-common-hook 'cc-hook)
+(add-hook 'coffee-mode-hook 'coffee-hook)
+(add-hook 'css-mode-hook 'css-hook)
+(add-hook 'elixir-mode-hook 'elixir-hook)
+(add-hook 'emacs-lisp-mode-hook 'elisp-hook)
 (add-hook 'go-mode-hook 'go-hook)
+(add-hook 'haskell-mode-hook 'haskell-hook)
+(add-hook 'html-mode-hook 'html-hook)
+(add-hook 'javascript-mode-hook 'js-hook)
+(add-hook 'js2-mode-hook 'js-hook)
+(add-hook 'js3-mode-hook 'js-hook)
+(add-hook 'php-mode-hook 'php-hook)
+(add-hook 'ruby-mode-hook 'ruby-hook)
 (add-hook 'rust-mode-hook 'rust-hook)
+(add-hook 'scss-mode-hook 'scss-hook)
+(add-hook 'sgml-mode-hook 'sgml-hook) ;; Auto-starts on any markup modes
+(add-hook 'sh-mode-hook 'shell-hook)
+(add-hook 'web-mode-hook 'web-hook)
 
 (autoload 'js3-mode "js3" nil t)
 (autoload 'ghc-init "ghc" nil t)
 (autoload 'ghc-debug "ghc" nil t)
 (autoload 'markdown-mode "markdown-mode" "Major mode for editing Markdown files" t)
 
+(add-to-list 'auto-mode-alist '("\\.[agj]sp$" . web-mode))
+(add-to-list 'auto-mode-alist '("\\.as[cp]x$" . web-mode))
+(add-to-list 'auto-mode-alist '("\\.djhtml$" . web-mode))
+(add-to-list 'auto-mode-alist '("\\.erb$" . web-mode))
 (add-to-list 'auto-mode-alist '("\\.html$" . web-mode))
+(add-to-list 'auto-mode-alist '("\\.js$" . web-mode))
+(add-to-list 'auto-mode-alist '("\\.json$" . web-mode))
 (add-to-list 'auto-mode-alist '("\\.jst$" . web-mode))
+(add-to-list 'auto-mode-alist '("\\.jsx$" . web-mode))
 (add-to-list 'auto-mode-alist '("\\.md$" . markdown-mode))
+(add-to-list 'auto-mode-alist '("\\.mustache\\'" . web-mode))
+(add-to-list 'auto-mode-alist '("\\.phtml\\'" . web-mode))
 (add-to-list 'auto-mode-alist '("\\.podspec$" . ruby-mode))
-(add-to-list 'auto-mode-alist '("\\.js$" . js3-mode))
-(add-to-list 'auto-mode-alist '("\\.json$" . json-mode))
-(add-to-list 'auto-mode-alist '("\\.jsx$" . js3-mode))
+(add-to-list 'auto-mode-alist '("\\.react\\.js$" . web-mode))
 (add-to-list 'auto-mode-alist '("\\.tac$" . python-mode))
+(add-to-list 'auto-mode-alist '("\\.tpl\\.php" . web-mode))
 (add-to-list 'auto-mode-alist '("zshrc$" . sh-mode))
+
+(eval-after-load 'cider
+  '(progn (setq cider-repl-pop-to-buffer-on-connect nil
+                cider-popup-stacktraces t
+                cider-repl-popup-stacktraces t
+                cider-auto-select-error-buffer t
+                cider-repl-wrap-history t
+                cider-repl-history-size 1000
+                cider-repl-history-file "/tmp/cider-repl-history")))
+
 
 ;; -----------------------------------------------------------------------------
 ;; Keys: xterm compatibility
@@ -430,7 +455,6 @@
                                            (interactive)
                                            (comment-or-uncomment-region (line-beginning-position)
                                                                         (line-end-position))))
-(define-key evil-normal-state-map (kbd "M-.") 'cider-find-var)
 
 (define-key evil-normal-state-map "\\t" '(lambda ()
                                            (interactive)
@@ -442,6 +466,8 @@
 
 ;; -----------------------------------------------------------------------------
 ;; Customizations
+
+(require 'web-mode)
 
 (setq
  ack-default-directory-function '(lambda (&rest args) (projectile-project-root))
@@ -463,6 +489,7 @@
  system-uses-terminfo nil
  tab-width 2
  version-control t ;; use versioned backups
+ web-mode-content-types-alist '(("jsx" . "\\.react\\.js$"))
  whitespace-action '(auto-cleanup)
  whitespace-style '(trailing space-before-tab space-after-tab indentation empty lines-tail)
  )
