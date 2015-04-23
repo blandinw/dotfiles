@@ -29,6 +29,9 @@
 /emacs.d/projectile.cache
 /emacs.d/lisp/local.el
 
+# tmux
+/tmux/local.conf
+
 # misc
 .DS_Store
 caches

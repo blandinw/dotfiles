@@ -11,6 +11,7 @@
  '(js3-enter-indents-newline t)
  '(js3-indent-on-enter-key t)
  '(safe-local-variable-values (quote ((eval font-lock-add-keywords nil (\` (((\, (concat "(" (regexp-opt (quote ("sp-do-move-op" "sp-do-move-cl" "sp-do-put-op" "sp-do-put-cl" "sp-do-del-op" "sp-do-del-cl")) t) "\\_>")) 1 (quote font-lock-variable-name-face))))) (erlang-indent-level . 4))))
+ '(same-window-regexps '("\\*grep\\*" "\\*ack\\*"))
  '(send-mail-function (quote mailclient-send-it))
  '(sh-basic-offset 2)
  '(sh-indentation 2)

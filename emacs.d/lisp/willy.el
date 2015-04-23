@@ -347,7 +347,7 @@
 
 (defun web-hook ()
   (let ((cur (web-mode-language-at-pos)))
-    (when (string= cur "javascript")
+    (when (or (string= cur "javascript") (string= cur "jsx"))
       (js-hook))
     (when (string= cur "html")
       (html-hook))))
@@ -486,6 +486,7 @@
  kept-old-versions 2
  kill-buffer-query-functions (remq 'process-kill-buffer-query-function kill-buffer-query-functions)
  line-number-mode t
+ magit-last-seen-setup-instructions "1.4.0"
  system-uses-terminfo nil
  tab-width 2
  version-control t ;; use versioned backups
