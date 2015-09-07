@@ -12,15 +12,15 @@
 (defun add-to-list* (the-list elems)
   (if elems
       (progn
-        (add-to-list the-list (car elems))
-        (add-to-list* the-list (cdr elems)))
+	(add-to-list the-list (car elems))
+	(add-to-list* the-list (cdr elems)))
     (eval the-list)))
 
 (defun byte-compile-current-buffer ()
   "`byte-compile' current buffer if it's emacs-lisp-mode and compiled file exists."
   (interactive)
   (when (and (eq major-mode 'emacs-lisp-mode)
-             (file-exists-p (byte-compile-dest-file buffer-file-name)))
+	     (file-exists-p (byte-compile-dest-file buffer-file-name)))
     (byte-compile-file buffer-file-name)))
 
 (defun to-markdown ()
@@ -40,7 +40,7 @@
   (interactive)
   (let ((buf (find-buffer-visiting "*terminal*")))
     (if buf
-        (switch-to-buffer-other-window buf)
+	(switch-to-buffer-other-window buf)
       (term "zsh"))))
 
 (defvar loaded-theme)
@@ -56,8 +56,8 @@
 (defun ensure-packages (packages)
   (if packages
       (progn
-        (ensure-package (car packages))
-        (ensure-packages (cdr packages)))
+	(ensure-package (car packages))
+	(ensure-packages (cdr packages)))
     nil))
 
 ;; -----------------------------------------------------------------------------
@@ -68,71 +68,71 @@
 (add-to-list 'package-archives '("marmalade" . "http://marmalade-repo.org/packages/"))
 (package-initialize)
 (ensure-packages '(ac-cider
-                   ac-emmet
-                   ac-octave
-                   ack
-                   auto-complete
-                   cider
-                   clojure-mode
-                   clojurescript-mode
-                   cmake-mode
-                   coffee-mode
-                   color-theme
-                   color-theme-solarized
-                   dash
-                   dockerfile-mode
-                   elixir-mode
-                   emmet-mode
-                   epl
-                   erlang
-                   evil
-                   evil-paredit
-                   f
-                   flycheck
-                   flymake-easy
-                   flymake-haskell-multi
-                   fringe-helper
-                   fuel
-                   ghc
-                   git-commit-mode
-                   git-rebase-mode
-                   go-autocomplete
-                   go-mode
-                   goto-chg
-                   goto-last-change
-                   haskell-mode
-                   ido-ubiquitous
-                   inf-ruby
-                   javap-mode
-                   js3-mode
-                   json-mode
-                   json-reformat
-                   json-snatcher
-                   key-chord
-                   let-alist
-                   linum
-                   magit
-                   markdown-mode
-                   nginx-mode
-                   notmuch
-                   paredit
-                   php-mode
-                   pkg-info
-                   popup
-                   projectile
-                   queue
-                   rainbow-delimiters
-                   ruby-end
-                   rust-mode
-                   s
-                   scss-mode
-                   smartparens
-                   toml-mode
-                   tree-mode
-                   undo-tree
-                   web-mode
-                   yaml-mode
-                   yasnippet))
+		   ac-emmet
+		   ac-octave
+		   ack
+		   auto-complete
+		   cider
+		   clojure-mode
+		   clojurescript-mode
+		   cmake-mode
+		   coffee-mode
+		   color-theme
+		   color-theme-solarized
+		   dash
+		   dockerfile-mode
+		   elixir-mode
+		   emmet-mode
+		   epl
+		   erlang
+		   evil
+		   evil-paredit
+		   f
+		   flycheck
+		   flymake-easy
+		   flymake-haskell-multi
+		   fringe-helper
+		   fuel
+		   ghc
+		   git-commit-mode
+		   git-rebase-mode
+		   go-autocomplete
+		   go-mode
+		   goto-chg
+		   goto-last-change
+		   haskell-mode
+		   ido-ubiquitous
+		   inf-ruby
+		   javap-mode
+		   js3-mode
+		   json-mode
+		   json-reformat
+		   json-snatcher
+		   key-chord
+		   let-alist
+		   linum
+		   magit
+		   markdown-mode
+		   nginx-mode
+		   notmuch
+		   paredit
+		   php-mode
+		   pkg-info
+		   popup
+		   projectile
+		   queue
+		   rainbow-delimiters
+		   ruby-end
+		   rust-mode
+		   s
+		   scss-mode
+		   smartparens
+		   toml-mode
+		   tree-mode
+		   undo-tree
+		   web-mode
+		   yaml-mode
+		   yasnippet))
 
 (require 'auto-complete)
 (require 'auto-complete-config)
@@ -228,25 +228,25 @@
   ;; fancy
   (font-lock-add-keywords
    'clojure-mode `(("(\\(fn\\)[\[[:space:]]"
-                    (0 (progn (compose-region (match-beginning 1)
-                                              (match-end 1) "λ")
-                              nil)))))
+		    (0 (progn (compose-region (match-beginning 1)
+					      (match-end 1) "λ")
+			      nil)))))
 
   (font-lock-add-keywords
    'clojure-mode `(("\\(#\\)("
-                    (0 (progn (compose-region (match-beginning 1)
-                                              (match-end 1) "λ")
-                              nil)))))
+		    (0 (progn (compose-region (match-beginning 1)
+					      (match-end 1) "λ")
+			      nil)))))
 
   (font-lock-add-keywords
    'clojure-mode `(("\\(#\\){"
-                    (0 (progn (compose-region (match-beginning 1)
-                                              (match-end 1) "∈")
-                              nil))))))
+		    (0 (progn (compose-region (match-beginning 1)
+					      (match-end 1) "∈")
+			      nil))))))
 
 (defun clojurescript-hook ()
   (setq inferior-lisp-program (expand-file-name "script/browser-repl"
-                                                (getenv "CLOJURESCRIPT_HOME"))))
+						(getenv "CLOJURESCRIPT_HOME"))))
 
 (defun coffee-hook ()
   (smartparens-mode 1)
@@ -255,7 +255,7 @@
 (defun css-hook ()
   (local-set-key (kbd "RET") 'newline-and-indent)
   (setq css-indent-offset 2
-        tab-width 2)
+	tab-width 2)
   (smartparens-mode 1)
   (emmet-mode t)
   (flycheck-mode -1)
@@ -267,13 +267,13 @@
   (local-set-key (kbd "C-c C-k") 'eval-buffer)
 
   (setq ac-sources (append '(
-                             ac-source-features
-                             ac-source-functions
-                             ac-source-symbols
-                             ac-source-variables
-                             ac-source-yasnippet
-                             )
-                           ac-sources))
+			     ac-source-features
+			     ac-source-functions
+			     ac-source-symbols
+			     ac-source-variables
+			     ac-source-yasnippet
+			     )
+			   ac-sources))
 
   (rainbow-delimiters-mode 1)
 
@@ -283,9 +283,9 @@
   ;; fancy
   (font-lock-add-keywords
    'emacs-lisp-mode `(("(\\(lambda\\)[\[[:space:]]"
-                       (0 (progn (compose-region (match-beginning 1)
-                                                 (match-end 1) "λ")
-                                 nil))))))
+		       (0 (progn (compose-region (match-beginning 1)
+						 (match-end 1) "λ")
+				 nil))))))
 
 (defun elixir-hook ()
   (smartparens-mode 1)
@@ -402,12 +402,12 @@
 
 (eval-after-load 'cider
   '(progn (setq cider-repl-pop-to-buffer-on-connect nil
-                cider-popup-stacktraces t
-                cider-repl-popup-stacktraces t
-                cider-auto-select-error-buffer t
-                cider-repl-wrap-history t
-                cider-repl-history-size 1000
-                cider-repl-history-file "/tmp/cider-repl-history")))
+		cider-popup-stacktraces t
+		cider-repl-popup-stacktraces t
+		cider-auto-select-error-buffer t
+		cider-repl-wrap-history t
+		cider-repl-history-size 1000
+		cider-repl-history-file "/tmp/cider-repl-history")))
 
 
 ;; -----------------------------------------------------------------------------
@@ -445,24 +445,28 @@
 (define-key evil-normal-state-map "\\g" 'magit-status)
 (define-key evil-normal-state-map "\\s" 'wly/switch-to-or-open-shell)
 (define-key evil-normal-state-map "\\ve" (lambda ()
-                                           (interactive)
-                                           (find-file "~/.emacs.d/lisp/willy.el")))
+					   (interactive)
+					   (find-file "~/.emacs.d/lisp/willy.el")))
 (define-key evil-normal-state-map "\\z" 'evil-emacs-state)
 (define-key evil-normal-state-map "\\m" 'to-markdown)
 (define-key evil-normal-state-map (kbd "C-z") 'suspend-frame)
 (define-key evil-visual-state-map "gc" 'comment-or-uncomment-region)
 (define-key evil-normal-state-map "gcc" '(lambda ()
-                                           (interactive)
-                                           (comment-or-uncomment-region (line-beginning-position)
-                                                                        (line-end-position))))
+					   (interactive)
+					   (comment-or-uncomment-region (line-beginning-position)
+									(line-end-position))))
 
 (define-key evil-normal-state-map "\\t" '(lambda ()
-                                           (interactive)
-                                           (wly/load-theme (if (eq 'solarized-dark loaded-theme)
-                                                               'solarized-light
-                                                             'solarized-dark))))
+					   (interactive)
+					   (wly/load-theme (if (eq 'solarized-dark loaded-theme)
+							       'solarized-light
+							     'solarized-dark))))
 
 (global-set-key (kbd "RET") 'newline-and-indent)
+(global-set-key "\C-cl" 'org-store-link)
+(global-set-key "\C-ca" 'org-agenda)
+(global-set-key "\C-cc" 'org-capture)
+(global-set-key "\C-cb" 'org-iswitchb)
 
 ;; -----------------------------------------------------------------------------
 ;; Customizations
@@ -477,7 +481,6 @@
  custom-file "~/.emacs.d/custom.el"
  delete-old-versions t
  ido-enable-flex-matching t
- indent-tabs-mode nil
  inhibit-startup-echo-area-message t
  inhibit-startup-message t
  ispell-program-name "aspell"
@@ -506,7 +509,7 @@
 (tool-bar-mode -1)
 (yas-global-mode 1)
 
-(wly/load-theme 'solarized-light)
+(wly/load-theme 'solarized)
 
 ;; -----------------------------------------------------------------------------
 ;; Smartparens
@@ -520,14 +523,14 @@
 ;; Autocomplete
 
 (add-to-list* 'ac-modes '(
-                          cider-mode
-                          cider-repl-mode
-                          coffee-mode
-                          elixir-mode
-                          haskell-mode
-                          rust-mode
-                          scss-mode
-                          ))
+			  cider-mode
+			  cider-repl-mode
+			  coffee-mode
+			  elixir-mode
+			  haskell-mode
+			  rust-mode
+			  scss-mode
+			  ))
 
 ;; -----------------------------------------------------------------------------
 ;; Allow local customizations

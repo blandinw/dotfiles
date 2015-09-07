@@ -1,6 +1,0 @@
-source ~/.bashrc
-
-resources=$HOME/.Xresources
-xrdb -load "$resources"
-
-exec $USERWM
