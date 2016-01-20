@@ -43,9 +43,8 @@ touch $DOTFILES/vim/local.vim
 
 # Vim
 BUNDLE_DIR=$DOTFILES/vim/bundle
-if [ ! -e $BUNDLE_DIR/ctrlp.vim.git ]; then
-  mkdir -p $BUNDLE_DIR
-  git clone git://github.com/kien/ctrlp.vim.git $BUNDLE_DIR/ctrlp.vim.git
+if [ ! -e $BUNDLE_DIR/Vundle.vim ]; then
+  git clone https://github.com/VundleVim/Vundle.vim.git $BUNDLE_DIR/Vundle.vim
 fi
 
 # IntelliJ Idea & CLion

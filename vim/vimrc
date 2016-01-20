@@ -1,8 +1,63 @@
-" pathogen
-call pathogen#infect()
-call pathogen#helptags()
-
 set nocp
+filetype off
+
+" vundle
+set rtp+=~/.vim/bundle/Vundle.vim
+call vundle#begin()
+
+" utils
+Plugin 'scrooloose/nerdtree.git'
+Plugin 'scrooloose/syntastic.git'
+Plugin 'tomtom/tcomment_vim.git'
+Plugin 'tpope/vim-surround.git'
+Plugin 'kien/ctrlp.vim.git'
+Plugin 'Raimondi/delimitMate.git'
+Plugin 'mileszs/ack.vim.git'
+Plugin 'vim-scripts/Align.git'
+" Plugin 'Valloric/YouCompleteMe.git'
+Plugin 'YouCompleteMe', {'pinned': 1}
+Plugin 'MarcWeber/vim-addon-mw-utils'
+Plugin 'tomtom/tlib_vim'
+Plugin 'garbas/vim-snipmate'
+Plugin 'honza/vim-snippets'
+
+" colors
+Plugin 'altercation/vim-colors-solarized.git'
+
+" cpp
+Plugin 'vim-scripts/a.vim'
+
+" html
+Plugin 'mattn/emmet-vim.git'
+Plugin 'tpope/vim-ragtag.git'
+
+" js
+Plugin 'kchmck/vim-coffee-script.git'
+Plugin 'pangloss/vim-javascript.git'
+
+" go
+Plugin 'jnwhiteh/vim-golang.git'
+
+" ruby
+Plugin 'tpope/vim-rails.git'
+Plugin 'vim-ruby/vim-ruby.git'
+Plugin 'tpope/vim-endwise.git'
+
+" markdown
+Plugin 'tpope/vim-markdown.git'
+
+" clojure
+Plugin 'guns/vim-clojure-static.git'
+Plugin 'tpope/vim-fireplace.git'
+Plugin 'kovisoft/paredit'
+Plugin 'kien/rainbow_parentheses.vim.git'
+
+" haskell
+Plugin 'lukerandall/haskellmode-vim.git'
+
+" end of vundle
+call vundle#end()
+filetype plugin indent on
 set noesckeys
 
 " appearance
@@ -74,10 +129,11 @@ set statusline=\ %F%m%r%h\ %w\ \ Line:\ %l/%L:%c
 
 set hidden " no need to write to disk when closing file
 
-" filetype
-filetype on
-filetype plugin on
-filetype indent on
+" cpp
+au FileType cpp set sw=2 sts=2
+
+" lua
+au FileType lua set sw=3 sts=3
 
 " ruby
 au BufRead,BufNewFile {Gemfile,Rakefile,Vagrantfile,Thorfile,config.ru,*.podspec,Podfile} set ft=ruby
@@ -184,6 +240,8 @@ endfunction
 " ctrlp
 let g:ctrlp_max_height = 25
 let g:ctrlp_map = '<leader>p'
+let g:ctrlp_root_markers = ['.ctrlp', '.projectile']
+let g:ctrlp_switch_buffer = 0
 nnoremap <leader>b :CtrlPBuffer<cr>
 
 " delimitMate
@@ -196,6 +254,18 @@ nnoremap <silent><leader>n :NERDTreeToggle<cr>
 nnoremap <silent><leader>f :NERDTreeFind<cr>
 let NERDTreeIgnore=['^cache$', '^logs$', '\~$']
 
+" snipMate + YCM tab key mediation
+function! TabKey()
+  if snipMate#CanBeTriggered() || exists('b:snip_state')
+    return "\<C-r>=snipMate#TriggerSnippet()\<CR>"
+  elseif pumvisible()
+    return "\<C-n>"
+  else
+    return "\<Tab>"
+  endif
+endfunction
+au BufEnter * exec "inoremap <expr> <tab> TabKey()"
+
 " Syntastic
 " let g:syntastic_mode_map = { 'mode': 'active',
 "                            \ 'active_filetypes': ['ruby', 'php'],
@@ -207,3 +277,15 @@ au FileType java nnoremap gf :JavaSearch<cr>
 
 " load other configz
 source $HOME/.vim/local.vim
+
+" YouCompleteMe
+let g:ycm_autoclose_preview_window_after_completion = 1
+let g:ycm_min_num_identifier_candidate_chars = 4
+let g:ycm_enable_diagnostic_signs = 0
+let g:ycm_error_symbol = 'x'
+let g:ycm_warning_symbol = '!'
+let g:ycm_server_keep_logfiles = 1
+let g:ycm_server_log_level = 'debug'
+nnoremap <leader>g :YcmCompleter GoToDefinitionElseDeclaration<CR>
+" nnoremap <leader>pd :YcmCompleter GoToDefinition<CR>
+" nnoremap <leader>pc :YcmCompleter GoToDeclaration<CR>

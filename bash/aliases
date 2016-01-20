@@ -64,10 +64,6 @@ alias adminclient='java org.apache.axis.client.AdminClient'
 alias javaproxy='java -Dhttp.proxyHost=localhost -Dhttp.proxyPort=8080'
 alias eclimd='$ECLIPSE_HOME/eclimd'
 
-# php
-alias sf='php symfony'
-alias sf2='php app/console'
-
 # coffeescript
 alias coffeec='find . -name "*.coffee" | xargs coffee -w -c'
 

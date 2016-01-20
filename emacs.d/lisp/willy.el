@@ -68,74 +68,73 @@
 (add-to-list 'package-archives '("marmalade" . "http://marmalade-repo.org/packages/"))
 (package-initialize)
 (ensure-packages '(ac-cider
-		   ac-emmet
-		   ac-octave
-		   ack
-		   auto-complete
-		   cider
-		   clojure-mode
-		   clojurescript-mode
-		   cmake-mode
-		   coffee-mode
-		   color-theme
-		   color-theme-solarized
-		   dash
-		   dockerfile-mode
-		   elixir-mode
-		   emmet-mode
-		   epl
-		   erlang
-		   evil
-		   evil-paredit
-		   f
-		   flycheck
-		   flymake-easy
-		   flymake-haskell-multi
-		   fringe-helper
-		   fuel
-		   ghc
-		   git-commit-mode
-		   git-rebase-mode
-		   go-autocomplete
-		   go-mode
-		   goto-chg
-		   goto-last-change
-		   haskell-mode
-		   ido-ubiquitous
-		   inf-ruby
-		   javap-mode
-		   js3-mode
-		   json-mode
-		   json-reformat
-		   json-snatcher
-		   key-chord
-		   let-alist
-		   linum
-		   magit
-		   markdown-mode
-		   nginx-mode
-		   notmuch
-		   paredit
-		   php-mode
-		   pkg-info
-		   popup
-		   projectile
-		   queue
-		   rainbow-delimiters
-		   ruby-end
-		   rust-mode
-		   s
-		   scss-mode
-		   smartparens
-		   toml-mode
-		   tree-mode
-		   undo-tree
-		   web-mode
-		   yaml-mode
-		   yasnippet))
+                   ac-emmet
+                   ac-octave
+                   ack
+                   ;; auto-complete
+                   cider
+                   clojure-mode
+                   clojurescript-mode
+                   cmake-mode
+                   coffee-mode
+                   color-theme
+                   color-theme-solarized
+                   company
+                   dash
+                   dockerfile-mode
+                   elixir-mode
+                   emmet-mode
+                   epl
+                   erlang
+                   evil
+                   evil-paredit
+                   f
+                   flycheck
+                   flymake-easy
+                   flymake-haskell-multi
+                   fringe-helper
+                   fuel
+                   ghc
+                   go-autocomplete
+                   go-mode
+                   goto-chg
+                   goto-last-change
+                   haskell-mode
+                   ido-ubiquitous
+                   inf-ruby
+                   javap-mode
+                   js3-mode
+                   json-mode
+                   json-reformat
+                   json-snatcher
+                   key-chord
+                   let-alist
+                   linum
+                   magit
+                   markdown-mode
+                   nginx-mode
+                   notmuch
+                   paredit
+                   php-mode
+                   pkg-info
+                   popup
+                   projectile
+                   queue
+                   rainbow-delimiters
+                   ruby-end
+                   rust-mode
+                   s
+                   scss-mode
+                   smartparens
+                   toml-mode
+                   tree-mode
+                   undo-tree
+                   web-mode
+                   yaml-mode
+                   yasnippet))
 
-(require 'auto-complete)
-(require 'auto-complete-config)
+;; (require 'auto-complete)
+;; (require 'auto-complete-config)
 (require 'cider)
 (require 'css-mode)
 (require 'evil)
@@ -223,6 +222,8 @@
     (ul 'defun)
     (as-channel 'defun)
     (query 'defun)
+    ;; mpmp
+    (locking-thread!> 'defun)
     )
 
   ;; fancy
@@ -252,6 +253,9 @@
   (smartparens-mode 1)
   (setq tab-width 2))
 
+(defun c++-hook ()
+  (smartparens-mode 1))
+
 (defun css-hook ()
   (local-set-key (kbd "RET") 'newline-and-indent)
   (setq css-indent-offset 2
@@ -266,14 +270,14 @@
   (local-set-key (kbd "RET") 'newline-and-indent)
   (local-set-key (kbd "C-c C-k") 'eval-buffer)
 
-  (setq ac-sources (append '(
-			     ac-source-features
-			     ac-source-functions
-			     ac-source-symbols
-			     ac-source-variables
-			     ac-source-yasnippet
-			     )
-			   ac-sources))
+  ;; (setq ac-sources (append '(
+  ;;                            ac-source-features
+  ;;                            ac-source-functions
+  ;;                            ac-source-symbols
+  ;;                            ac-source-variables
+  ;;                            ac-source-yasnippet
+  ;;                            )
+  ;;                          ac-sources))
 
   (rainbow-delimiters-mode 1)
 
@@ -321,8 +325,13 @@
   (define-key evil-normal-state-map (kbd "M-.") 'find-tag)
   (local-set-key (kbd "RET") 'newline-and-indent))
 
+(defun lua-hook ()
+  (smartparens-mode 1)
+  (local-set-key (kbd "RET") 'newline-and-indent))
+
 (defun php-hook ()
-  (define-key evil-normal-state-map (kbd "M-.") 'find-tag))
+  (define-key evil-normal-state-map (kbd "M-.") 'find-tag)
+  (define-key evil-normal-state-map (kbd "C-x <space>") 'gud-break))
 
 (defun ruby-hook ()
   (local-set-key (kbd "RET") 'newline-and-indent)
@@ -352,6 +361,8 @@
     (when (string= cur "html")
       (html-hook))))
 
+(add-hook 'after-init-hook '(lambda ()
+                              (global-company-mode)))
 (add-hook 'after-save-hook 'byte-compile-current-buffer)
 (add-hook 'cider-mode-hook 'cider-hook)
 (add-hook 'cider-popup-buffer-mode-hook 'cider-popup-buffer-hook)
@@ -369,6 +380,7 @@
 (add-hook 'javascript-mode-hook 'js-hook)
 (add-hook 'js2-mode-hook 'js-hook)
 (add-hook 'js3-mode-hook 'js-hook)
+(add-hook 'lua-mode-hook 'lua-hook)
 (add-hook 'php-mode-hook 'php-hook)
 (add-hook 'ruby-mode-hook 'ruby-hook)
 (add-hook 'rust-mode-hook 'rust-hook)
@@ -500,7 +512,7 @@
 
 (put 'dired-find-alternate-file 'disabled nil)
 
-(global-auto-complete-mode t)
+;; (global-auto-complete-mode t)
 (global-whitespace-mode t)
 (ido-mode t)
 (linum-mode -1)
@@ -518,19 +530,33 @@
   (sp-local-pair "(" nil :bind "M-("))
 
 (sp-local-pair 'rust-mode "'" nil :actions nil)
+(sp-local-pair 'web-mode "{" nil
+               :post-handlers '((wly/create-newline-and-enter-sexp "RET")))
+(sp-local-pair 'css-mode "{" nil
+               :post-handlers '((wly/create-newline-and-enter-sexp "RET")))
+(sp-local-pair 'scss-mode "{" nil
+               :post-handlers '((wly/create-newline-and-enter-sexp "RET")))
+
+(defun wly/create-newline-and-enter-sexp (&rest _ignored)
+  "Open a new brace or bracket expression, with relevant newlines and indent. "
+  (newline)
+  (indent-according-to-mode)
+  (forward-line -1)
+  (indent-according-to-mode))
 
 ;; -----------------------------------------------------------------------------
 ;; Autocomplete
 
-(add-to-list* 'ac-modes '(
-			  cider-mode
-			  cider-repl-mode
-			  coffee-mode
-			  elixir-mode
-			  haskell-mode
-			  rust-mode
-			  scss-mode
-			  ))
+;; (add-to-list* 'ac-modes '(
+;;                           cider-mode
+;;                           cider-repl-mode
+;;                           coffee-mode
+;;                           elixir-mode
+;;                           haskell-mode
+;;                           lua-mode
+;;                           rust-mode
+;;                           scss-mode
+;;                           ))
 
 ;; -----------------------------------------------------------------------------
 ;; Allow local customizations

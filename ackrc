@@ -1,6 +1,7 @@
 --ignore-dir=cache
---ignore-dir=logs
+--ignore-dir=node_modules
 --ignore-dir=tmp
+--ignore-dir=_tmp
 --type-add=cljs=.cljs
 --type-add=coffee=.coffee
 --type-add=scss=.scss
