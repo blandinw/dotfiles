@@ -9,6 +9,7 @@ BACKUPS="$PREFIX/backups"
 function sym () {
   src="$DOTFILES/$1"
   dest="$PREFIX/$2"
+  mkdir -p "$(dirname $dest)"
 
   if [ -e "$dest" ]; then
     newdest="$BACKUPS/$(basename $dest)-$(date +%s)"
@@ -47,8 +48,12 @@ if [ ! -e $BUNDLE_DIR/ctrlp.vim.git ]; then
   git clone git://github.com/kien/ctrlp.vim.git $BUNDLE_DIR/ctrlp.vim.git
 fi
 
-# IntelliJ Idea
-sym idea/idea.vmoptions  Library/Preferences/IdeaIC15/idea.vmoptions
-sym idea/idea.properties Library/Preferences/IdeaIC15/idea.properties
+# IntelliJ Idea & CLion
+for ide in IdeaIC15 clion11; do
+  sym idea/idea.vmoptions  Library/Preferences/$ide/idea.vmoptions
+  sym idea/idea.properties Library/Preferences/$ide/idea.properties
+  sym idea/willy.icls Library/Preferences/$ide/colors/willy.icls
+  sym idea/willy.xml Library/Preferences/$ide/keymaps/willy.xml
+done
 
 echo "> Invasion successful!"

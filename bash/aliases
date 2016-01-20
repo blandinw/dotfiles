@@ -3,7 +3,7 @@
 # general
 alias ls='ls -p -G'
 alias ll='ls -l -h'
-alias blt="$EDITOR $HOME/dotfiles/bash; source $HOME/dotfiles/bashrc"
+alias blt="vim $HOME/dotfiles/bash; source $HOME/dotfiles/bashrc"
 alias dotfiles="vim $HOME/dotfiles"
 alias t250='tail -n250'
 alias xee='open -a xee'
