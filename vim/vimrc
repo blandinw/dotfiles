@@ -2,61 +2,64 @@ set nocp
 filetype off
 
 " vundle
-set rtp+=~/.vim/bundle/Vundle.vim
-call vundle#begin()
+if exists('*vundle#begin')
+  set rtp+=~/.vim/bundle/Vundle.vim
+  call vundle#begin()
 
-" utils
-Plugin 'scrooloose/nerdtree.git'
-Plugin 'scrooloose/syntastic.git'
-Plugin 'tomtom/tcomment_vim.git'
-Plugin 'tpope/vim-surround.git'
-Plugin 'kien/ctrlp.vim.git'
-Plugin 'Raimondi/delimitMate.git'
-Plugin 'mileszs/ack.vim.git'
-Plugin 'vim-scripts/Align.git'
-" Plugin 'Valloric/YouCompleteMe.git'
-Plugin 'YouCompleteMe', {'pinned': 1}
-Plugin 'MarcWeber/vim-addon-mw-utils'
-Plugin 'tomtom/tlib_vim'
-Plugin 'garbas/vim-snipmate'
-Plugin 'honza/vim-snippets'
+  " utils
+  Plugin 'scrooloose/nerdtree.git'
+  Plugin 'scrooloose/syntastic.git'
+  Plugin 'tomtom/tcomment_vim.git'
+  Plugin 'tpope/vim-surround.git'
+  Plugin 'kien/ctrlp.vim.git'
+  Plugin 'Raimondi/delimitMate.git'
+  Plugin 'mileszs/ack.vim.git'
+  Plugin 'vim-scripts/Align.git'
+  " Plugin 'Valloric/YouCompleteMe.git'
+  Plugin 'YouCompleteMe', {'pinned': 1}
+  Plugin 'MarcWeber/vim-addon-mw-utils'
+  Plugin 'tomtom/tlib_vim'
+  Plugin 'garbas/vim-snipmate'
+  Plugin 'honza/vim-snippets'
 
-" colors
-Plugin 'altercation/vim-colors-solarized.git'
+  " colors
+  Plugin 'altercation/vim-colors-solarized.git'
 
-" cpp
-Plugin 'vim-scripts/a.vim'
+  " cpp
+  Plugin 'vim-scripts/a.vim'
 
-" html
-Plugin 'mattn/emmet-vim.git'
-Plugin 'tpope/vim-ragtag.git'
+  " html
+  Plugin 'mattn/emmet-vim.git'
+  Plugin 'tpope/vim-ragtag.git'
 
-" js
-Plugin 'kchmck/vim-coffee-script.git'
-Plugin 'pangloss/vim-javascript.git'
+  " js
+  Plugin 'kchmck/vim-coffee-script.git'
+  Plugin 'pangloss/vim-javascript.git'
 
-" go
-Plugin 'jnwhiteh/vim-golang.git'
+  " go
+  Plugin 'jnwhiteh/vim-golang.git'
 
-" ruby
-Plugin 'tpope/vim-rails.git'
-Plugin 'vim-ruby/vim-ruby.git'
-Plugin 'tpope/vim-endwise.git'
+  " ruby
+  Plugin 'tpope/vim-rails.git'
+  Plugin 'vim-ruby/vim-ruby.git'
+  Plugin 'tpope/vim-endwise.git'
 
-" markdown
-Plugin 'tpope/vim-markdown.git'
+  " markdown
+  Plugin 'tpope/vim-markdown.git'
 
-" clojure
-Plugin 'guns/vim-clojure-static.git'
-Plugin 'tpope/vim-fireplace.git'
-Plugin 'kovisoft/paredit'
-Plugin 'kien/rainbow_parentheses.vim.git'
+  " clojure
+  Plugin 'guns/vim-clojure-static.git'
+  Plugin 'tpope/vim-fireplace.git'
+  Plugin 'kovisoft/paredit'
+  Plugin 'kien/rainbow_parentheses.vim.git'
 
-" haskell
-Plugin 'lukerandall/haskellmode-vim.git'
+  " haskell
+  Plugin 'lukerandall/haskellmode-vim.git'
 
-" end of vundle
-call vundle#end()
+  " end of vundle
+  call vundle#end()
+endif
+
 filetype plugin indent on
 set noesckeys
 
