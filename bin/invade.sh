@@ -37,6 +37,7 @@ sym zshrc          .zshrc
 sym emacs.d        .emacs.d
 sym tmux           .tmux
 sym tmux/tmux.conf .tmux.conf
+sym idea/ideavimrc .ideavimrc
 
 touch $DOTFILES/bash/local
 touch $DOTFILES/vim/local.vim
@@ -54,5 +55,9 @@ for ide in IdeaIC15 clion11; do
   sym idea/willy.icls Library/Preferences/$ide/colors/willy.icls
   sym idea/willy.xml Library/Preferences/$ide/keymaps/willy.xml
 done
+
+# Atom
+sym atom/keymap.cson   .atom/keymap.cson
+sym atom/snippets.cson .atom/snippets.cson
 
 echo "> Invasion successful!"

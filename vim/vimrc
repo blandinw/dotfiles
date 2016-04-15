@@ -72,7 +72,6 @@ set bg=light
 silent! color solarized
 
 " neat mappings
-inoremap <esc> <nop>
 inoremap jk <esc>
 nnoremap - <C-w>w
 nnoremap _ <C-w>W

@@ -1,0 +1,81 @@
+'.source.js':
+  'react create class':
+    'prefix': 'rcc'
+    'body': """
+      const ${1:MyComponent} = React.createClass({
+        displayName: '$1',
+        propTypes: {
+          foo: React.PropTypes.string.isRequired,
+        },
+        render() {
+          return (
+            <div>$2</div>
+          );
+        },
+      });
+    """
+  'react class':
+    'prefix': 'rc'
+    'body': """
+      export class ${1:MyComponent} extends React.Component {
+        static displayName = '$1';
+        static propTypes = {
+          ${2:foo}: React.PropTypes.string.isRequired,
+        };
+        static defaultProps = {
+        };
+
+        constructor(props) {
+          super(props);
+          this.state = {};
+        }
+
+        render() {
+          return (
+            <div>
+            ${3:Hello}
+            </div>
+          );
+        }
+      };
+    """
+  'es6 method':
+    'prefix': 'm'
+    'body': """
+      ${1:myMethod}($2) {
+        $3
+      },
+    """
+  'require immutable':
+    'prefix': 'imm'
+    'body': "const Immutable = require('immutable');"
+  'import immutable':
+    'prefix': 'im'
+    'body': "import Immutable, {Map, List, Record, Set} from 'immutable';"
+  'pragma':
+    'prefix': 'pragma'
+    'body': """
+    // -----------------------------------------------------------------------------
+    // $1
+    """
+'.source.coffee':
+  'pragma':
+    'prefix': 'pragma'
+    'body': """
+    # ------------------------------------------------------------------------------
+    # $1
+    """
+'.source.ruby':
+  'pragma':
+    'prefix': 'pragma'
+    'body': """
+    # ------------------------------------------------------------------------------
+    # $1
+    """
+'.source.css.scss':
+  'pragma':
+    'prefix': 'pragma'
+    'body': """
+    // -----------------------------------------------------------------------------
+    // $1
+    """
