@@ -79,3 +79,23 @@
     // -----------------------------------------------------------------------------
     // $1
     """
+'*':
+  'solve':
+    'prefix': 'solve'
+    'body': """
+      ## Context & Problem
+
+      - ${1}
+
+      ## Requirements
+
+      - ${2}
+
+      ## Open Questions
+
+      - ${3}
+
+      ## Related problems in the wild
+
+      - ${4}
+    """
