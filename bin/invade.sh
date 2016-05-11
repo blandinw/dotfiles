@@ -38,9 +38,10 @@ sym emacs.d        .emacs.d
 sym tmux           .tmux
 sym tmux/tmux.conf .tmux.conf
 sym idea/ideavimrc .ideavimrc
+sym kwmrc          .kwm/kwmrc
 
-touch $DOTFILES/bash/local
-touch $DOTFILES/vim/local.vim
+touch "$DOTFILES/bash/local"
+touch "$DOTFILES/vim/local.vim"
 
 # Vim
 BUNDLE_DIR=$DOTFILES/vim/bundle
