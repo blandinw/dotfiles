@@ -100,7 +100,7 @@
     <keyboard-shortcut first-keystroke="shift ctrl t" />
   </action>
   <action id=":cursive.repl.actions/search-history">
-    <keyboard-shortcut first-keystroke="shift ctrl h" />
+    <keyboard-shortcut first-keystroke="shift ctrl g" />
   </action>
   <action id=":cursive.repl.actions/switch-namespace">
     <keyboard-shortcut first-keystroke="shift ctrl n" />
@@ -138,4 +138,5 @@
   <action id="SwitchUp">
     <keyboard-shortcut first-keystroke="ctrl alt up" />
   </action>
+  <action id="UnselectPreviousOccurrence" />
 </keymap>
