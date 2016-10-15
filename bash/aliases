@@ -19,8 +19,7 @@ alias ed='emacs --daemon'
 alias e='emacsclient -nw'
 alias v=vagrant
 alias d=docker
-alias a=ansible
-alias ap=ansible-playbook
+alias a=atom
 
 # git
 alias g='git status'

@@ -17,12 +17,14 @@ kwmc config display 0 mode monocle
 kwmc rule owner="iTerm2" properties={role="AXDialog"; display="0"}
 kwmc rule owner="Sketch" properties={display="0"}
 kwmc rule owner="IntelliJ IDEA.*" properties={display="0"}
-kwmc rule owner="IntelliJ IDEA.*" name=".*" properties={float="true"} except=".*-.*-.*"
+kwmc rule owner="IntelliJ IDEA.*" name=".*" properties={float="true"} except=".*-.*"
 //kwmc rule owner="IntelliJ IDEA.*" name="(Find|Replace).*" properties={float="true"}
 //kwmc rule owner="IntelliJ IDEA.*" name=".*ocumentation.*" properties={float="true"}
 //kwmc rule owner="IntelliJ IDEA.*" name="Preferences.*" properties={float="true"}
 kwmc rule owner="Atom" properties={display="0"}
 kwmc rule owner="Cisco AnyConnect Secure Mobilit" properties={float="true"}
+kwmc rule owner="Google Chrome" properties={display="1"}
+kwmc rule owner="TextEdit" properties={display="1"}
 kwmc rule owner="Work Chat" properties={display="1"}
 kwmc rule owner="Microsoft Outlook" properties={display="1"}
 kwmc rule owner="Microsoft Outlook" name=".*Reminder.*" properties={float="true"}
@@ -69,8 +71,8 @@ kwmc bindsym cmd+alt-l window -f east
 kwmc bindsym cmd+alt-j window -f south
 kwmc bindsym cmd+alt-k window -f north
 
-kwmc bindsym cmd+alt-n window -fm prev
-kwmc bindsym cmd+alt-m window -fm next
+// kwmc bindsym cmd+alt-n window -fm prev
+// kwmc bindsym cmd+alt-m window -fm next
 
 kwmc bindsym cmd+alt-1 display -f 0
 kwmc bindsym cmd+alt-2 display -f 1

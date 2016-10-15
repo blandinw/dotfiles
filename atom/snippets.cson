@@ -1,3 +1,64 @@
+'.source.ocaml':
+  'pragma':
+    'prefix': 'pragma'
+    'body': """
+    (** $1 *)
+    """
+'.source.python':
+  'pragma':
+    'prefix': 'pragma'
+    'body': """
+    # -----------------------------------------------------------------------------
+    # $1
+    """
+'.source.thrift':
+  'pragma':
+    'prefix': 'pragma'
+    'body': """
+    // ----------------------------------------------------------------------------
+    // $1
+    """
+'.source.hack':
+  'A':
+    'prefix': 'A'
+    'body': 'Awaitable'
+  'po':
+    'prefix': 'po'
+    'body': """
+      final class $1 {
+        public function __construct(
+          $2
+        ) {}
+      }
+    """
+  'sha':
+    'prefix': 'sha'
+    'body': """
+      const type $1 = shape(
+        $2
+      )
+    """
+  '**':
+    'prefix': '**'
+    'body': '/*$1=*/$2,'
+  'psf':
+    'prefix': 'psf'
+    'body': """
+      public static function $1(
+        $2
+      ): $3 {
+        $4
+      }
+    """
+  'psaf':
+    'prefix': 'psaf'
+    'body': """
+      public static async function gen$1(
+        $2
+      ): Awaitable<$3> {
+        $4
+      }
+    """
 '.source.js':
   'react create class':
     'prefix': 'rcc'
@@ -14,11 +75,10 @@
         },
       });
     """
-  'react class':
-    'prefix': 'rc'
+  'reactc':
+    'prefix': 'reactc'
     'body': """
-      export class ${1:MyComponent} extends React.Component {
-        static displayName = '$1';
+      class ${1:MyComponent} extends React.Component {
         static propTypes = {
           ${2:foo}: React.PropTypes.string.isRequired,
         };
@@ -33,11 +93,29 @@
         render() {
           return (
             <div>
-            ${3:Hello}
+              ${3:Hello}
             </div>
           );
         }
       };
+    """
+  'relayc':
+    'prefix': 'relayc'
+    'body': """
+      Relay.createContainer(${1:MyComponent}, {
+        initialVariables: {
+          size: 32,
+        },
+        fragments: {
+          user: () => Relay.QL`
+            fragment on User {
+              profilePhoto(size: $size) {
+                uri,
+              },
+            }
+          `,
+        },
+      });
     """
   'es6 method':
     'prefix': 'm'
@@ -79,6 +157,36 @@
     // -----------------------------------------------------------------------------
     // $1
     """
+'.source.shell':
+  'pragma':
+    'prefix': 'pragma'
+    'body': """
+    # ------------------------------------------------------------------------------
+    # $1
+    """
+  'base':
+    'prefix': 'base'
+    'body': """
+    #!/usr/bin/env bash
+
+    set -ex
+
+    usage() {
+      set +ex
+      read -r -d '' msg <<EOF
+    usage: $(basename "\\$0")
+    EOF
+      echo "$msg"
+      set -ex
+    }
+
+    if false; then
+      usage
+      exit 1
+    fi
+
+    ${1}
+    """
 '*':
   'solve':
     'prefix': 'solve'
@@ -95,11 +203,23 @@
 
       -
 
+      ## Proposal
+
+      -
+
       ## Open Questions
 
       -
 
       ## Related problems in the wild
+
+      -
+
+      ## Test plan
+
+      -
+
+      ## Timeline
 
       -
     """

@@ -22,7 +22,7 @@ export RUBYOPT='rubygems'
 # paths :D
 export NODE_PATH
 export CLASSPATH
-export PATH="$HOME/dotfiles/bin:$HOME/bin:$HOME/Library/Haskell/bin:/usr/local/bin:/usr/local/share/npm/bin:/usr/local/go/bin:/usr/local/sbin:$PATH"
+export PATH="$HOME/anaconda/bin:$HOME/dotfiles/bin:$HOME/bin:$HOME/Library/Haskell/bin:/usr/local/bin:/usr/local/share/npm/bin:/usr/local/go/bin:/usr/local/sbin:$PATH"
 
 # shell specific settings
 if [ ! -z $BASH_VERSION ]; then
