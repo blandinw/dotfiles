@@ -1,0 +1,12 @@
+# -*- mode: snippet -*-
+# name: React.createClass
+# key: rcc
+# expand-env: ((yas-indent-line 'fixed) (yas-wrap-around-region 'nil))
+# --
+var $1 = React.createClass({
+  render() {
+    return <div>$0</div>;
+  }
+});
+
+module.exports = $1;

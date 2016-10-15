@@ -4,10 +4,11 @@
 --ignore-dir=_tmp
 --type-add=cljs=.cljs
 --type-add=coffee=.coffee
---type-add=scss=.scss
---type-add=less=.less
---type-add=hamlc=.hamlc
---type-add=haml=.haml
---type-add=jst=.jst
 --type-add=edn=.edn
+--type-add=haml=.haml
+--type-add=hamlc=.hamlc
+--type-add=jst=.jst
+--type-add=less=.less
+--type-add=scss=.scss
+--type-add=thrift=.thrift
 --smart-case

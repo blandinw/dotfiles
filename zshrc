@@ -22,10 +22,15 @@ setopt share_history
 fpath=(~/_w/forks/zsh-completions/src $fpath)
 
 # hack to get multiline prompt
-precmd() {
-  vcs_info
-}
-RPROMPT='${vcs_info_msg_0_}'
+if which _dotfiles_scm_info &>/dev/null; then
+  RPROMPT='$(_dotfiles_scm_info)'
+else
+  precmd() {
+    vcs_info
+  }
+  RPROMPT='${vcs_info_msg_0_}'
+fi
+
 PROMPT='\
 %B%F{075}%n@%m%f%b%F{10}:%f%F{242}%~%f \
 

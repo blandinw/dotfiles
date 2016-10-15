@@ -1,0 +1,8 @@
+# -*- mode: snippet -*-
+# name: propTypes
+# key: pT
+# expand-env: ((yas-indent-line 'fixed) (yas-wrap-around-region 'nil))
+# --
+propTypes: {
+  $1: React.PropTypes.${2:object}.${3:isRequired},
+},

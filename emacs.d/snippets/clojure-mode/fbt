@@ -2,4 +2,4 @@
 # name: fbt
 # key: fbt
 # --
-fb.util/tracepp
+fb.util/trace

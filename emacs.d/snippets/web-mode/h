@@ -1,0 +1,13 @@
+# -*- mode: snippet -*-
+# name: h
+# key: h
+# --
+/**
+ * Copyright 2004-present Facebook. All Rights Reserved.
+ *
+ * @providesModule $0
+ * @typechecks
+ * @fbt {"project": "$1"}
+ */
+
+'use strict';

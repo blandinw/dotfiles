@@ -3,7 +3,7 @@
 # general
 alias ls='ls -p -G'
 alias ll='ls -l -h'
-alias blt="vim $HOME/dotfiles/bash; source $HOME/dotfiles/bashrc"
+alias blt="vim $HOME/dotfiles/bash/local; source $HOME/dotfiles/bashrc"
 alias dotfiles="vim $HOME/dotfiles"
 alias t250='tail -n250'
 alias xee='open -a xee'
@@ -39,6 +39,23 @@ alias glo='git log'
 alias gl='git pull'
 alias gp='git push'
 
+# mercurial
+alias h='hg log -l1 ; hg status'
+alias hc='hg commit'
+alias ha='hg amend'
+alias hdi='hg diff'
+alias hlo='hg log'
+alias hu='hg update'
+function hushe () {
+  hg she && hg update $1
+}
+function huuns () {
+  hg update $1 && hg uns
+}
+function husheuns () {
+  hg she && hg update $1 && hg uns
+}
+
 # clojure
 alias cljs='lein trampoline cljsbuild'
 
@@ -49,7 +66,6 @@ alias sgbg='shotgun --host 0.0.0.0 config.ru &> /dev/null &'
 alias b='bundle exec'
 alias reindex='rails runner script/reindex.rb'
 alias remove_all_gems='gem list | cut -d" " -f1 | xargs gem uninstall -aIx'
-alias rvmrc='rvm rvmrc'
 alias ng-serverjruby='JRUBY_OPTS="" jruby --ng-server'
 
 # python
@@ -69,23 +85,4 @@ alias coffeec='find . -name "*.coffee" | xargs coffee -w -c'
 
 function uri () {
     echo $1 | ruby -p -e 'require "uri";$_=URI.encode($_.strip)'
-}
-
-function mergedeveloptag () {
-  sh <<EOF
-    set -e -x
-
-    last=$(git tag -l | tail -n1)
-    if [ -z $last ]; then
-      echo "No tags found"
-      exit 1
-    fi
-    echo "unfinished"
-    exit 1
-
-    git merge develop
-    git tag $next
-
-    set +e
-EOF
 }

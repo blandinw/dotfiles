@@ -1,0 +1,6 @@
+# -*- mode: snippet -*-
+# name: require
+# key: req
+# expand-env: ((yas-indent-line 'fixed) (yas-wrap-around-region 'nil))
+# --
+var $1 = require('$1');
