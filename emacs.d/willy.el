@@ -83,7 +83,8 @@
     (add-hook
      'spacemacs-post-user-config-hook
      (lambda ()
-       (setq-default persp-auto-save-opt 0)
+       (setq-default evil-escape-key-sequence "jk"
+                     persp-auto-save-opt 0)
        (setq powerline-default-separator 'bar)
        (spaceline-compile)
        (define-key evil-insert-state-map (kbd "<tab>") 'yas-expand)))))

@@ -47,7 +47,10 @@ touch "$DOTFILES/fish/local.fish"
 # zsh
 
 if [ ! -d "$EXTERN/zsh-completions"]; then
-  git clone https://github.com/zsh-users/zsh-completions.git "$EXTERN/zsh-completions"
+  git clone https://github.com/zsh-users/zsh-completions "$EXTERN/zsh-completions"
+fi
+if [ ! -d "$EXTERN/zsh-autosuggestions" ]; then
+  git clone https://github.com/zsh-users/zsh-autosuggestions "$EXTERN/zsh-autosuggestions"
 fi
 
 # ------------------------------------------------------------------------------

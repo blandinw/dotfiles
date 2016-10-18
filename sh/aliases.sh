@@ -39,6 +39,8 @@ alias ha='hg amend'
 alias hdi='hg diff'
 alias hlo='hg log'
 alias hu='hg update'
+alias hgresolvetheirs='hg resolve -t internal:other --all'
+alias hgresolveyours='hg resolve -t internal:local --all'
 
 # python
 alias p='python'
