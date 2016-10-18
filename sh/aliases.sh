@@ -2,7 +2,7 @@
 
 # general
 alias ls='ls -p -G'
-alias ll='ls -l -h'
+alias ll='ls -l -h --color'
 alias editlocal='vim $HOME/dotfiles/sh/local.sh; source $HOME/dotfiles/sh/bashrc'
 alias dotfiles='vim $HOME/dotfiles'
 alias t250='tail -n250'

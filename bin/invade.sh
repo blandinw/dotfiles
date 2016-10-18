@@ -5,6 +5,7 @@ set -ex
 PREFIX="$HOME"
 DOTFILES="$PREFIX/dotfiles"
 BACKUPS="$PREFIX/backups"
+EXTERN="$DOTFILES/extern"
 
 sym () {
   SRC="$DOTFILES/$1"
@@ -26,6 +27,7 @@ if [ ! -e "$DOTFILES" ]; then
 fi
 
 mkdir -p "$PREFIX"
+mkdir -p "$EXTERN"
 mkdir -p "$BACKUPS/vim_backups"
 
 sym sh/bashrc      .bashrc
@@ -40,6 +42,13 @@ sym kwmrc          .kwm/kwmrc
 
 touch "$DOTFILES/sh/local.sh"
 touch "$DOTFILES/fish/local.fish"
+
+# ------------------------------------------------------------------------------
+# zsh
+
+if [ ! -d "$EXTERN/zsh-completions"]; then
+  git clone https://github.com/zsh-users/zsh-completions.git "$EXTERN/zsh-completions"
+fi
 
 # ------------------------------------------------------------------------------
 # Vim
