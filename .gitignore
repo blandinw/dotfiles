@@ -8,6 +8,9 @@
 /vim/bundle/*
 /vim/local*
 
+# fish
+/fish/fishd.*
+
 # local files
 /mutt/local*
 /sh/local*
