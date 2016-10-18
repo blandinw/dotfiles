@@ -6,13 +6,12 @@
 .netrwhist
 *#
 /vim/bundle/*
-/vim/plugin/eclim.vim
-/vim/eclim
+/vim/local*
 
 # local files
-/bash/local
-/vim/local.vim
-/mutt/localrc
+/mutt/local*
+/sh/local*
+/fish/local*
 
 # version control
 *.hg
@@ -23,11 +22,10 @@
 /emacs.d/elpa
 /emacs.d/eshell
 /emacs.d/ac-comphist.dat
-/emacs.d/evil-paredit
 /emacs.d/url
 /emacs.d/projectile-bookmarks.eld
 /emacs.d/projectile.cache
-/emacs.d/lisp/local*.el
+/emacs.d/local*.el
 
 # tmux
 /tmux/local.conf

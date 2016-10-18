@@ -5,5 +5,5 @@
 ;; You may delete these explanatory comments.
 (package-initialize)
 
-(add-to-list 'load-path "~/.emacs.d/lisp")
+(add-to-list 'load-path "~/dotfiles/emacs.d")
 (load "willy.el")
