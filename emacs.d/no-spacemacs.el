@@ -374,25 +374,6 @@
 (add-hook 'after-save-hook 'wly/byte-compile-current-buffer)
 
 ;; -----------------------------------------------------------------------------
-;; Keys: xterm compatibility
-
-(define-key input-decode-map "\e3"     "#")
-(define-key input-decode-map "\e[18~"  (kbd "<C-S-backspace>"))
-(define-key input-decode-map "\e[9;97" (kbd "C-;"))
-(define-key input-decode-map "\e[9;98" (kbd "C-S-("))
-(define-key input-decode-map "\e[8;8L" (kbd "C-S-L"))
-(define-key input-decode-map "\eOA"    (kbd "<up>"))
-(define-key input-decode-map "\eOB"    (kbd "<down>"))
-(define-key input-decode-map "\eOC"    (kbd "<right>"))
-(define-key input-decode-map "\eOD"    (kbd "<left>"))
-(define-key input-decode-map "\e[A"    (kbd "<C-up>"))
-(define-key input-decode-map "\e[B"    (kbd "<C-down>"))
-(define-key input-decode-map "\e[C"    (kbd "<C-right>"))
-(define-key input-decode-map "\e[D"    (kbd "<C-left>"))
-(define-key input-decode-map "\e[1;7A" (kbd "<M-up>"))
-(define-key input-decode-map "\e[1;7B" (kbd "<M-down>"))
-
-;; -----------------------------------------------------------------------------
 ;; Keys: Evil bindings
 
 (key-chord-mode t)

@@ -53,6 +53,28 @@
     nil))
 
 ;; -----------------------------------------------------------------------------
+;; Keys: xterm compatibility, has to be in hooked to tty-setup for emacsclient
+
+(add-hook
+  'tty-setup-hook
+  (lambda ()
+    (define-key input-decode-map "\e3"     "#")
+    (define-key input-decode-map "\e[18~"  (kbd "<C-S-backspace>"))
+    (define-key input-decode-map "\e[9;97" (kbd "C-;"))
+    (define-key input-decode-map "\e[9;98" (kbd "C-S-("))
+    (define-key input-decode-map "\e[8;8L" (kbd "C-S-L"))
+    (define-key input-decode-map "\eOA"    (kbd "<up>"))
+    (define-key input-decode-map "\eOB"    (kbd "<down>"))
+    (define-key input-decode-map "\eOC"    (kbd "<right>"))
+    (define-key input-decode-map "\eOD"    (kbd "<left>"))
+    (define-key input-decode-map "\e[A"    (kbd "<C-up>"))
+    (define-key input-decode-map "\e[B"    (kbd "<C-down>"))
+    (define-key input-decode-map "\e[C"    (kbd "<C-right>"))
+    (define-key input-decode-map "\e[D"    (kbd "<C-left>"))
+    (define-key input-decode-map "\e[1;7A" (kbd "<M-up>"))
+    (define-key input-decode-map "\e[1;7B" (kbd "<M-down>"))))
+
+;; -----------------------------------------------------------------------------
 ;; Keys: Evil bindings
 
 (with-eval-after-load 'evil
@@ -73,20 +95,28 @@
   (define-key evil-normal-state-map "\\m" 'wly/to-markdown)
   (define-key evil-normal-state-map (kbd "C-z") 'suspend-frame))
 
+(defun wly/config ()
+  (when (not (display-graphic-p))
+    (xterm-mouse-mode 0)))
+
 ;; -----------------------------------------------------------------------------
 ;; Spacemacs or fallback
 
 (if (not (boundp 'spacemacs-version))
-    (load "no-spacemacs")
+    (progn (load "no-spacemacs")
+           (wly/config))
   ;; Spacemacs-specific
   (progn
     (add-hook
      'spacemacs-post-user-config-hook
      (lambda ()
+       (wly/config)
        (setq-default evil-escape-key-sequence "jk"
                      persp-auto-save-opt 0)
        (setq powerline-default-separator 'bar)
+       (setq haskell-stylish-on-save t) ;; override haskell-mode hardcoded
        (spaceline-compile)
+       (helm-projectile-on)
        (define-key evil-insert-state-map (kbd "<tab>") 'yas-expand)))))
 
 ;; -----------------------------------------------------------------------------

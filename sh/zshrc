@@ -1,31 +1,16 @@
 source ~/.bashrc
 
-# Fish-style autosuggestions
-source ~/dotfiles/extern/zsh-autosuggestions/zsh-autosuggestions.zsh
-ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE='fg=241'
+# base
 
-# settings
-autoload -U colors && colors
-autoload -U compinit && compinit
-autoload -U bashcompinit && bashcompinit
-autoload -Uz vcs_info
-
-# vcs_info
-zstyle ':vcs_info:*' actionformats '%F{242}%s%f:%F{111}%b%f'
-zstyle ':vcs_info:*' formats '%F{242}%s%f:%F{111}%b%f'
-zstyle ':vcs_info:(sv[nk]|bzr):*' branchformat '%b%F{1}:%F{3}%r'
-
-zstyle ':completion:*' menu select
-
+export HOSTNAME=$HOST
 export SAVEHIST=50000
 export HISTSIZE=50000
 export HISTFILE=~/.zsh_history
 
-setopt prompt_subst
+setopt autocd
 setopt inc_append_history
+setopt prompt_subst
 setopt share_history
-
-fpath=($HOME/dotfiles/extern/zsh-completions/src $fpath)
 
 if which _dotfiles_scm_info &>/dev/null; then
   VCS_CMD='$(_dotfiles_scm_info)'
@@ -41,6 +26,33 @@ PROMPT='\
 
 λ%f '
 
+# Fish-style autosuggestions
+source ~/dotfiles/extern/zsh-autosuggestions/zsh-autosuggestions.zsh
+ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE='fg=241'
+
+# settings
+autoload -U colors && colors
+autoload -U compinit && compinit
+autoload -U bashcompinit && bashcompinit
+autoload -Uz vcs_info
+
+# vcs_info
+zstyle ':vcs_info:*' actionformats '%F{242}%s%f:%F{111}%b%f'
+zstyle ':vcs_info:*' formats '%F{242}%s%f:%F{111}%b%f'
+zstyle ':vcs_info:(sv[nk]|bzr):*' branchformat '%b%F{1}:%F{3}%r'
+
+# completions
+zstyle ':completion:*' menu select
+zstyle ':completion:*:*:*:*:processes' command "ps -u $USER -o pid,user,comm -w -w"
+fpath=($HOME/dotfiles/extern/zsh-completions/src $fpath)
+
+# Help command
+autoload -Uz run-help
+autoload -Uz run-help-git
+autoload -Uz run-help-svn
+autoload -Uz run-help-svk
+unalias run-help
+alias help=run-help
 
 # Fish-style up/down arrows history search
 autoload -U up-line-or-beginning-search
@@ -50,13 +62,10 @@ zle -N down-line-or-beginning-search
 bindkey "^[[A" up-line-or-beginning-search # Up
 bindkey "^[[B" down-line-or-beginning-search # Down
 
-# Help command
-autoload -Uz run-help
-autoload -Uz run-help-git
-autoload -Uz run-help-svn
-autoload -Uz run-help-svk
-unalias run-help
-alias help=run-help
+# edit command-line in editor
+autoload edit-command-line
+zle -N edit-command-line
+bindkey -M vicmd v edit-command-line
 
 # bindings
 bindkey '^R' 'history-incremental-search-backward'

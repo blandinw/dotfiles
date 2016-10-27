@@ -14,7 +14,7 @@
  '(delete-old-versions t)
  '(evil-want-C-u-scroll t)
  '(frame-background-mode (quote dark))
- '(haskell-stylish-on-save t t)
+ '(haskell-stylish-on-save t)
  '(ido-enable-flex-matching t)
  '(indent-tabs-mode nil)
  '(inhibit-startup-echo-area-message t)
