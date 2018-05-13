@@ -1,34 +1,4 @@
 #!/usr/bin/env bash
 # -*- mode: shell-script -*-
 
-export_path() {
-  export "$1=$2"
-}
-
-source "$HOME/dotfiles/sh/variables.sh"
-source "$HOME/dotfiles/sh/aliases.sh"
-
-set -o vi
-
-hushe () {
-  hg she && hg update "$1"
-}
-huuns () {
-  hg update "$1" && hg uns
-}
-husheuns () {
-  hg she && hg update "$1" && hg uns
-}
-uri () {
-  # shellcheck disable=SC2016
-  echo "$1" | ruby -p -e 'require "uri";$_=URI.encode($_.strip)'
-}
-
-# Bash-specific
-if [ ! -z "$BASH_VERSION" ]; then
-  shopt -s histappend
-  export PS1='\n\[\033[0;35m\]\u@\h\[\033[00m\]:\w \nλ '
-fi
-
-source "$HOME/dotfiles/sh/local.sh"
-source "$HOME/dotfiles/sh/z.sh"
+source "$HOME/dotfiles/sh/main.sh"
