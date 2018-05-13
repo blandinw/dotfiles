@@ -2,10 +2,15 @@
   'ctrl-d': 'vim-mode:scroll-half-screen-down'
 
 'atom-text-editor.vim-mode.insert-mode':
-  'k': 'exit-insert-mode-if-preceded-by-j'
+  'k': 'user:exit-insert-mode-if-preceded-by-j'
 
 'atom-text-editor:not([mini])':
   'ctrl-e': 'emmet:expand-abbreviation'
 
 '.platform-darwin atom-text-editor:not([mini])':
   'shift-cmd-J': 'emmet:split-join-tag'
+
+'atom-text-editor':
+  'cmd-shift-b' : 'user:close-non-editor-panes'
+  'cmd-shift-left': 'user:move-to-left-pane'
+  'cmd-shift-right': 'user:move-to-right-pane'

@@ -117,7 +117,8 @@
        (setq haskell-stylish-on-save t) ;; override haskell-mode hardcoded
        (spaceline-compile)
        (helm-projectile-on)
-       (define-key evil-insert-state-map (kbd "<tab>") 'yas-expand)))))
+       ;(define-key evil-insert-state-map (kbd "<tab>") 'yas-expand)
+       ))))
 
 ;; -----------------------------------------------------------------------------
 ;; Allow local customizations
