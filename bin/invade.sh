@@ -32,16 +32,13 @@ mkdir -p "$BACKUPS/vim_backups"
 
 sym sh/bashrc      .bashrc
 sym sh/zshrc       .zshrc
-sym fish           .config/fish
 sym ackrc          .ackrc
 sym ctags          .ctags
 sym tmux           .tmux
 sym tmux/tmux.conf .tmux.conf
 sym idea/ideavimrc .ideavimrc
-sym kwmrc          .kwm/kwmrc
 
 touch "$DOTFILES/sh/local.sh"
-touch "$DOTFILES/fish/local.fish"
 
 # ------------------------------------------------------------------------------
 # zsh
