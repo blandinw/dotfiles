@@ -88,49 +88,49 @@ hgswap() {
   hg book -d $book
 }
 hushe () {
-  hg she && hg update "$1"
+  hg shelve && hg update "$1"
 }
 huuns () {
-  hg update "$1" && hg uns
+  hg update "$1" && hg unshelve
 }
 husheuns () {
-  hg she && hg update "$1" && hg uns
+  hg shelve && hg update "$1" && hg unshelve
 }
 hpshe () {
-  hg she && hg prev
+  hg shelve && hg prev
 }
 hpuns () {
-  hg prev && hg uns
+  hg prev && hg unshelve
 }
 hpsheuns () {
-  hg she && hg prev && hg uns
+  hg shelve && hg prev && hg unshelve
 }
 hnshe () {
-  hg she && hg next
+  hg shelve && hg next
 }
 hnuns () {
-  hg next && hg uns
+  hg next && hg unshelve
 }
 hnsheuns () {
-  hg she && hg next && hg uns
+  hg shelve && hg next && hg unshelve
 }
 htshe () {
-  hg she && hg top
+  hg shelve && hg top
 }
 htuns () {
-  hg top && hg uns
+  hg top && hg unshelve
 }
 htsheuns () {
-  hg she && hg top && hg uns
+  hg shelve && hg top && hg unshelve
 }
 hbshe () {
-  hg she && hg bottom
+  hg shelve && hg bottom
 }
 hbuns () {
-  hg bottom && hg uns
+  hg bottom && hg unshelve
 }
 hbsheuns () {
-  hg she && hg bottom && hg uns
+  hg shelve && hg bottom && hg unshelve
 }
 
 # bat
