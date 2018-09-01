@@ -84,6 +84,9 @@ while [ $# -gt 0 ]; do
       shift
       DEBUG=true
       ;;
+    *)
+      shift
+      ;;
   esac
 done
 
