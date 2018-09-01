@@ -120,6 +120,7 @@ sym tmux/tmux.conf .tmux.conf
 # ripgrep
 
 check_path rg
+sym ripgreprc .ripgreprc
 
 # ------------------------------------------------------------------------------
 # bat

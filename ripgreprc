@@ -1,0 +1,7 @@
+--smart-case
+
+--type-add
+edn:*.edn
+
+--type-add
+thrift:*.thrift
