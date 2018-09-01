@@ -117,6 +117,7 @@
   <action id="ChooseRunConfiguration">
     <keyboard-shortcut first-keystroke="ctrl alt r" />
   </action>
+  <action id="Move" />
   <action id="Run">
     <keyboard-shortcut first-keystroke="ctrl r" />
   </action>

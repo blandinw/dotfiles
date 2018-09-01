@@ -31,8 +31,8 @@ values."
    ;; List of configuration layers to load.
    dotspacemacs-configuration-layers
    '(
-     erlang
-     php
+     ;; erlang
+     ;; php
      ;; ----------------------------------------------------------------
      ;; Example of useful layers you may want to use right away.
      ;; Uncomment some layer names and press <SPC f e R> (Vim style) or
@@ -43,20 +43,22 @@ values."
                       auto-completion-private-snippets-directory
                       (expand-file-name "~/dotfiles/emacs.d/snippets"))
      better-defaults
-     (c-c++ :variables
-            c-c++-default-mode-for-headers 'c++-mode
-            c-c++-enable-clang-support t)
-     elixir
+     ;; (c-c++ :variables
+     ;;        c-c++-default-mode-for-headers 'c++-mode
+     ;;        c-c++-enable-clang-support t)
+     ;; elixir
      emacs-lisp
      git
-     javascript
-     haskell
+     ;; javascript
+     ;; haskell
      html
      markdown
      ;; org
-     ocaml
+     ;; ocaml
      python
      rcirc
+     ;; (rust :variables
+     ;;       rust-format-on-save t)
      shell-scripts
      ;; (shell :variables
      ;;        shell-default-height 30
@@ -65,7 +67,6 @@ values."
      syntax-checking
      version-control
      yaml
-     ycmd
      )
    ;; List of additional packages that will be installed without being
    ;; wrapped in a layer. If you need some configuration for these
@@ -136,7 +137,7 @@ values."
    ;; List sizes may be nil, in which case
    ;; `spacemacs-buffer-startup-lists-length' takes effect.
    ;; (default nil)
-   dotspacemacs-startup-lists '()
+   dotspacemacs-startup-lists '(recents)
    ;; True if the home buffer should respond to resize events.
    dotspacemacs-startup-buffer-responsive t
    ;; Default major mode of the scratch buffer (default `text-mode')

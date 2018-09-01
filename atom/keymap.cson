@@ -1,9 +1,6 @@
 'atom-text-editor.vim-mode.normal-mode':
   'ctrl-d': 'vim-mode:scroll-half-screen-down'
 
-'atom-text-editor.vim-mode.insert-mode':
-  'k': 'user:exit-insert-mode-if-preceded-by-j'
-
 'atom-text-editor:not([mini])':
   'ctrl-e': 'emmet:expand-abbreviation'
 
