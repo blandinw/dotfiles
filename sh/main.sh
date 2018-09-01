@@ -1,27 +1,32 @@
 #!/usr/bin/env sh
 
-source "$HOME/dotfiles/sh/z.sh"
+# shellcheck source=z.sh
+. "$HOME/dotfiles/sh/z.sh"
 
 set -o vi
 
 # Bash-specific
-if [ ! -z "$BASH_VERSION" ]; then
+# shellcheck disable=SC2039
+if [ "$BASH_VERSION" ]; then
   shopt -s histappend
   export PS1='\n\[\033[0;35m\]\u@\h\[\033[00m\]:\w \nλ '
 fi
 
+export TERM=xterm-256color
 export EDITOR='vim'
-export TERM='xterm-256color'
 export LANG='en_US.UTF-8'
 export HISTSIZE=10000
 export SAVEHIST=10000
 export HISTFILE="$HOME/.histfile"
-export JAVA_TOOL_OPTIONS='-Dfile.encoding=UTF8'
 export PATH="$HOME/dotfiles/bin:$HOME/bin:/usr/local/bin:/usr/local/go/bin:/usr/local/sbin:$PATH"
 
 # general
 alias ls='ls -p -G'
-alias ll='ls -l -h --color'
+if [ "$(uname)" = Darwin ]; then
+  alias ll='ls -lhG'
+else
+  alias ll='ls -l -h --color'
+fi
 alias editlocal='vim $HOME/dotfiles/sh/local.sh; source $HOME/dotfiles/sh/bashrc'
 alias dotfiles='vim $HOME/dotfiles'
 alias t250='tail -n250'
@@ -50,6 +55,9 @@ alias gg='git grep'
 alias glo='git log'
 alias gl='git pull'
 alias gp='git push'
+github() {
+  echo "https://github.com/$(git config --get remote.origin.url | sed -E 's,.*github.com(:|/)([a-zA-Z0-9_-]+)/([a-zA-Z0-9_-]+)(\.git)?,\2/\3,')"
+}
 
 # mercurial
 alias h='hg log -l1 ; hg status'
@@ -125,15 +133,33 @@ hbsheuns () {
   hg she && hg bottom && hg uns
 }
 
+# bat
+if command -v bat >/dev/null; then
+  alias cat=bat
+fi
+
+# ripgrep
+export RIPGREP_CONFIG_PATH="$HOME/.ripgreprc"
+
 # python
 alias p='python'
 alias json='python -m json.tool'
-alias venv='source bin/activate'
+
+# rustup
+export PATH="$HOME/.cargo/bin:$PATH"
+if [ -f "$HOME/.cargo/env" ]; then
+  . "$HOME/.cargo/env"
+fi
 
 uri () {
-  node -e 'console.log(encodeURIComponent(`'$1'`))'
+  node -e "console.log(encodeURIComponent(\`$1\`))"
 }
 
+rmpath () {
+    PATH="$(echo "$PATH" | perl -anE 'chomp ; @arr = split ":" ; @arr = grep(!/'"$1"'/, @arr) ; say join(":", @arr)')"
+    export PATH="$PATH"
+    echo "PATH=$PATH"
+}
 
-source "$HOME/dotfiles/sh/local.sh"
+. "$HOME/dotfiles/sh/local.sh"
 

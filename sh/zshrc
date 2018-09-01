@@ -1,4 +1,4 @@
-source ~/.bashrc
+. ~/.bashrc
 
 # base
 
@@ -27,7 +27,7 @@ PROMPT='\
 λ%f '
 
 # Fish-style autosuggestions
-source ~/dotfiles/extern/zsh-autosuggestions/zsh-autosuggestions.zsh
+. ~/dotfiles/extern/zsh-autosuggestions/zsh-autosuggestions.zsh
 ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE='fg=241'
 
 # settings

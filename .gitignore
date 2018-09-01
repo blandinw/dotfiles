@@ -1,4 +1,5 @@
 /extern
+/vendor
 
 # vim
 .VimballRecord
@@ -19,8 +20,9 @@
 /fish/local*
 
 # version control
-*.hg
+.hg
 .svn
+.git
 
 # emacs
 *.elc
@@ -44,3 +46,4 @@ caches
 *.hi
 *.errors
 *i386-darwin
+*.crt

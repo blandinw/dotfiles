@@ -1,4 +1,1 @@
-#!/usr/bin/env bash
-# -*- mode: shell-script -*-
-
-source "$HOME/dotfiles/sh/main.sh"
+. "$HOME/dotfiles/sh/main.sh"
