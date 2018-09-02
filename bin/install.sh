@@ -33,8 +33,9 @@ color() {
   }
 "
 }
-color blue "38;5;45"
-color bold "1"
+color blue  "38;5;45"
+color bold  "1"
+color gray  "38;5;241"
 color green "38;5;82"
 color red   "38;5;160"
 
@@ -101,6 +102,20 @@ fi
 
 mkdir -p "$PREFIX"
 mkdir -p "$VENDOR"
+
+# ------------------------------------------------------------------------------
+# git
+
+check_path git
+git config --global core.pager "diff-so-fancy | less --tabs=4 -RFX"
+
+# ------------------------------------------------------------------------------
+# hg
+
+check_path hg
+if command -v hg >/dev/null; then
+  gray "  use diff-so-fancy in Mercurial: hg config -e\n  [pager]\n  pager = diff-so-fancy | less --tabs=4 -RFX\n"
+fi
 
 # ------------------------------------------------------------------------------
 # zsh
