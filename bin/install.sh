@@ -108,6 +108,7 @@ mkdir -p "$VENDOR"
 
 check_path git
 git config --global core.pager "diff-so-fancy | less --tabs=4 -RFX"
+git config --bool --global diff-so-fancy.markEmptyLines false
 
 # ------------------------------------------------------------------------------
 # hg
