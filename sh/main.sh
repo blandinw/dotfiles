@@ -133,6 +133,16 @@ hbsheuns () {
   hg shelve && hg bottom && hg unshelve
 }
 
+# python
+alias p='python'
+alias json='python -m json.tool'
+
+# rust
+export PATH="$HOME/.cargo/bin:$PATH"
+if [ -f "$HOME/.cargo/env" ]; then
+  . "$HOME/.cargo/env"
+fi
+
 # bat
 if command -v bat >/dev/null; then
   alias cat=bat
@@ -140,16 +150,6 @@ fi
 
 # ripgrep
 export RIPGREP_CONFIG_PATH="$HOME/.ripgreprc"
-
-# python
-alias p='python'
-alias json='python -m json.tool'
-
-# rustup
-export PATH="$HOME/.cargo/bin:$PATH"
-if [ -f "$HOME/.cargo/env" ]; then
-  . "$HOME/.cargo/env"
-fi
 
 uri () {
   node -e "console.log(encodeURIComponent(\`$1\`))"
