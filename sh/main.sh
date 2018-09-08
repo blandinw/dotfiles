@@ -151,6 +151,9 @@ fi
 # ripgrep
 export RIPGREP_CONFIG_PATH="$HOME/.ripgreprc"
 
+# gdb
+alias gdb='gdb -q'
+
 uri () {
   node -e "console.log(encodeURIComponent(\`$1\`))"
 }
