@@ -95,6 +95,12 @@
   (define-key evil-normal-state-map "\\m" 'wly/to-markdown)
   (define-key evil-normal-state-map (kbd "C-z") 'suspend-frame))
 
+;; -----------------------------------------------------------------------------
+;; Keys: org-mode
+
+(with-eval-after-load 'org-mode
+  (smartparens-mode 0))
+
 (defun wly/config ()
   (when (not (display-graphic-p))
     (xterm-mouse-mode 0)))

@@ -27,17 +27,12 @@ if [ "$(uname)" = Darwin ]; then
 else
   alias ll='ls -l -h --color'
 fi
-alias editlocal='vim $HOME/dotfiles/sh/local.sh; source $HOME/dotfiles/sh/bashrc'
-alias dotfiles='vim $HOME/dotfiles'
-alias t250='tail -n250'
-alias xee='open -a xee'
 alias vi='vim --noplugin'
 alias hosts='sudo vim /etc/hosts'
 alias tmuxw='tmux new -s w'
 alias ed='emacs --daemon'
-alias e='emacsclient -nw'
+alias e='emacsclient'
 alias d=docker
-alias a=atom
 
 # git
 alias g='git status'
@@ -87,49 +82,49 @@ hgswap() {
   hg rebase -r $book -d '.'
   hg book -d $book
 }
-hushe () {
+hushe() {
   hg shelve && hg update "$1"
 }
-huuns () {
+huuns() {
   hg update "$1" && hg unshelve
 }
-husheuns () {
+husheuns() {
   hg shelve && hg update "$1" && hg unshelve
 }
-hpshe () {
+hpshe() {
   hg shelve && hg prev
 }
-hpuns () {
+hpuns() {
   hg prev && hg unshelve
 }
-hpsheuns () {
+hpsheuns() {
   hg shelve && hg prev && hg unshelve
 }
-hnshe () {
+hnshe() {
   hg shelve && hg next
 }
-hnuns () {
+hnuns() {
   hg next && hg unshelve
 }
-hnsheuns () {
+hnsheuns() {
   hg shelve && hg next && hg unshelve
 }
-htshe () {
+htshe() {
   hg shelve && hg top
 }
-htuns () {
+htuns() {
   hg top && hg unshelve
 }
-htsheuns () {
+htsheuns() {
   hg shelve && hg top && hg unshelve
 }
-hbshe () {
+hbshe() {
   hg shelve && hg bottom
 }
-hbuns () {
+hbuns() {
   hg bottom && hg unshelve
 }
-hbsheuns () {
+hbsheuns() {
   hg shelve && hg bottom && hg unshelve
 }
 
@@ -154,14 +149,24 @@ export RIPGREP_CONFIG_PATH="$HOME/.ripgreprc"
 # gdb
 alias gdb='gdb -q'
 
-uri () {
-  node -e "console.log(encodeURIComponent(\`$1\`))"
+c() {
+  cd "$1" || return
+  ll
 }
-
-rmpath () {
+dotfiles() {
+    eval "$EDITOR $HOME/dotfiles"
+}
+dotsh() {
+    eval "$EDITOR $HOME/dotfiles/sh/{main,local}.sh"
+    source "$HOME/dotfiles/sh/bashrc"
+}
+rmpath() {
     PATH="$(echo "$PATH" | perl -anE 'chomp ; @arr = split ":" ; @arr = grep(!/'"$1"'/, @arr) ; say join(":", @arr)')"
     export PATH="$PATH"
     echo "PATH=$PATH"
+}
+uri() {
+  node -e "console.log(encodeURIComponent(\`$1\`))"
 }
 
 . "$HOME/dotfiles/sh/local.sh"
