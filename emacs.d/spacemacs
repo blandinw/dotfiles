@@ -33,46 +33,31 @@ This function should only modify configuration layer settings."
 
    ;; List of configuration layers to load.
    dotspacemacs-configuration-layers
-   '(javascript
-     ;; erlang
-     ;; php
-     ;; ----------------------------------------------------------------
-     ;; Example of useful layers you may want to use right away.
-     ;; Uncomment some layer names and press `SPC f e R' (Vim style) or
-     ;; `M-m f e R' (Emacs style) to install them.
-     ;; ----------------------------------------------------------------
-     helm
+   '(
      (auto-completion :variables
                       auto-completion-private-snippets-directory
                       (expand-file-name "~/dotfiles/emacs.d/snippets"))
      better-defaults
      (c-c++ :variables
             c-c++-backend 'lsp-ccls
-            c-c++-default-mode-for-headers 'c++-mode)
+            c-c++-default-mode-for-headers 'c++-mode
+            c-c++-enable-clang-format-on-save t)
      dap
-     ;; elixir
      emacs-lisp
      git
      helm
-     ;; javascript
-     ;; haskell
      html
+     (lsp :variables
+          lsp-ui-sideline-enable nil)
      markdown
-     ;; multiple-cursors
      org
-     ;; ocaml
      python
      rcirc
-     ;; (rust :variables
-     ;;       rust-format-on-save t)
      shell-scripts
-     ;; (shell :variables
-     ;;        shell-default-height 30
-     ;;        shell-default-position 'bottom)
-     ;; spell-checking
      syntax-checking
      treemacs
-     version-control
+     (version-control :variables
+                      version-control-global-margin nil)
      yaml
      )
 
@@ -89,7 +74,9 @@ This function should only modify configuration layer settings."
    dotspacemacs-frozen-packages '()
 
    ;; A list of packages that will not be installed and loaded.
-   dotspacemacs-excluded-packages '()
+   dotspacemacs-excluded-packages '(
+                                    highlight-parentheses
+                                    )
 
    ;; Defines the behaviour of Spacemacs when installing packages.
    ;; Possible values are `used-only', `used-but-keep-unused' and `all'.
@@ -218,7 +205,7 @@ It should only modify the values of Spacemacs settings."
    ;; refer to the DOCUMENTATION.org for more info on how to create your own
    ;; spaceline theme. Value can be a symbol or list with additional properties.
    ;; (default '(spacemacs :separator wave :separator-scale 1.5))
-   dotspacemacs-mode-line-theme '(spacemacs :separator wave :separator-scale 1.5)
+   dotspacemacs-mode-line-theme '(spacemacs :separator nil :separator-scale 1.5)
 
    ;; If non-nil the cursor color matches the state color in GUI Emacs.
    ;; (default t)
@@ -358,7 +345,7 @@ It should only modify the values of Spacemacs settings."
    ;; If non-nil smooth scrolling (native-scrolling) is enabled. Smooth
    ;; scrolling overrides the default behavior of Emacs which recenters point
    ;; when it reaches the top or bottom of the screen. (default t)
-   dotspacemacs-smooth-scrolling t
+   dotspacemacs-smooth-scrolling nil
 
    ;; Control line numbers activation.
    ;; If set to `t', `relative' or `visual' then line numbers are enabled in all
@@ -378,7 +365,7 @@ It should only modify the values of Spacemacs settings."
    ;;   :size-limit-kb 1000)
    ;; When used in a plist, `visual' takes precedence over `relative'.
    ;; (default nil)
-   dotspacemacs-line-numbers t
+   dotspacemacs-line-numbers nil
 
    ;; Code folding method. Possible values are `evil' and `origami'.
    ;; (default 'evil)
@@ -400,7 +387,7 @@ It should only modify the values of Spacemacs settings."
 
    ;; If non-nil, start an Emacs server if one is not already running.
    ;; (default nil)
-   dotspacemacs-enable-server nil
+   dotspacemacs-enable-server t
 
    ;; Set the emacs server socket location.
    ;; If nil, uses whatever the Emacs default is, otherwise a directory path
@@ -465,13 +452,14 @@ variables declared in `~/.spacemacs.env' or `~/.spacemacs.d/.spacemacs.env'.
 See the header of this file for more information."
   (spacemacs/load-spacemacs-env))
 
+(setq wly/spacemacs-file-name (file-truename load-file-name))
 (defun dotspacemacs/user-init ()
   "Initialization for user code:
 This function is called immediately after `dotspacemacs/init', before layer
 configuration.
 It is mostly for variables that should be set before packages are loaded.
 If you are unsure, try setting them in `dotspacemacs/user-config' first."
-  (add-to-list 'load-path (expand-file-name "~/dotfiles/emacs.d"))
+  (add-to-list 'load-path (concat (file-name-directory wly/spacemacs-file-name) "elisp"))
   (load "willy.el")
   )
 
@@ -488,6 +476,24 @@ This function is called at the very end of Spacemacs startup, after layer
 configuration.
 Put your configuration code here, except for variables that should be set
 before packages are loaded."
+  (wly/config)
+  (setq-default evil-escape-key-sequence "jk"
+                persp-auto-save-opt 0)
+  (setq haskell-stylish-on-save t) ;; override haskell-mode hardcoded
+  (show-smartparens-global-mode 0)
+
+  (spacemacs/toggle-highlight-current-line-globally-off)
+
+  (spacemacs/toggle-mode-line-minor-modes-off)
+  (spacemacs/toggle-mode-line-point-position-off)
+  (spaceline-toggle-buffer-size-off)
+  (spaceline-toggle-window-number-off)
+  (spaceline-toggle-evil-state-off)
+  (spaceline-toggle-buffer-position-off)
+  (spaceline-toggle-hud-off)
+  (spaceline-compile)
+
+  (helm-projectile-on)
   )
 
 ;; Do not write anything past this comment. This is where Emacs will

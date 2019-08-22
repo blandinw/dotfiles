@@ -27,6 +27,8 @@
  '(kept-new-versions 6)
  '(kept-old-versions 2)
  '(line-number-mode t)
+ '(lsp-enable-symbol-highlighting nil)
+ '(lsp-symbol-highlighting-skip-current nil)
  '(markdown-command "marked --gfm")
  '(package-selected-packages
    (quote
@@ -67,4 +69,4 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- )
+ '(font-lock-comment-face ((t (:foreground "#2aa1ae" :background nil :slant normal)))))

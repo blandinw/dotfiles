@@ -56,23 +56,23 @@
 ;; Keys: xterm compatibility, has to be in hooked to tty-setup for emacsclient
 
 (add-hook
-  'tty-setup-hook
-  (lambda ()
-    (define-key input-decode-map "\e3"     "#")
-    (define-key input-decode-map "\e[18~"  (kbd "<C-S-backspace>"))
-    (define-key input-decode-map "\e[9;97" (kbd "C-;"))
-    (define-key input-decode-map "\e[9;98" (kbd "C-S-("))
-    (define-key input-decode-map "\e[8;8L" (kbd "C-S-L"))
-    (define-key input-decode-map "\eOA"    (kbd "<up>"))
-    (define-key input-decode-map "\eOB"    (kbd "<down>"))
-    (define-key input-decode-map "\eOC"    (kbd "<right>"))
-    (define-key input-decode-map "\eOD"    (kbd "<left>"))
-    (define-key input-decode-map "\e[A"    (kbd "<C-up>"))
-    (define-key input-decode-map "\e[B"    (kbd "<C-down>"))
-    (define-key input-decode-map "\e[C"    (kbd "<C-right>"))
-    (define-key input-decode-map "\e[D"    (kbd "<C-left>"))
-    (define-key input-decode-map "\e[1;7A" (kbd "<M-up>"))
-    (define-key input-decode-map "\e[1;7B" (kbd "<M-down>"))))
+ 'tty-setup-hook
+ (lambda ()
+   (define-key input-decode-map "\e3"     "#")
+   (define-key input-decode-map "\e[18~"  (kbd "<C-S-backspace>"))
+   (define-key input-decode-map "\e[9;97" (kbd "C-;"))
+   (define-key input-decode-map "\e[9;98" (kbd "C-S-("))
+   (define-key input-decode-map "\e[8;8L" (kbd "C-S-L"))
+   (define-key input-decode-map "\eOA"    (kbd "<up>"))
+   (define-key input-decode-map "\eOB"    (kbd "<down>"))
+   (define-key input-decode-map "\eOC"    (kbd "<right>"))
+   (define-key input-decode-map "\eOD"    (kbd "<left>"))
+   (define-key input-decode-map "\e[A"    (kbd "<C-up>"))
+   (define-key input-decode-map "\e[B"    (kbd "<C-down>"))
+   (define-key input-decode-map "\e[C"    (kbd "<C-right>"))
+   (define-key input-decode-map "\e[D"    (kbd "<C-left>"))
+   (define-key input-decode-map "\e[1;7A" (kbd "<M-up>"))
+   (define-key input-decode-map "\e[1;7B" (kbd "<M-down>"))))
 
 ;; -----------------------------------------------------------------------------
 ;; Keys: Evil bindings
@@ -93,7 +93,8 @@
                                              (find-library "willy")))
   (define-key evil-normal-state-map "\\z" 'evil-emacs-state)
   (define-key evil-normal-state-map "\\m" 'wly/to-markdown)
-  (define-key evil-normal-state-map (kbd "C-z") 'suspend-frame))
+  (define-key evil-normal-state-map (kbd "C-z") 'suspend-frame)
+  (define-key evil-normal-state-map (kbd "<escape>") 'keyboard-quit))
 
 ;; -----------------------------------------------------------------------------
 ;; Keys: org-mode
@@ -101,52 +102,48 @@
 (with-eval-after-load 'org-mode
   (smartparens-mode 0))
 
+;; -----------------------------------------------------------------------------
+;; C/C++
+
+(require 'compile)
+(add-hook 'c-mode-common-hook
+          (lambda ()
+            (unless (file-exists-p "Makefile")
+              (set (make-local-variable 'compile-command)
+                   (cond ((file-exists-p "BUCK") "buck build : :everything#compilation-database"))))))
+
 (defun wly/config ()
   (when (not (display-graphic-p))
     (xterm-mouse-mode 0)))
 
 ;; -----------------------------------------------------------------------------
-;; Spacemacs or fallback
+;; Load vanilla Emacs config if no Spacemacs
 
-(if (not (boundp 'spacemacs-version))
-    (progn (load "no-spacemacs")
-           (wly/config))
-  ;; Spacemacs-specific
-  (progn
-    (add-hook
-     'spacemacs-post-user-config-hook
-     (lambda ()
-       (wly/config)
-       (setq-default evil-escape-key-sequence "jk"
-                     persp-auto-save-opt 0)
-       (setq powerline-default-separator 'bar)
-       (setq haskell-stylish-on-save t) ;; override haskell-mode hardcoded
-       (spaceline-compile)
-       (helm-projectile-on)
-       ;(define-key evil-insert-state-map (kbd "<tab>") 'yas-expand)
-       ))))
+(when (not (boundp 'spacemacs-version))
+  (progn (load "no-spacemacs")
+         (wly/config)))
 
 ;; -----------------------------------------------------------------------------
 ;; Allow local customizations
 
-(let ((this-directory (file-name-directory load-file-name))
+(let ((emacsd-directory (file-name-directory (directory-file-name (file-name-directory load-file-name))))
       (local-file (locate-library "local")))
   (when local-file (load local-file))
 
-  (setq custom-file (concat this-directory "custom.el"))
+  (setq custom-file (concat emacsd-directory "custom.el"))
   (if (not (boundp 'local-custom))
       ;; no local custom, just load regular file
       (load custom-file)
-    (let ((generated-custom-file (concat this-directory
+    (let ((generated-custom-file (concat emacsd-directory
                                          "local-generated-custom.el")))
-        ;; regenerate?
-        (when (or (file-newer-than-file-p custom-file generated-custom-file)
-                  (file-newer-than-file-p local-file generated-custom-file))
-          (with-temp-file generated-custom-file
-            (let* ((custom (car (read-from-string (wly/file-string custom-file))))
-                   (merged (append custom local-custom)))
-              (prin1 merged (current-buffer)))))
-        (load generated-custom-file))))
+      ;; regenerate?
+      (when (or (file-newer-than-file-p custom-file generated-custom-file)
+                (file-newer-than-file-p local-file generated-custom-file))
+        (with-temp-file generated-custom-file
+          (let* ((custom (car (read-from-string (wly/file-string custom-file))))
+                 (merged (append custom local-custom)))
+            (prin1 merged (current-buffer)))))
+      (load generated-custom-file))))
 
 (provide 'willy)
 ;;; willy.el ends here

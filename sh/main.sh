@@ -160,11 +160,12 @@ dotsh() {
     eval "$EDITOR $HOME/dotfiles/sh/{main,local}.sh"
     source "$HOME/dotfiles/sh/bashrc"
 }
-rmpath() {
+rmpath() (
+    set -e
     PATH="$(echo "$PATH" | perl -anE 'chomp ; @arr = split ":" ; @arr = grep(!/'"$1"'/, @arr) ; say join(":", @arr)')"
     export PATH="$PATH"
     echo "PATH=$PATH"
-}
+)
 uri() {
   node -e "console.log(encodeURIComponent(\`$1\`))"
 }

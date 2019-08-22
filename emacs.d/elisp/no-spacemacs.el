@@ -2,68 +2,22 @@
 ;; Packages
 
 (require 'package)
-(add-to-list 'package-archives '("melpa" . "http://melpa.milkbox.net/packages/") t)
-(add-to-list 'package-archives '("marmalade" . "http://marmalade-repo.org/packages/"))
+(setq package-archives '(("gnu" . "http://elpa.gnu.org/packages/")
+                         ("melpa" . "https://melpa.org/packages/")
+                         ("org" . "http://orgmode.org/elpa/")))
 (package-initialize)
-(wly/ensure-packages '(ack
-                       cmake-mode
-                       color-theme-solarized
-                       company
-                       dash
-                       dockerfile-mode
-                       elixir-mode
-                       emmet-mode
-                       epl
-                       erlang
-                       evil
+(wly/ensure-packages '(evil
                        evil-paredit
-                       f
-                       flycheck
-                       flymake-easy
-                       flymake-haskell-multi
-                       fringe-helper
-                       fuel
-                       ghc
-                       go-mode
-                       goto-chg
-                       goto-last-change
-                       haskell-mode
-                       ido-ubiquitous
-                       inf-ruby
-                       json-mode
-                       json-reformat
-                       json-snatcher
                        key-chord
-                       let-alist
-                       linum
-                       magit
-                       markdown-mode
-                       nginx-mode
-                       notmuch
                        paredit
-                       pkg-info
-                       popup
                        projectile
-                       queue
                        rainbow-delimiters
-                       ruby-end
-                       rust-mode
-                       s
-                       scss-mode
                        smartparens
-                       toml-mode
-                       tree-mode
-                       undo-tree
-                       web-mode
-                       yaml-mode
                        yasnippet))
 
-(require 'css-mode)
-(require 'evil)
 (require 'evil-paredit)
 (require 'projectile)
 (require 'smartparens-config)
-(require 'uniquify)
 (require 'yasnippet)
 
 ;; -----------------------------------------------------------------------------
@@ -134,19 +88,19 @@
 (add-hook 'scss-mode-hook 'scss-hook)
 (add-hook 'web-mode-hook 'web-hook)
 
-(add-to-list 'auto-mode-alist '("\\.[agj]sp$" . web-mode))
-(add-to-list 'auto-mode-alist '("\\.as[cp]x$" . web-mode))
-(add-to-list 'auto-mode-alist '("\\.djhtml$" . web-mode))
-(add-to-list 'auto-mode-alist '("\\.erb$" . web-mode))
-(add-to-list 'auto-mode-alist '("\\.html$" . web-mode))
-(add-to-list 'auto-mode-alist '("\\.js$" . web-mode))
-(add-to-list 'auto-mode-alist '("\\.json$" . web-mode))
-(add-to-list 'auto-mode-alist '("\\.jst$" . web-mode))
-(add-to-list 'auto-mode-alist '("\\.jsx$" . web-mode))
-(add-to-list 'auto-mode-alist '("\\.mustache\\'" . web-mode))
-(add-to-list 'auto-mode-alist '("\\.phtml\\'" . web-mode))
-(add-to-list 'auto-mode-alist '("\\.react\\.js$" . web-mode))
-(add-to-list 'auto-mode-alist '("\\.tpl\\.php" . web-mode))
+;; (add-to-list 'auto-mode-alist '("\\.[agj]sp$" . web-mode))
+;; (add-to-list 'auto-mode-alist '("\\.as[cp]x$" . web-mode))
+;; (add-to-list 'auto-mode-alist '("\\.djhtml$" . web-mode))
+;; (add-to-list 'auto-mode-alist '("\\.erb$" . web-mode))
+;; (add-to-list 'auto-mode-alist '("\\.html$" . web-mode))
+;; (add-to-list 'auto-mode-alist '("\\.js$" . web-mode))
+;; (add-to-list 'auto-mode-alist '("\\.json$" . web-mode))
+;; (add-to-list 'auto-mode-alist '("\\.jst$" . web-mode))
+;; (add-to-list 'auto-mode-alist '("\\.jsx$" . web-mode))
+;; (add-to-list 'auto-mode-alist '("\\.mustache\\'" . web-mode))
+;; (add-to-list 'auto-mode-alist '("\\.phtml\\'" . web-mode))
+;; (add-to-list 'auto-mode-alist '("\\.react\\.js$" . web-mode))
+;; (add-to-list 'auto-mode-alist '("\\.tpl\\.php" . web-mode))
 
 ;; -----------------------------------------------------------------------------
 ;; Haskell
@@ -173,8 +127,8 @@
                company-backends))
   (message "haskell mode loaded."))
 (add-hook 'haskell-mode-hook 'haskell-hook)
-(autoload 'ghc-init "ghc" nil t)
-(autoload 'ghc-debug "ghc" nil t)
+;; (autoload 'ghc-init "ghc" nil t)
+;; (autoload 'ghc-debug "ghc" nil t)
 
 ;; -----------------------------------------------------------------------------
 ;; Clojure
@@ -227,29 +181,6 @@
     (go-try 'defun)
     ;; clojure.test.check
     (for-all 'defun)
-    ;; wit
-    (delta 'defun)
-    (defcontroller 'defun)
-    (nlp 'defun)
-    (defsm 'defun)
-    (doarr 'defun)
-    (if-not-let 'defun)
-    (try-nil 'defun)
-    (stubbing-goog 'defun)
-    (stubbing-stack 'defun)
-    (dom/a 'defun)
-    (div 'defun)
-    (img 'defun)
-    (input 'defun)
-    (label 'defun)
-    (li 'defun)
-    (span 'defun)
-    (textarea 'defun)
-    (ul 'defun)
-    (as-channel 'defun)
-    (query 'defun)
-    ;; mpmp
-    (locking-thread!> 'defun)
     )
 
   ;; fancy
@@ -369,8 +300,7 @@
 ;; -----------------------------------------------------------------------------
 ;; Global hooks
 
-(add-hook 'after-init-hook '(lambda ()
-                              (global-company-mode)))
+;; (add-hook 'after-init-hook '(lambda () (global-company-mode)))
 (add-hook 'after-save-hook 'wly/byte-compile-current-buffer)
 
 ;; -----------------------------------------------------------------------------
@@ -396,10 +326,8 @@
 ;; Customizations
 
 (setq
- ack-default-directory-function '(lambda (&rest args) (projectile-project-root))
  ispell-list-command "list"
  kill-buffer-query-functions (remq 'process-kill-buffer-query-function kill-buffer-query-functions)
- magit-last-seen-setup-instructions "1.4.0"
  system-uses-terminfo nil
  web-mode-content-types-alist '(("jsx" . "\\.react\\.js$"))
  whitespace-action '(auto-cleanup)
@@ -415,14 +343,6 @@
 (projectile-global-mode 1)
 (tool-bar-mode -1)
 (yas-global-mode 1)
-
-;; -----------------------------------------------------------------------------
-;; Color theme
-
-(require 'color-theme)
-(require 'color-theme-solarized)
-(customize-set-variable 'frame-background-mode 'dark)
-(load-theme 'solarized t)
 
 ;; -----------------------------------------------------------------------------
 ;; Smartparens
