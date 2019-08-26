@@ -32,7 +32,7 @@
 /emacs.d/url
 /emacs.d/projectile-bookmarks.eld
 /emacs.d/projectile.cache
-/emacs.d/local*.el
+/emacs.d/elisp/local*.el
 
 # tmux
 /tmux/local.conf

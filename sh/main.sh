@@ -33,6 +33,35 @@ alias tmuxw='tmux new -s w'
 alias ed='emacs --daemon'
 alias e='emacsclient'
 alias d=docker
+c() {
+  cd "$1" || return
+  ll
+}
+dotfiles() {
+  eval "$EDITOR $HOME/dotfiles"
+}
+dotsh() {
+  eval "$EDITOR $HOME/dotfiles/sh/{main,local}.sh"
+  . "$HOME/dotfiles/sh/bashrc"
+}
+git_clone_filter_all() {
+  # NOTE(willy) ideally we'd add this filter too
+  # --filter=tree:0
+  git clone \
+      --depth 1 \
+      --filter=blob:none \
+      --no-checkout \
+      "$@";
+}
+rmpath() (
+  set -e
+  PATH="$(echo "$PATH" | perl -anE 'chomp ; @arr = split ":" ; @arr = grep(!/'"$1"'/, @arr) ; say join(":", @arr)')"
+  export PATH="$PATH"
+  echo "PATH=$PATH"
+)
+uri() {
+  node -e "console.log(encodeURIComponent(\`$1\`))"
+}
 
 # git
 alias g='git status'
@@ -148,27 +177,6 @@ export RIPGREP_CONFIG_PATH="$HOME/.ripgreprc"
 
 # gdb
 alias gdb='gdb -q'
-
-c() {
-  cd "$1" || return
-  ll
-}
-dotfiles() {
-    eval "$EDITOR $HOME/dotfiles"
-}
-dotsh() {
-    eval "$EDITOR $HOME/dotfiles/sh/{main,local}.sh"
-    source "$HOME/dotfiles/sh/bashrc"
-}
-rmpath() (
-    set -e
-    PATH="$(echo "$PATH" | perl -anE 'chomp ; @arr = split ":" ; @arr = grep(!/'"$1"'/, @arr) ; say join(":", @arr)')"
-    export PATH="$PATH"
-    echo "PATH=$PATH"
-)
-uri() {
-  node -e "console.log(encodeURIComponent(\`$1\`))"
-}
 
 . "$HOME/dotfiles/sh/local.sh"
 

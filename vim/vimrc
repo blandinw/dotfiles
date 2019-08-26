@@ -1,62 +1,21 @@
-set nocp
+set nocompatible
 filetype off
 
 " vundle
-if exists('*vundle#begin')
-  set rtp+=~/.vim/bundle/Vundle.vim
+" run :PluginInstall to install all packages
+set rtp+=~/.vim/bundle/Vundle.vim
+if isdirectory(expand('~/.vim/bundle/Vundle.vim'))
   call vundle#begin()
 
-  " utils
+  " let Vundle manage Vundle, required
+  Plugin 'VundleVim/Vundle.vim'
+
   Plugin 'scrooloose/nerdtree.git'
   Plugin 'scrooloose/syntastic.git'
   Plugin 'tomtom/tcomment_vim.git'
   Plugin 'tpope/vim-surround.git'
   Plugin 'kien/ctrlp.vim.git'
-  Plugin 'Raimondi/delimitMate.git'
-  Plugin 'mileszs/ack.vim.git'
-  Plugin 'vim-scripts/Align.git'
-  " Plugin 'Valloric/YouCompleteMe.git'
-  Plugin 'YouCompleteMe', {'pinned': 1}
-  Plugin 'MarcWeber/vim-addon-mw-utils'
-  Plugin 'tomtom/tlib_vim'
-  Plugin 'garbas/vim-snipmate'
-  Plugin 'honza/vim-snippets'
 
-  " colors
-  Plugin 'altercation/vim-colors-solarized.git'
-
-  " cpp
-  Plugin 'vim-scripts/a.vim'
-
-  " html
-  Plugin 'mattn/emmet-vim.git'
-  Plugin 'tpope/vim-ragtag.git'
-
-  " js
-  Plugin 'kchmck/vim-coffee-script.git'
-  Plugin 'pangloss/vim-javascript.git'
-
-  " go
-  Plugin 'jnwhiteh/vim-golang.git'
-
-  " ruby
-  Plugin 'tpope/vim-rails.git'
-  Plugin 'vim-ruby/vim-ruby.git'
-  Plugin 'tpope/vim-endwise.git'
-
-  " markdown
-  Plugin 'tpope/vim-markdown.git'
-
-  " clojure
-  Plugin 'guns/vim-clojure-static.git'
-  Plugin 'tpope/vim-fireplace.git'
-  Plugin 'kovisoft/paredit'
-  Plugin 'kien/rainbow_parentheses.vim.git'
-
-  " haskell
-  Plugin 'lukerandall/haskellmode-vim.git'
-
-  " end of vundle
   call vundle#end()
 endif
 
@@ -69,7 +28,6 @@ set number
 set title
 set linespace=1
 set bg=light
-silent! color solarized
 
 " neat mappings
 inoremap jk <esc>
@@ -80,18 +38,12 @@ nnoremap <silent><C-h> :let @/ = '  *$'<cr>
 nnoremap <leader>ve :vs $MYVIMRC<cr>
 nnoremap <leader>vs :so $MYVIMRC<cr>
 nnoremap <silent><leader>s :w<cr>:so %<cr>
-command! W :w
 nnoremap <silent><leader>c :cn<cr>
 nnoremap <silent><leader>l :lclose \| :cclose<cr>
-command! AspellEN :!aspell -l en -c %
-command! AspellFR :!aspell -l fr -c %
+command! W :w
 
 " quickly :source a range of VimL
 vnoremap <leader>s :w! /tmp/sourced.vim \| :so /tmp/sourced.vim \| :!rm /tmp/sourced.vim &>/dev/null<cr><cr>
-
-" iterm2 compat
-imap [1;5A <c-up>
-imap [1;5B <c-down>
 
 " indent
 set autoindent smartindent
@@ -116,11 +68,11 @@ set history=300
 " autocompletion in menu
 set wildmenu
 set wildignore+=*.o,*.obj,.git,*.pyc
-set wildignore+=app/cache/*,app/logs/* " symfony2
-set wildignore+=tmp/cache " rails
+set wildignore+=app/cache/*,app/logs/*
+set wildignore+=tmp/cache
 set wildignore+=.DS_Store,*.swp,*.swo
 set wildignore+=*.class,*.scssc
-set wildignore+=temp,node_modules " yeoman
+set wildignore+=temp,node_modules
 
 " backups
 set backup backupext=~ backupdir=~/backups/vim_backups/
@@ -142,41 +94,6 @@ au BufRead,BufNewFile {Gemfile,Rakefile,Vagrantfile,Thorfile,config.ru,*.podspec
 au FileType ruby set sw=2 sts=2
 au FileType eruby set sw=2 sts=2
 
-" python
-au FileType python set omnifunc=pythoncomplete#Complete
-
-" html
-au FileType html set omnifunc=htmlcomplete#CompleteTags sw=2 sts=2
-let g:user_zen_leader_key = '<leader>,'
-let g:html_indent_script1 = 'inc'
-let g:html_indent_style1 = 'inc'
-
-" haml
-au BufNewFile,BufRead *.hamlc set ft=haml
-
-" css
-au FileType css set omnifunc=csscomplete#CompleteCSS
-au FileType scss set omnifunc=csscomplete#CompleteCSS
-
-" jinja
-au BufNewFile,BufRead {*twig*,*jinja*} set ft=htmljinja
-
-" javascript
-au FileType javascript set omnifunc=javascriptcomplete#CompleteJS
-                     \ sw=2 sts=2
-au BufNewFile,BufRead *.ejs set ft=html
-au BufNewFile,BufRead *.jst set ft=html | SyntasticToggleMode
-
-" coffee
-au BufNewFile,BufRead *.coffee set sw=2 sts=2 ts=2
-
-" prolog
-function! PrologRun()
-    !osascript -e 'tell application "terminal" to do script "clear;cd \"%:p:h\";gprolog --entry-goal \"consult(%:r)\""'
-    !osascript -e 'tell application "terminal" to activate'
-endfunction
-command! -nargs=* PrologRun call PrologRun()
-
 " php
 au FileType php set sw=2 sts=2
 
@@ -186,58 +103,8 @@ au FileType go set noexpandtab sw=4 ts=4 sts=0
 " java
 au FileType java set sw=4 sts=4
 
-" markdown
-nnoremap <leader>m :!markdown % \| browser<cr><cr>
-inoremap <leader>m :!markdown % \| browser<cr><cr>
-
-" haskell
-au BufEnter *.hs compiler ghc
-let g:haddock_browser="/usr/bin/open"
-let g:haddock_browser_callformat = "%s %s"
-
-" makefile\
+" makefile
 au FileType make set ts=2
-
-" clojure
-au FileType clojure let b:delimitMate_quotes = "\""
-au BufRead,BufNewFile *.jar,*.war,*.ear,*.sar,*.rar set filetype=zip
-au BufRead,BufNewFile *.clj nmap <buffer><unique><silent><LocalLeader>o <Plug>ClojureCloseResultBuffer.
-au FileType clojure set sw=2 sts=2
-au FileType clojure nnoremap <buffer><C-]> :call GoToCljTag()<cr>
-au FileType clojure nnoremap <buffer><leader>ry :call VimClojureRunTests2()<cr>
-
-if exists("*RainbowParenthesesToggle")
-    au VimEnter * RainbowParenthesesToggle
-    au Syntax * RainbowParenthesesLoadRound
-endif
-let g:clojure_maxlines = 100
-let g:clojure_fuzzy_indent = 1
-au FileType clojure let g:clojure_fuzzy_indent_patterns += ['^fn', '^run*', '^fresh', '^project', '^facts\?', '^context']
-au FileType clojure nnoremap <buffer><leader>ry :call VimClojureRunTests2()<cr>
-nnoremap cme :call FireplaceMacroExpand()<cr>
-nnoremap cpe :Eval<cr>
-nnoremap crt :Eval (clojure.test/run-tests)<cr>
-
-function! FireplaceMacroExpand()
-  normal! ^
-  let start = searchpair('(', '', ')', 'bcrn')
-  let end = searchpair('(', '', ')', 'rn')
-  let form = join(getline(start, end), "\n")
-  let expr = "(do (import java.io.StringWriter)(use '[clojure.walk :only (macroexpand-all)])(let [w (StringWriter.)] (clojure.pprint/pprint (macroexpand-all '". form .") w) (.toString w)))"
-  let result = fireplace#session_eval(expr)
-  call append(end, split(result, '\\n'))
-endfunction
-
-" may not be needed with Fireplace
-function! GoToCljTag()
-  ruby <<
-  cw = Vim.evaluate %q{expand("<cword>")}
-  ma = cw.match %r,/([^/]+)$,
-  cw = ma[1] if ma
-
-  Vim.command "tag #{cw}"
-.
-endfunction
 
 " ctrlp
 let g:ctrlp_max_height = 25
@@ -246,48 +113,10 @@ let g:ctrlp_root_markers = ['.ctrlp', '.projectile']
 let g:ctrlp_switch_buffer = 0
 nnoremap <leader>b :CtrlPBuffer<cr>
 
-" delimitMate
-let delimitMate_expand_cr = 1
-let delimitMate_balance_matchpairs = 1
-let delimitMate_smart_quotes = 0
-
 " NERDTree
 nnoremap <silent><leader>n :NERDTreeToggle<cr>
 nnoremap <silent><leader>f :NERDTreeFind<cr>
 let NERDTreeIgnore=['^cache$', '^logs$', '\~$']
 
-" snipMate + YCM tab key mediation
-function! TabKey()
-  if snipMate#CanBeTriggered() || exists('b:snip_state')
-    return "\<C-r>=snipMate#TriggerSnippet()\<CR>"
-  elseif pumvisible()
-    return "\<C-n>"
-  else
-    return "\<Tab>"
-  endif
-endfunction
-au BufEnter * exec "inoremap <expr> <tab> TabKey()"
-
-" Syntastic
-" let g:syntastic_mode_map = { 'mode': 'active',
-"                            \ 'active_filetypes': ['ruby', 'php'],
-"                            \ 'passive_filetypes': ['puppet', 'ejs'] }
-
-" eclim
-nnoremap <silent><leader>ej :JavaDocPreview<cr>
-au FileType java nnoremap gf :JavaSearch<cr>
-
 " load other configz
 source $HOME/.vim/local.vim
-
-" YouCompleteMe
-let g:ycm_autoclose_preview_window_after_completion = 1
-let g:ycm_min_num_identifier_candidate_chars = 4
-let g:ycm_enable_diagnostic_signs = 0
-let g:ycm_error_symbol = 'x'
-let g:ycm_warning_symbol = '!'
-let g:ycm_server_keep_logfiles = 1
-let g:ycm_server_log_level = 'debug'
-nnoremap <leader>g :YcmCompleter GoToDefinitionElseDeclaration<CR>
-" nnoremap <leader>pd :YcmCompleter GoToDefinition<CR>
-" nnoremap <leader>pc :YcmCompleter GoToDeclaration<CR>

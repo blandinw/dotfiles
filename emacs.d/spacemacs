@@ -20,7 +20,7 @@ This function should only modify configuration layer settings."
    ;; installation feature and you have to explicitly list a layer in the
    ;; variable `dotspacemacs-configuration-layers' to install it.
    ;; (default 'unused)
-   dotspacemacs-enable-lazy-installation 'unused
+   dotspacemacs-enable-lazy-installation 'nil
 
    ;; If non-nil then Spacemacs will ask for confirmation before installing
    ;; a layer lazily. (default t)
@@ -37,7 +37,6 @@ This function should only modify configuration layer settings."
      (auto-completion :variables
                       auto-completion-private-snippets-directory
                       (expand-file-name "~/dotfiles/emacs.d/snippets"))
-     better-defaults
      (c-c++ :variables
             c-c++-backend 'lsp-ccls
             c-c++-default-mode-for-headers 'c++-mode
@@ -45,17 +44,33 @@ This function should only modify configuration layer settings."
      dap
      emacs-lisp
      git
-     helm
-     html
      (lsp :variables
           lsp-ui-sideline-enable nil)
      markdown
-     org
+     (mu4e :variables
+           mu4e-use-maildirs-extension t
+           mu4e-enable-notifications t
+           mu4e-enable-mode-line t
+           ;; INSIDE_EMACS tells pinentry to use emacs' pinentry.el
+           mu4e-get-mail-command (format "INSIDE_EMACS=%s mbsync -a" emacs-version)
+           mu4e-update-interval nil
+           mu4e-compose-signature-auto-include nil
+           mu4e-view-show-images t
+           mu4e-view-show-addresses t
+           mu4e-sent-messages-behavior 'delete
+           mu4e-confirm-quit nil
+           mu4e-change-filenames-when-moving t
+           mu4e-bookmarks
+           `(("flag:unread AND NOT flag:trashed" "Unread messages" ?u)
+             ("date:today..now" "Today's messages" ?t)
+             ("date:7d..now" "Last 7 days" ?w)
+             ("mime:image/*" "Messages with images" ?p)))
+     (org :variables
+          org-refile-targets '((org-agenda-files :maxlevel . 3)))
      python
-     rcirc
+     shell
      shell-scripts
      syntax-checking
-     treemacs
      (version-control :variables
                       version-control-global-margin nil)
      yaml
@@ -68,14 +83,26 @@ This function should only modify configuration layer settings."
    ;; To use a local version of a package, use the `:location' property:
    ;; '(your-package :location "~/path/to/your-package/")
    ;; Also include the dependencies as they will not be resolved automatically.
-   dotspacemacs-additional-packages '()
+   dotspacemacs-additional-packages '(
+                                      nord-theme
+                                      pinentry
+                                      )
 
    ;; A list of packages that cannot be updated.
    dotspacemacs-frozen-packages '()
 
    ;; A list of packages that will not be installed and loaded.
    dotspacemacs-excluded-packages '(
+                                    helm-xref
                                     highlight-parentheses
+                                    company-rtags
+                                    company-ycmd
+                                    cquery
+                                    helm-cscope
+                                    helm-gtags
+                                    rtags
+                                    srefactor
+                                    ycmd
                                     )
 
    ;; Defines the behaviour of Spacemacs when installing packages.
@@ -166,7 +193,7 @@ It should only modify the values of Spacemacs settings."
    ;; directory. A string value must be a path to an image format supported
    ;; by your Emacs build.
    ;; If the value is nil then no banner is displayed. (default 'official)
-   dotspacemacs-startup-banner 'official
+   dotspacemacs-startup-banner nil
 
    ;; List of items to show in startup buffer or an association list of
    ;; the form `(list-type . list-size)`. If nil then it is disabled.
@@ -195,8 +222,7 @@ It should only modify the values of Spacemacs settings."
    ;; List of themes, the first of the list is loaded when spacemacs starts.
    ;; Press `SPC T n' to cycle to the next theme in the list (works great
    ;; with 2 themes variants, one dark and one light)
-   dotspacemacs-themes '(spacemacs-dark
-                         spacemacs-light)
+   dotspacemacs-themes '(nord)
 
    ;; Set the theme for the Spaceline. Supported themes are `spacemacs',
    ;; `all-the-icons', `custom', `doom', `vim-powerline' and `vanilla'. The
@@ -205,7 +231,7 @@ It should only modify the values of Spacemacs settings."
    ;; refer to the DOCUMENTATION.org for more info on how to create your own
    ;; spaceline theme. Value can be a symbol or list with additional properties.
    ;; (default '(spacemacs :separator wave :separator-scale 1.5))
-   dotspacemacs-mode-line-theme '(spacemacs :separator nil :separator-scale 1.5)
+   dotspacemacs-mode-line-theme '(spacemacs :separator nil :separator-scale 1)
 
    ;; If non-nil the cursor color matches the state color in GUI Emacs.
    ;; (default t)
@@ -340,7 +366,7 @@ It should only modify the values of Spacemacs settings."
    ;; If non-nil unicode symbols are displayed in the mode line.
    ;; If you use Emacs as a daemon and wants unicode characters only in GUI set
    ;; the value to quoted `display-graphic-p'. (default t)
-   dotspacemacs-mode-line-unicode-symbols t
+   dotspacemacs-mode-line-unicode-symbols nil
 
    ;; If non-nil smooth scrolling (native-scrolling) is enabled. Smooth
    ;; scrolling overrides the default behavior of Emacs which recenters point
@@ -459,7 +485,7 @@ This function is called immediately after `dotspacemacs/init', before layer
 configuration.
 It is mostly for variables that should be set before packages are loaded.
 If you are unsure, try setting them in `dotspacemacs/user-config' first."
-  (add-to-list 'load-path (concat (file-name-directory wly/spacemacs-file-name) "elisp"))
+  (add-to-list 'load-path (format "%selisp" (file-name-directory wly/spacemacs-file-name)))
   (load "willy.el")
   )
 
@@ -477,13 +503,13 @@ configuration.
 Put your configuration code here, except for variables that should be set
 before packages are loaded."
   (wly/config)
-  (setq-default evil-escape-key-sequence "jk"
+  (setq-default ;evil-escape-key-sequence "jk"
                 persp-auto-save-opt 0)
-  (setq haskell-stylish-on-save t) ;; override haskell-mode hardcoded
+
+  ;; visual minimalism
+  (kill-buffer spacemacs-buffer-name)
   (show-smartparens-global-mode 0)
-
   (spacemacs/toggle-highlight-current-line-globally-off)
-
   (spacemacs/toggle-mode-line-minor-modes-off)
   (spacemacs/toggle-mode-line-point-position-off)
   (spaceline-toggle-buffer-size-off)
@@ -493,7 +519,38 @@ before packages are loaded."
   (spaceline-toggle-hud-off)
   (spaceline-compile)
 
+  (setq haskell-stylish-on-save t) ;; override haskell-mode hardcoded
   (helm-projectile-on)
+
+  ;; brew install ninja
+  ;; git clone https://github.com/llvm/llvm-project.git
+  ;; cd llvm-project/lldb
+  ;; cmake -G Ninja -DLLVM_ENABLE_PROJECTS="clang;lldb" -DLLDB_INCLUDE_TESTS=OFF ../llvm
+  ;; ninja lldb-vscode
+  ;; cp bin/lldb-vscode /usr/local/bin
+  ;; cp lib/liblldb*.dylib /usr/local/lib
+  (require 'dap-lldb)
+  (setq dap-lldb-debug-program (list (expand-file-name "/usr/local/bin/lldb-vscode"))
+        dap-lldb-debugged-program-function (lambda ()
+                                             (cond ((file-exists-p "BUCK")
+                                                    "game"
+                                                    ;; "buck-out/gen/game"
+                                                    )
+                                                   (t "./a.out")))
+        epg-pinentry-mode 'ask)
+
+  (add-hook 'c-mode-common-hook (lambda ()
+                                  (dap-mode 1)
+                                  (dap-ui-mode 1)
+                                  ;; enables mouse hover support
+                                  (dap-tooltip-mode 1)))
+  (evilified-state-evilify-map
+    mu4e-view-mode-map
+    :mode mu4e-view-mode
+    :bindings
+    (kbd "gl") 'mu4e-view-go-to-url)
+
+  (pinentry-start)
   )
 
 ;; Do not write anything past this comment. This is where Emacs will

@@ -5,7 +5,6 @@
 (setq package-archives '(("gnu" . "http://elpa.gnu.org/packages/")
                          ("melpa" . "https://melpa.org/packages/")
                          ("org" . "http://orgmode.org/elpa/")))
-(package-initialize)
 (wly/ensure-packages '(evil
                        evil-paredit
                        key-chord
@@ -26,12 +25,8 @@
 (defun elisp-hook ()
   (local-set-key (kbd "RET") 'newline-and-indent)
   (local-set-key (kbd "C-c C-k") 'eval-buffer)
-
   (rainbow-delimiters-mode 1)
-
-  (paredit-mode 1)
-  (evil-paredit-mode 1)
-  )
+  (evil-paredit-mode 1))
 (add-hook 'emacs-lisp-mode-hook 'elisp-hook)
 
 ;; -----------------------------------------------------------------------------

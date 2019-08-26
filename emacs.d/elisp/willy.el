@@ -52,6 +52,12 @@
         (wly/ensure-packages (cdr packages)))
     nil))
 
+(defun wly/remove-autosave-file ()
+  (interactive)
+  (let ((f (make-auto-save-file-name)))
+    (message "deleting autosave file \"%s\"" f)
+    (delete-file f)))
+
 ;; -----------------------------------------------------------------------------
 ;; Keys: xterm compatibility, has to be in hooked to tty-setup for emacsclient
 
@@ -88,33 +94,54 @@
   (define-key evil-normal-state-map "\\p" 'projectile-find-file)
   (define-key evil-normal-state-map "\\g" 'magit-status)
   (define-key evil-normal-state-map "\\s" 'wly/switch-to-or-open-shell)
+  (define-key evil-normal-state-map "\\t" '(lambda () (interactive)
+                                             (let ((buf "todo.org"))
+                                               (if (buffer-live-p (get-buffer buf))
+                                                   (switch-to-buffer buf)
+                                                 (message "could not find buffer \"%s\"" buf)))))
   (define-key evil-normal-state-map "\\ve" (lambda ()
                                              (interactive)
                                              (find-library "willy")))
   (define-key evil-normal-state-map "\\z" 'evil-emacs-state)
   (define-key evil-normal-state-map "\\m" 'wly/to-markdown)
   (define-key evil-normal-state-map (kbd "C-z") 'suspend-frame)
-  (define-key evil-normal-state-map (kbd "<escape>") 'keyboard-quit))
+  (define-key evil-normal-state-map (kbd "<escape>") '(lambda ()
+                                                        (interactive)
+                                                        (evil-ex-nohighlight)
+                                                        (keyboard-quit))))
 
 ;; -----------------------------------------------------------------------------
-;; Keys: org-mode
+;; Org-mode
 
 (with-eval-after-load 'org-mode
-  (smartparens-mode 0))
+  (add-hook 'org-mode-hook (lambda ()
+                             (smartparens-mode 0))))
 
 ;; -----------------------------------------------------------------------------
 ;; C/C++
 
-(require 'compile)
 (add-hook 'c-mode-common-hook
           (lambda ()
+            ;; Smartparens is broken in `cc-mode' as of Emacs 27. See
+            ;; <https://github.com/Fuco1/smartparens/issues/963>.
+            (when (version<= "27" emacs-version)
+              (dolist (fun '(c-electric-paren c-electric-brace))
+                (add-to-list 'sp--special-self-insert-commands fun)))
+
             (unless (file-exists-p "Makefile")
               (set (make-local-variable 'compile-command)
                    (cond ((file-exists-p "BUCK") "buck build : :everything#compilation-database"))))))
 
 (defun wly/config ()
+  (blink-cursor-mode 0)
   (when (not (display-graphic-p))
     (xterm-mouse-mode 0)))
+
+;; -----------------------------------------------------------------------------
+;; Emacs Lisp
+
+(add-hook 'emacs-lisp-mode-hook (lambda ()
+                                  (paredit-mode 1)))
 
 ;; -----------------------------------------------------------------------------
 ;; Load vanilla Emacs config if no Spacemacs
