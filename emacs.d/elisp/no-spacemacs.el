@@ -5,14 +5,14 @@
 (setq package-archives '(("gnu" . "http://elpa.gnu.org/packages/")
                          ("melpa" . "https://melpa.org/packages/")
                          ("org" . "http://orgmode.org/elpa/")))
-(wly/ensure-packages '(evil
-                       evil-paredit
-                       key-chord
-                       paredit
-                       projectile
-                       rainbow-delimiters
-                       smartparens
-                       yasnippet))
+(wy/ensure-packages '(evil
+                      evil-paredit
+                      key-chord
+                      paredit
+                      projectile
+                      rainbow-delimiters
+                      smartparens
+                      yasnippet))
 
 (require 'evil-paredit)
 (require 'projectile)
@@ -296,7 +296,7 @@
 ;; Global hooks
 
 ;; (add-hook 'after-init-hook '(lambda () (global-company-mode)))
-(add-hook 'after-save-hook 'wly/byte-compile-current-buffer)
+(add-hook 'after-save-hook 'wy/byte-compile-current-buffer)
 
 ;; -----------------------------------------------------------------------------
 ;; Keys: Evil bindings
@@ -315,7 +315,7 @@
 (global-set-key "\C-ca" 'org-agenda)
 (global-set-key "\C-cc" 'org-capture)
 (global-set-key "\C-cb" 'org-iswitchb)
-(wly/add-to-list* 'evil-emacs-state-modes '(haskell-error-mode))
+(wy/add-to-list* 'evil-emacs-state-modes '(haskell-error-mode))
 
 ;; -----------------------------------------------------------------------------
 ;; Customizations
@@ -347,13 +347,13 @@
 
 (sp-local-pair 'rust-mode "'" nil :actions nil)
 (sp-local-pair 'web-mode "{" nil
-               :post-handlers '((wly/create-newline-and-enter-sexp "RET")))
+               :post-handlers '((wy/create-newline-and-enter-sexp "RET")))
 (sp-local-pair 'css-mode "{" nil
-               :post-handlers '((wly/create-newline-and-enter-sexp "RET")))
+               :post-handlers '((wy/create-newline-and-enter-sexp "RET")))
 (sp-local-pair 'scss-mode "{" nil
-               :post-handlers '((wly/create-newline-and-enter-sexp "RET")))
+               :post-handlers '((wy/create-newline-and-enter-sexp "RET")))
 
-(defun wly/create-newline-and-enter-sexp (&rest _ignored)
+(defun wy/create-newline-and-enter-sexp (&rest _ignored)
   "Open a new brace or bracket expression, with relevant newlines and indent."
   (newline)
   (indent-according-to-mode)

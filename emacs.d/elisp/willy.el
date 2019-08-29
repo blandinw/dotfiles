@@ -6,53 +6,53 @@
 ;; -----------------------------------------------------------------------------
 ;; Helpers
 
-(defun wly/add-to-list* (the-list elems)
+(defun wy/add-to-list* (the-list elems)
   (if elems
       (progn
         (add-to-list the-list (car elems))
-        (wly/add-to-list* the-list (cdr elems)))
+        (wy/add-to-list* the-list (cdr elems)))
     (eval the-list)))
 
-(defun wly/byte-compile-current-buffer ()
+(defun wy/byte-compile-current-buffer ()
   "`byte-compile' current buffer if it's emacs-lisp-mode and compiled file exists."
   (interactive)
   (when (and (eq major-mode 'emacs-lisp-mode)
              (file-exists-p (byte-compile-dest-file buffer-file-name)))
     (byte-compile-file buffer-file-name)))
 
-(defun wly/to-markdown ()
+(defun wy/to-markdown ()
   (interactive)
   (shell-command (concat "marked --gfm " buffer-file-name " | browser")))
 
-(defun wly/switch-to-prev-buffer ()
+(defun wy/switch-to-prev-buffer ()
   (interactive)
   (switch-to-buffer (other-buffer (current-buffer))))
 
-(defun wly/file-string (filename)
+(defun wy/file-string (filename)
   (with-temp-buffer
     (insert-file-contents filename)
     (buffer-string)))
 
-(defun wly/switch-to-or-open-shell ()
+(defun wy/switch-to-or-open-shell ()
   (interactive)
   (let ((buf (find-buffer-visiting "*terminal*")))
     (if buf
         (switch-to-buffer-other-window buf)
       (term "zsh"))))
 
-(defun wly/ensure-package (package-name)
+(defun wy/ensure-package (package-name)
   (unless (package-installed-p package-name)
     (package-refresh-contents)
     (package-install package-name)))
 
-(defun wly/ensure-packages (packages)
+(defun wy/ensure-packages (packages)
   (if packages
       (progn
-        (wly/ensure-package (car packages))
-        (wly/ensure-packages (cdr packages)))
+        (wy/ensure-package (car packages))
+        (wy/ensure-packages (cdr packages)))
     nil))
 
-(defun wly/remove-autosave-file ()
+(defun wy/delete-autosave-file ()
   (interactive)
   (let ((f (make-auto-save-file-name)))
     (message "deleting autosave file \"%s\"" f)
@@ -93,7 +93,7 @@
   (define-key evil-normal-state-map "\\b" 'projectile-switch-to-buffer)
   (define-key evil-normal-state-map "\\p" 'projectile-find-file)
   (define-key evil-normal-state-map "\\g" 'magit-status)
-  (define-key evil-normal-state-map "\\s" 'wly/switch-to-or-open-shell)
+  (define-key evil-normal-state-map "\\s" 'wy/switch-to-or-open-shell)
   (define-key evil-normal-state-map "\\t" '(lambda () (interactive)
                                              (let ((buf "todo.org"))
                                                (if (buffer-live-p (get-buffer buf))
@@ -103,11 +103,13 @@
                                              (interactive)
                                              (find-library "willy")))
   (define-key evil-normal-state-map "\\z" 'evil-emacs-state)
-  (define-key evil-normal-state-map "\\m" 'wly/to-markdown)
+  (define-key evil-normal-state-map "\\m" 'wy/to-markdown)
   (define-key evil-normal-state-map (kbd "C-z") 'suspend-frame)
   (define-key evil-normal-state-map (kbd "<escape>") '(lambda ()
                                                         (interactive)
                                                         (evil-ex-nohighlight)
+                                                        (when (functionp 'pupo/close-window)
+                                                          (pupo/close-window))
                                                         (keyboard-quit))))
 
 ;; -----------------------------------------------------------------------------
@@ -128,12 +130,60 @@
               (dolist (fun '(c-electric-paren c-electric-brace))
                 (add-to-list 'sp--special-self-insert-commands fun)))
 
-            (unless (file-exists-p "Makefile")
+            ;; guess compile command
+            (let ((base-dir (if (and (boundp 'projectile-project-root) projectile-project-root)
+                                projectile-project-root
+                              (file-name-directory buffer-file-name))))
               (set (make-local-variable 'compile-command)
-                   (cond ((file-exists-p "BUCK") "buck build : :everything#compilation-database"))))))
+                   (cond
+                    ((file-exists-p "Makefile") "make -k")
 
-(defun wly/config ()
+                    ((and (eq system-type 'windows-nt)
+                          (file-exists-p (format "%s/windows/build.bat" base-dir)))
+                     (format "cmd.exe /c cd %s ^&^& windows\\build.bat" base-dir))
+
+                    ((file-executable-p (format "%s/build.sh" base-dir))
+                     (format "cd %s && ./build.sh" base-dir)))))))
+
+(setq wy/ccls-path-mapping '())
+
+(defun wy/window-path-to-unix-uri (path)
+  ;; NOTE(willy) take into account the extra slash from windows-style URIs
+  (let* ((win-uri (lsp--path-to-uri-1 path))
+         (kv (cl-find-if (lambda (x)
+                           (let ((k (car x))
+                                 (v (cdr x)))
+                             (string-prefix-p (concat "file:///" v) win-uri)))
+                         wy/ccls-path-mapping)))
+    (concat "file://" (car kv) (substring win-uri (length (concat "file:///" (cdr kv)))))))
+
+(defun wy/unix-uri-to-windows-path (uri)
+  ;; NOTE(willy) root slash got removed from the path, as it was considered
+  ;; part of the file:/// win-style file URI protocol. we add it back for consistency
+  (let* ((win-path (lsp--uri-to-path-1 uri))
+         (unix-path (concat "/" win-path))
+         (kv (cl-find-if (lambda (x)
+                           (let ((k (car x))
+                                 (v (cdr x)))
+                             ;; NOTE(willy) take into account the extra slash from windows-style URIs
+                             (string-prefix-p k unix-path)))
+                         wy/ccls-path-mapping)))
+    (concat (cdr kv) (substring unix-path (length (car kv))))))
+
+(with-eval-after-load 'ccls
+  (if-let ((ccls-client (gethash 'ccls lsp-clients)))
+      ;; FIXME(willy) should work the same as aset, but crashes with "symbol function void"
+      ;; try again in Emacs 27 stable
+      ;; (setf (lsp--client-path->uri-fn ccls-client) 'wy/window-path-to-unix-uri
+      ;;       (lsp--client-uri->path-fn ccls-client) 'wy/unix-uri-to-windows-path)
+    (progn
+      (aset ccls-client 23 'wy/window-path-to-unix-uri)
+      (aset ccls-client 24 'wy/unix-uri-to-windows-path))
+    (error "could not find ccls lsp client")))
+
+(defun wy/config ()
   (blink-cursor-mode 0)
+  (prefer-coding-system 'utf-8-unix)
   (when (not (display-graphic-p))
     (xterm-mouse-mode 0)))
 
@@ -148,7 +198,7 @@
 
 (when (not (boundp 'spacemacs-version))
   (progn (load "no-spacemacs")
-         (wly/config)))
+         (wy/config)))
 
 ;; -----------------------------------------------------------------------------
 ;; Allow local customizations
@@ -167,7 +217,7 @@
       (when (or (file-newer-than-file-p custom-file generated-custom-file)
                 (file-newer-than-file-p local-file generated-custom-file))
         (with-temp-file generated-custom-file
-          (let* ((custom (car (read-from-string (wly/file-string custom-file))))
+          (let* ((custom (car (read-from-string (wy/file-string custom-file))))
                  (merged (append custom local-custom)))
             (prin1 merged (current-buffer)))))
       (load generated-custom-file))))

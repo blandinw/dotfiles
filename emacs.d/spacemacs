@@ -47,24 +47,25 @@ This function should only modify configuration layer settings."
      (lsp :variables
           lsp-ui-sideline-enable nil)
      markdown
-     (mu4e :variables
-           mu4e-use-maildirs-extension t
-           mu4e-enable-notifications t
-           mu4e-enable-mode-line t
-           ;; INSIDE_EMACS tells pinentry to use emacs' pinentry.el
-           mu4e-get-mail-command (format "INSIDE_EMACS=%s mbsync -a" emacs-version)
-           mu4e-update-interval nil
-           mu4e-compose-signature-auto-include nil
-           mu4e-view-show-images t
-           mu4e-view-show-addresses t
-           mu4e-sent-messages-behavior 'delete
-           mu4e-confirm-quit nil
-           mu4e-change-filenames-when-moving t
-           mu4e-bookmarks
-           `(("flag:unread AND NOT flag:trashed" "Unread messages" ?u)
-             ("date:today..now" "Today's messages" ?t)
-             ("date:7d..now" "Last 7 days" ?w)
-             ("mime:image/*" "Messages with images" ?p)))
+     (when (not (spacemacs/system-is-mswindows))
+       (mu4e :variables
+             mu4e-use-maildirs-extension t
+             mu4e-enable-notifications t
+             mu4e-enable-mode-line t
+             ;; INSIDE_EMACS tells pinentry to use emacs' pinentry.el
+             mu4e-get-mail-command (format "INSIDE_EMACS=%s mbsync -a" emacs-version)
+             mu4e-update-interval nil
+             mu4e-compose-signature-auto-include nil
+             mu4e-view-show-images t
+             mu4e-view-show-addresses t
+             mu4e-sent-messages-behavior 'delete
+             mu4e-confirm-quit nil
+             mu4e-change-filenames-when-moving t
+             mu4e-bookmarks
+             `(("flag:unread AND NOT flag:trashed" "Unread messages" ?u)
+               ("date:today..now" "Today's messages" ?t)
+               ("date:7d..now" "Last 7 days" ?w)
+               ("mime:image/*" "Messages with images" ?p))))
      (org :variables
           org-refile-targets '((org-agenda-files :maxlevel . 3)))
      python
@@ -478,14 +479,14 @@ variables declared in `~/.spacemacs.env' or `~/.spacemacs.d/.spacemacs.env'.
 See the header of this file for more information."
   (spacemacs/load-spacemacs-env))
 
-(setq wly/spacemacs-file-name (file-truename load-file-name))
+(setq wy/spacemacs-file-name (file-truename load-file-name))
 (defun dotspacemacs/user-init ()
   "Initialization for user code:
 This function is called immediately after `dotspacemacs/init', before layer
 configuration.
 It is mostly for variables that should be set before packages are loaded.
 If you are unsure, try setting them in `dotspacemacs/user-config' first."
-  (add-to-list 'load-path (format "%selisp" (file-name-directory wly/spacemacs-file-name)))
+  (add-to-list 'load-path (format "%selisp" (file-name-directory wy/spacemacs-file-name)))
   (load "willy.el")
   )
 
@@ -502,9 +503,9 @@ This function is called at the very end of Spacemacs startup, after layer
 configuration.
 Put your configuration code here, except for variables that should be set
 before packages are loaded."
-  (wly/config)
+  (wy/config)
   (setq-default ;evil-escape-key-sequence "jk"
-                persp-auto-save-opt 0)
+   persp-auto-save-opt 0)
 
   ;; visual minimalism
   (kill-buffer spacemacs-buffer-name)
@@ -544,14 +545,17 @@ before packages are loaded."
                                   (dap-ui-mode 1)
                                   ;; enables mouse hover support
                                   (dap-tooltip-mode 1)))
-  (evilified-state-evilify-map
-    mu4e-view-mode-map
-    :mode mu4e-view-mode
-    :bindings
-    (kbd "gl") 'mu4e-view-go-to-url)
 
-  (pinentry-start)
+  (when (boundp 'mu4-view-mode-map)
+    (evilified-state-evilify-map
+      mu4e-view-mode-map
+      :mode mu4e-view-mode
+      :bindings
+      (kbd "gl") 'mu4e-view-go-to-url))
+
+  (when (featurep 'make-network-process '(:family local))
+    (pinentry-start))
+
+  ;; Do not write anything past this comment. This is where Emacs will
+  ;; auto-generate custom variable definitions.
   )
-
-;; Do not write anything past this comment. This is where Emacs will
-;; auto-generate custom variable definitions.
