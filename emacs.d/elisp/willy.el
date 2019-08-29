@@ -120,6 +120,12 @@
                              (smartparens-mode 0))))
 
 ;; -----------------------------------------------------------------------------
+;; Emacs Lisp
+
+(add-hook 'emacs-lisp-mode-hook (lambda ()
+                                  (paredit-mode 1)))
+
+;; -----------------------------------------------------------------------------
 ;; C/C++
 
 (add-hook 'c-mode-common-hook
@@ -181,17 +187,24 @@
       (aset ccls-client 24 'wy/unix-uri-to-windows-path))
     (error "could not find ccls lsp client")))
 
+;; -----------------------------------------------------------------------------
+;; General
+
+(with-eval-after-load 'projectile
+  (wy/add-to-list* 'projectile-globally-ignored-directories
+                   '(".vs" ".vscode" "buck-out" ".ccls-cache"))
+
+  (when (eq system-type 'windows-nt)
+    (setq projectile-indexing-method 'hybrid)
+    (setq projectile-generic-command "wsl find . -type f -printf '%P\\0'")
+    ;; NOTE(willy) monkey-patching vcs detection to avoid buggy git logic on Windows
+    (setf (symbol-function 'projectile-project-vcs) '(lambda (&optional _) 'none))))
+
 (defun wy/config ()
   (blink-cursor-mode 0)
   (prefer-coding-system 'utf-8-unix)
   (when (not (display-graphic-p))
     (xterm-mouse-mode 0)))
-
-;; -----------------------------------------------------------------------------
-;; Emacs Lisp
-
-(add-hook 'emacs-lisp-mode-hook (lambda ()
-                                  (paredit-mode 1)))
 
 ;; -----------------------------------------------------------------------------
 ;; Load vanilla Emacs config if no Spacemacs
