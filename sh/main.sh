@@ -44,6 +44,9 @@ dotsh() {
   eval "$EDITOR $HOME/dotfiles/sh/{main,local}.sh"
   . "$HOME/dotfiles/sh/bashrc"
 }
+most_recent_files() {
+  find "$1" -printf "%T+\t%p\n" | sort -r
+}
 git_clone_filter_all() {
   # NOTE(willy) ideally we'd add this filter too
   # --filter=tree:0

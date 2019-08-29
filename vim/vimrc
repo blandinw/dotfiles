@@ -83,6 +83,9 @@ set statusline=\ %F%m%r%h\ %w\ \ Line:\ %l/%L:%c
 
 set hidden " no need to write to disk when closing file
 
+" sh
+au FileType cpp set sw=2 sts=2
+
 " cpp
 au FileType cpp set sw=2 sts=2
 
