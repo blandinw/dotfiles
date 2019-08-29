@@ -40,17 +40,17 @@
         (switch-to-buffer-other-window buf)
       (term "zsh"))))
 
-(defun wy/ensure-package (package-name)
-  (unless (package-installed-p package-name)
-    (package-refresh-contents)
-    (package-install package-name)))
+(defun wy//ensure-packages (packages)
+  (if packages
+      (let ((pkg (car packages)))
+        (unless (package-installed-p pkg)
+          (package-install pkg))
+        (wy//ensure-packages (cdr packages)))
+    nil))
 
 (defun wy/ensure-packages (packages)
-  (if packages
-      (progn
-        (wy/ensure-package (car packages))
-        (wy/ensure-packages (cdr packages)))
-    nil))
+  (package-refresh-contents)
+  (wy//ensure-packages packages))
 
 (defun wy/delete-autosave-file ()
   (interactive)
@@ -84,7 +84,7 @@
 ;; Keys: Evil bindings
 
 (with-eval-after-load 'evil
-  (evil-mode t)
+  (evil-mode 1)
   (evil-ex-define-cmd "W" 'evil-write)
   (define-key evil-insert-state-map (kbd "<enter>") 'evil-ret-and-indent)
   (define-key evil-normal-state-map (kbd "-") 'evil-window-next)
@@ -197,8 +197,7 @@
 ;; Load vanilla Emacs config if no Spacemacs
 
 (when (not (boundp 'spacemacs-version))
-  (progn (load "no-spacemacs")
-         (wy/config)))
+  (load "vanilla"))
 
 ;; -----------------------------------------------------------------------------
 ;; Allow local customizations
