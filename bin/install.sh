@@ -173,13 +173,6 @@ touch "$DOTFILES/vim/local.vim"
 git_clone https://github.com/VundleVim/Vundle.vim.git "$DOTFILES/vim/bundle/Vundle.vim"
 
 # ------------------------------------------------------------------------------
-# Atom
-
-check_path atom
-sym atom/keymap.cson   .atom/keymap.cson
-sym atom/snippets.cson .atom/snippets.cson
-
-# ------------------------------------------------------------------------------
 # Emacs + Spacemacs
 
 check_path emacs
@@ -192,19 +185,6 @@ if [ ! -d "$PREFIX/.emacs.d/layers" ]; then
   git_clone https://github.com/syl20bnr/spacemacs "$PREFIX/.emacs.d"
 fi
 sym emacs.d/spacemacs .spacemacs
-
-# ------------------------------------------------------------------------------
-# IntelliJ Idea
-
-sym idea/ideavimrc .ideavimrc
-if [ "$(uname)" = "Darwin" ]; then
-  for ide in IdeaIC15 clion11 IdeaIC2018.2; do
-    sym idea/idea.vmoptions  Library/Preferences/$ide/idea.vmoptions
-    sym idea/idea.properties Library/Preferences/$ide/idea.properties
-    sym idea/willy.icls Library/Preferences/$ide/colors/willy.icls
-    sym idea/willy.xml Library/Preferences/$ide/keymaps/willy.xml
-  done
-fi
 
 echo "
 [38;5;184m [39m[38;5;184m_[39m[38;5;178m_[39m[38;5;214m_[39m[38;5;214m_[39m[38;5;214m_[39m[38;5;214m_[39m[38;5;214m_[39m[38;5;214m_[39m[38;5;214m_[39m[38;5;214m_[39m[38;5;214m_[39m[38;5;208m_[39m[38;5;208m_[39m[38;5;208m_[39m[38;5;208m_[39m[38;5;208m_[39m[38;5;208m [39m[38;5;208m[39m
