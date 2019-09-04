@@ -67,9 +67,13 @@ This function should only modify configuration layer settings."
                ("date:today..now" "Today's messages" ?t)
                ("date:7d..now" "Last 7 days" ?w)
                ("mime:image/*" "Messages with images" ?p))))
-     (org :variables
-          org-refile-targets '((org-agenda-files :maxlevel . 3)))
+     org
      python
+     racket
+     (scheme :variables
+             geiser-active-implementations '(chez)
+             geiser-mode-start-repl-p t
+             )
      shell
      shell-scripts
      syntax-checking
@@ -505,8 +509,8 @@ configuration.
 Put your configuration code here, except for variables that should be set
 before packages are loaded."
   (wy/config)
-  (setq-default ;evil-escape-key-sequence "jk"
-   persp-auto-save-opt 0)
+
+  (helm-projectile-on)
 
   ;; visual minimalism
   (kill-buffer spacemacs-buffer-name)
@@ -520,9 +524,6 @@ before packages are loaded."
   (spaceline-toggle-buffer-position-off)
   (spaceline-toggle-hud-off)
   (spaceline-compile)
-
-  (setq haskell-stylish-on-save t) ;; override haskell-mode hardcoded
-  (helm-projectile-on)
 
   ;; brew install ninja
   ;; git clone https://github.com/llvm/llvm-project.git
@@ -538,8 +539,7 @@ before packages are loaded."
                                                     "game"
                                                     ;; "buck-out/gen/game"
                                                     )
-                                                   (t "./a.out")))
-        epg-pinentry-mode 'ask)
+                                                   (t "./a.out"))))
 
   (add-hook 'c-mode-common-hook (lambda ()
                                   (dap-mode 1)
@@ -547,12 +547,23 @@ before packages are loaded."
                                   ;; enables mouse hover support
                                   (dap-tooltip-mode 1)))
 
+  ;; -----------------------------------------------------------------------------
+  ;; mu4e
+
   (when (boundp 'mu4-view-mode-map)
     (evilified-state-evilify-map
       mu4e-view-mode-map
       :mode mu4e-view-mode
       :bindings
       (kbd "gl") 'mu4e-view-go-to-url))
+
+  ;; -----------------------------------------------------------------------------
+  ;; Scheme
+
+  (with-eval-after-load 'company
+    (with-eval-after-load 'geiser
+      (when (and (spacemacs/system-is-mswindows))
+        (setq geiser-chez-binary "scheme.exe"))))
 
   (when (featurep 'make-network-process '(:family local))
     (pinentry-start))
