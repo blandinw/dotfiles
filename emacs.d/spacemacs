@@ -26,7 +26,6 @@ This function should only modify configuration layer settings."
    ;; a layer lazily. (default t)
    dotspacemacs-ask-for-lazy-installation t
 
-   ;; If non-nil layers with lazy install support are lazy installed.
    ;; List of additional paths where to look for configuration layers.
    ;; Paths must have a trailing slash (i.e. `~/.mycontribs/')
    dotspacemacs-configuration-layer-path '()
@@ -49,32 +48,10 @@ This function should only modify configuration layer settings."
      (lsp :variables
           lsp-ui-sideline-enable nil)
      markdown
-     (when (not (spacemacs/system-is-mswindows))
-       (mu4e :variables
-             mu4e-use-maildirs-extension t
-             mu4e-enable-notifications t
-             mu4e-enable-mode-line t
-             ;; INSIDE_EMACS tells pinentry to use emacs' pinentry.el
-             mu4e-get-mail-command (format "INSIDE_EMACS=%s mbsync -a" emacs-version)
-             mu4e-update-interval nil
-             mu4e-compose-signature-auto-include nil
-             mu4e-view-show-images t
-             mu4e-view-show-addresses t
-             mu4e-sent-messages-behavior 'delete
-             mu4e-confirm-quit nil
-             mu4e-change-filenames-when-moving t
-             mu4e-bookmarks
-             `(("flag:unread AND NOT flag:trashed" "Unread messages" ?u)
-               ("date:today..now" "Today's messages" ?t)
-               ("date:7d..now" "Last 7 days" ?w)
-               ("mime:image/*" "Messages with images" ?p))))
+     ocaml
      org
      python
      racket
-     (scheme :variables
-             geiser-active-implementations '(chez)
-             geiser-mode-start-repl-p t
-             )
      shell
      shell-scripts
      syntax-checking
@@ -119,7 +96,30 @@ This function should only modify configuration layer settings."
    ;; installs only the used packages but won't delete unused ones. `all'
    ;; installs *all* packages supported by Spacemacs and never uninstalls them.
    ;; (default is `used-only')
-   dotspacemacs-install-packages 'used-only))
+   dotspacemacs-install-packages 'used-only)
+
+  (when (not (spacemacs/system-is-mswindows))
+    (add-to-list
+     'dotspacemacs-configuration-layers
+     `(mu4e :variables
+           mu4e-use-maildirs-extension t
+           mu4e-enable-notifications t
+           mu4e-enable-mode-line t
+           ;; INSIDE_EMACS tells pinentry to use emacs' pinentry.el
+           mu4e-get-mail-command ,(format "INSIDE_EMACS=%s mbsync -a" emacs-version)
+           mu4e-update-interval nil
+           mu4e-compose-signature-auto-include nil
+           mu4e-view-show-images t
+           mu4e-view-show-addresses t
+           mu4e-sent-messages-behavior 'delete
+           mu4e-confirm-quit nil
+           mu4e-change-filenames-when-moving t
+           mu4e-bookmarks
+           `(("flag:unread AND NOT flag:trashed" "Unread messages" ?u)
+             ("date:today..now" "Today's messages" ?t)
+             ("date:7d..now" "Last 7 days" ?w)
+             ("mime:image/*" "Messages with images" ?p)))))
+  )
 
 (defun dotspacemacs/init ()
   "Initialization:
@@ -172,8 +172,8 @@ It should only modify the values of Spacemacs settings."
    dotspacemacs-use-spacelpa nil
 
    ;; If non-nil then verify the signature for downloaded Spacelpa archives.
-   ;; (default nil)
-   dotspacemacs-verify-spacelpa-archives nil
+   ;; (default t)
+   dotspacemacs-verify-spacelpa-archives t
 
    ;; If non-nil then spacemacs will check for updates at startup
    ;; when the current branch is not `develop'. Note that checking for
@@ -549,6 +549,44 @@ before packages are loaded."
                                   (dap-tooltip-mode 1)))
 
   ;; -----------------------------------------------------------------------------
+  ;; org-mode
+
+  ;; credit to @codygman
+  ;; not the first iteration, but since =, i h=  and =, i s= didn't work and inserting a subitem above doesn't make sense I made the capitalized versions insert a todo
+  ;; we can just rely upon =, s j= to move a heading up if need be
+  (defun my-org-insert-subheading (arg)
+    "Insert a new subheading and demote it.
+             Works for outline headings and for plain lists alike."
+    (interactive "P")
+    (evil-org-end-of-line) ;; go to end of line first
+    (org-insert-heading arg)
+    (cond
+     ((org-at-heading-p) (org-do-demote))
+     ((org-at-item-p) (org-indent-item))))
+
+  (defun my-org-insert-todo-subheading (arg)
+    "Insert a new subheading with TODO keyword or checkbox and demote it.
+      Works for outline headings and for plain lists alike."
+    (interactive "P")
+    (evil-org-end-of-line) ;; go to end of line first
+    (org-insert-todo-heading arg)
+    (cond
+     ((org-at-heading-p) (org-do-demote))
+     ((org-at-item-p) (org-indent-item))))
+
+  (spacemacs/set-leader-keys-for-major-mode 'org-mode "is" 'my-org-insert-subheading)
+  (spacemacs/set-leader-keys-for-major-mode 'org-mode "iS" 'my-org-insert-todo-subheading)
+  ;; introduce same parity for normal headings
+  ;; "ih" is already working org-insert-heading
+  (spacemacs/set-leader-keys-for-major-mode 'org-mode "ih" 'org-insert-heading-after-current)
+  (spacemacs/set-leader-keys-for-major-mode 'org-mode "iH" 'evil-org-org-insert-todo-heading-respect-content-below)
+
+  ;; -----------------------------------------------------------------------------
+  ;; racket
+
+  (spacemacs|add-company-backends :backends company-dcd :modes racket-mode)
+
+  ;; -----------------------------------------------------------------------------
   ;; mu4e
 
   (when (boundp 'mu4-view-mode-map)
@@ -557,14 +595,6 @@ before packages are loaded."
       :mode mu4e-view-mode
       :bindings
       (kbd "gl") 'mu4e-view-go-to-url))
-
-  ;; -----------------------------------------------------------------------------
-  ;; Scheme
-
-  (with-eval-after-load 'company
-    (with-eval-after-load 'geiser
-      (when (and (spacemacs/system-is-mswindows))
-        (setq geiser-chez-binary "scheme.exe"))))
 
   (when (featurep 'make-network-process '(:family local))
     (pinentry-start))

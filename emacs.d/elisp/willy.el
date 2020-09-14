@@ -1,3 +1,5 @@
+(setq lexical-binding 1)
+
 ;; -----------------------------------------------------------------------------
 ;; Base
 
@@ -62,6 +64,49 @@
   (let ((gitrepo (s-trim (shell-command-to-string "git config --get remote.origin.url"))))
     (cond ((not (string-empty-p gitrepo)) (concat (file-name-base gitrepo) ".org"))
           (t (concat (file-name-base (directory-file-name project-path)) ".org")))))
+
+(defun wy/archive-emails-older-than-n-months (n)
+  (interactive "nArchive messages older than how many months? ")
+
+  (mu4e~start)
+
+  ;; NOTE: we need lexical-let here for lambdas to capture these vars
+  ;; since this function returns before callbacks are called
+  (lexical-let* ((old-header-func mu4e-header-func)
+                 (old-found-func mu4e-found-func)
+                 (msgs nil))
+
+    (setq mu4e-header-func
+          (lambda (msg &optional point)
+            (push msg msgs)))
+
+    (setq mu4e-found-func
+          (lambda (nfound)
+            (setq mu4e-header-func old-header-func)
+            (setq mu4e-found-func old-found-func)
+
+            (when (not (= nfound (length msgs)))
+              (error "Expected same number for :found and number of msg S-exps"))
+
+            (let ((choice (read-char-exclusive (format "Archive %d messages? [y/n]" (length msgs)))))
+              (if (eq choice ?y)
+                  (progn
+                    (dolist (msg msgs)
+                      (mu4e~proc-move (mu4e-message-field msg :docid) mu4e-refile-folder "-N"))
+                    (message (format "Archived %d messages." (length msgs))))
+                (message "Aborted.")))))
+
+    (pcase-let ((`(,s ,M ,h ,d ,m ,y ,dow ,dst ,utcoff) (decode-time)))
+      (mu4e~proc-find (format "maildir:/%s\/.+/ date:..%s"
+                              wy/maildir-to-archive
+                              (format-time-string "%Y-%m-%d"
+                                                  (encode-time s M h d (- m n) y)))
+                      nil
+                      mu4e-headers-sort-field
+                      mu4e-headers-sort-direction
+                      nil
+                      nil
+                      nil))))
 
 (defvar wy/after-config-hook)
 (defun wy/config ()
@@ -145,7 +190,12 @@
           org-refile-targets '((org-agenda-files :maxlevel . 3))
           org-projectile-per-project-filepath 'wy/org-projectile-find-project-orgfile
           org-blank-before-new-entry '((heading) (plain-list-item))
-          org-catch-invisible-edits 'smart)
+          org-catch-invisible-edits 'smart
+          org-agenda-custom-commands
+          '(("n" "Agenda and all TODOs (willy)"
+             ((agenda "")
+              (alltodo "" '(org-agenda-skip-function '(org-agenda-skip-entry-if 'scheduled)))))))
+
     (add-hook 'org-mode-hook (lambda ()
                                (smartparens-mode 0))))
 
@@ -166,6 +216,31 @@
 
   (add-hook 'emacs-lisp-mode-hook (lambda ()
                                     (paredit-mode 1)))
+
+  ;; -----------------------------------------------------------------------------
+  ;; Racket
+
+  (add-hook 'racket-mode-hook (lambda ()
+                                (paredit-mode 1)))
+
+  (add-hook 'racket-repl-mode-hook
+            (lambda ()
+              (define-key racket-repl-mode-map (kbd "C-w") nil)))
+
+  ;; -----------------------------------------------------------------------------
+  ;; Ocaml
+
+  (let ((ocamlformat-elisp-dir (expand-file-name "~/.opam/default/share/emacs/site-lisp")))
+    (when (file-exists-p ocamlformat-elisp-dir)
+      (add-to-list 'load-path ocamlformat-elisp-dir)
+      (require 'ocamlformat)
+      (add-hook 'tuareg-mode-hook
+                (lambda ()
+                  (add-hook 'before-save-hook #'ocamlformat-before-save)
+                  (if (not (boundp 'spacemacs-version))
+                      (define-key tuareg-mode-map (kbd "=") #'ocamlformat)
+                    (spacemacs/set-leader-keys-for-major-mode 'tuareg-mode
+                      "=" 'ocamlformat))))))
 
   ;; -----------------------------------------------------------------------------
   ;; C/C++
@@ -230,10 +305,10 @@
       (error "could not find ccls lsp client")))
 
   ;; -----------------------------------------------------------------------------
-  ;; Scheme
+  ;; Python
 
-  (add-hook 'scheme-mode-hook (lambda ()
-                                (paredit-mode 1)))
+  (with-eval-after-load 'python
+    (setq flycheck-python-pycompile-executable "python3"))
 
   ;; -----------------------------------------------------------------------------
   ;; General
@@ -261,24 +336,25 @@
 ;; -----------------------------------------------------------------------------
 ;; Allow local customizations
 
-(let ((emacsd-directory (file-name-directory (directory-file-name (file-name-directory load-file-name))))
-      (local-file (locate-library "local")))
-  (when local-file (load local-file))
+(when load-file-name
+  (let ((emacsd-directory (file-name-directory (directory-file-name (file-name-directory load-file-name))))
+        (local-file (locate-library "local")))
+    (when local-file (load local-file))
 
-  (setq custom-file (concat emacsd-directory "custom.el"))
-  (if (not (boundp 'local-custom))
-      ;; no local custom, just load regular file
-      (load custom-file)
-    (let ((generated-custom-file (concat emacsd-directory
-                                         "local-generated-custom.el")))
-      ;; regenerate?
-      (when (or (file-newer-than-file-p custom-file generated-custom-file)
-                (file-newer-than-file-p local-file generated-custom-file))
-        (with-temp-file generated-custom-file
-          (let* ((custom (car (read-from-string (wy/file-string custom-file))))
-                 (merged (append custom local-custom)))
-            (prin1 merged (current-buffer)))))
-      (load generated-custom-file))))
+    (setq custom-file (concat emacsd-directory "custom.el"))
+    (if (not (boundp 'local-custom))
+        ;; no local custom, just load regular file
+        (load custom-file)
+      (let ((generated-custom-file (concat emacsd-directory
+                                           "local-generated-custom.el")))
+        ;; regenerate?
+        (when (or (file-newer-than-file-p custom-file generated-custom-file)
+                  (file-newer-than-file-p local-file generated-custom-file))
+          (with-temp-file generated-custom-file
+            (let* ((custom (car (read-from-string (wy/file-string custom-file))))
+                   (merged (append custom local-custom)))
+              (prin1 merged (current-buffer)))))
+        (load generated-custom-file)))))
 
 (provide 'willy)
 ;;; willy.el ends here
