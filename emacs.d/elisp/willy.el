@@ -150,6 +150,18 @@
                                (smartparens-mode 0))))
 
   ;; -----------------------------------------------------------------------------
+  ;; Ledger-mode
+
+  (with-eval-after-load 'ledger-mode
+    (setq ledger-reports
+      '(("bal" "gpg --batch --decrypt --quiet %(ledger-file) | %(binary) bal -f - -X $ not Equity:Initial")
+        ("reg" "gpg --batch --decrypt --quiet %(ledger-file) | %(binary) reg -f - -X $ not Equity:Initial")
+        ("payee" "gpg --batch --decrypt --quiet %(ledger-file) | %(binary) reg @%(payee) -f - -X $ not Equity:Initial")
+        ("account" "gpg --batch --decrypt --quiet %(ledger-file) | %(binary) reg %(account) -f - -X $ not Equity:Initial")
+        ("budget" "gpg --batch --decrypt --quiet %(ledger-file) | %(binary) budget -f - -X $ not Equity and not Assets")
+        )))
+
+  ;; -----------------------------------------------------------------------------
   ;; Emacs Lisp
 
   (add-hook 'emacs-lisp-mode-hook (lambda ()

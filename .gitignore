@@ -33,6 +33,8 @@
 /emacs.d/projectile-bookmarks.eld
 /emacs.d/projectile.cache
 /emacs.d/elisp/local*.el
+.yas-compiled-snippets.el
+ido.last
 
 # tmux
 /tmux/local.conf

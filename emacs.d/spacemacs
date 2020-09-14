@@ -44,6 +44,7 @@ This function should only modify configuration layer settings."
             c-c++-lsp-cache-dir ".ccls-cache")
      dap
      emacs-lisp
+     finance
      git
      (lsp :variables
           lsp-ui-sideline-enable nil)
