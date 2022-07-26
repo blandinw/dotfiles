@@ -65,6 +65,16 @@ check_path() {
   normal "\n"
 }
 
+check() {
+  log "$2... "
+  if [ "$1" "$2" ] >/dev/null; then
+    green 'found'
+  else
+    red 'not found'
+  fi
+  normal "\n"
+}
+
 git_clone() {
   log "cloning %s... " "$(bold "$1")"
   if [ -d "$2" ]; then
@@ -176,15 +186,30 @@ git_clone https://github.com/VundleVim/Vundle.vim.git "$DOTFILES/vim/bundle/Vund
 # Emacs + Spacemacs
 
 check_path emacs
-if [ ! -d "$PREFIX/.emacs.d/layers" ]; then
-  # backup existing emacs.d
-  sym emacs.d .emacs.d
-  # remove the symlink we just created
-  rm "$PREFIX/.emacs.d"
-  # install Spacemacs
-  git_clone https://github.com/syl20bnr/spacemacs "$PREFIX/.emacs.d"
-fi
-sym emacs.d/spacemacs .spacemacs
+
+# if [ ! -d "$PREFIX/.emacs.d/layers" ]; then
+#   # backup existing emacs.d
+#   sym emacs.d .emacs.d
+#   # remove the symlink we just created
+#   rm "$PREFIX/.emacs.d"
+#   # install Spacemacs
+#   git_clone https://github.com/syl20bnr/spacemacs "$PREFIX/.emacs.d"
+# fi
+# sym emacs.d/spacemacs .spacemacs
+
+check -f "$PREFIX/.emacs.d/bin/doom"
+sym emacs.d/doom.d .doom.d
+
+# ------------------------------------------------------------------------------
+# Readline
+
+sym inputrc .inputrc
+
+# ------------------------------------------------------------------------------
+# Fennel
+
+check_path lua
+sym fennelrc .fennelrc
 
 # ------------------------------------------------------------------------------
 # Ledger

@@ -1,4 +1,4 @@
-#!/usr/bin/env sh
+#!/bin/bash
 
 # shellcheck source=z.sh
 . "$HOME/dotfiles/sh/z.sh"
@@ -28,34 +28,10 @@ else
   alias ll='ls -l -h --color'
 fi
 alias vi='vim --noplugin'
-alias hosts='sudo vim /etc/hosts'
 alias tmuxw='tmux new -s w'
-alias ed='emacs --daemon'
-alias e='emacsclient'
 alias d=docker
-c() {
-  cd "$1" || return
-  ll
-}
-dotfiles() {
-  eval "$EDITOR $HOME/dotfiles"
-}
-dotsh() {
-  eval "$EDITOR $HOME/dotfiles/sh/{main,local}.sh"
-  . "$HOME/dotfiles/sh/bashrc"
-}
-most_recent_files() {
-  find "$1" -printf "%T+\t%p\n" | sort -r
-}
-git_clone_filter_all() {
-  # NOTE(willy) ideally we'd add this filter too
-  # --filter=tree:0
-  git clone \
-      --depth 1 \
-      --filter=blob:none \
-      --no-checkout \
-      "$@";
-}
+alias e=emacsclient
+alias p=python
 rmpath() (
   set -e
   PATH="$(echo "$PATH" | perl -anE 'chomp ; @arr = split ":" ; @arr = grep(!/'"$1"'/, @arr) ; say join(":", @arr)')"
@@ -64,6 +40,34 @@ rmpath() (
 )
 uri() {
   node -e "console.log(encodeURIComponent(\`$1\`))"
+}
+geocode() {
+  curl -sL "https://geocode.xyz/$(uri "$1")?json=1" | jq -r '@text "\(.latt),\(.longt)"'
+}
+csv() (
+  set -ex
+
+  file="$1"
+  shift
+  declare -a args
+
+  if [ -z "$1" ]; then
+    args=("--all")
+  else
+    args=("$@")
+  fi
+
+  if [[ "$file" =~ \.xls$ ]]; then
+    base="$(basename "$file" .xls)"
+    soffice --convert-to "xlsx:Calc MS Excel 2007 XML" "$file"
+    xlsx2csv.py "${args[@]}" "$base.xlsx" > "$base.csv"
+  elif [[ "$file" =~ \.xlsx$ ]]; then
+    base="$(basename "$file" .xlsx)"
+    xlsx2csv.py "${args[@]}" "$file" > "$base.csv"
+  fi
+)
+notif() {
+  osascript -e 'display notification "'"$1"'"'
 }
 
 # git
@@ -160,15 +164,59 @@ hbsheuns() {
   hg shelve && hg bottom && hg unshelve
 }
 
-# python
-alias p='python'
-alias json='python -m json.tool'
-
 # rust
 export PATH="$HOME/.cargo/bin:$PATH"
 if [ -f "$HOME/.cargo/env" ]; then
   . "$HOME/.cargo/env"
 fi
+
+# erlang
+alias r3=rebar3
+edoc_r3() {
+  rebar3 edoc || true
+
+  if [ -z "$1" ]; then
+    fd --max-depth 2 . _build/docs
+  else
+    pushd "$(fd "$1" _build/docs | head -n1)"
+
+    if [ -f rebar.config ]; then
+      # remove edoc customizations (edown, etc.)
+      sed -i.old -e '/{profiles/,/}\./d' rebar.config
+      rebar3 edoc || true
+      mv rebar.config.old rebar.config
+    elif [ -f Makefile ]; then
+      make edoc
+    else
+      popd
+    fi
+
+    [ -f doc/index.html ] && open doc/index.html
+    [ -f README.md ] && marked README.md -o README.html && open README.html
+    [ -f README.asciidoc ] && asciidoctor README.asciidoc && open README.html
+  fi
+}
+
+edoc_mix() {
+  DIR="$(fd --max-depth 1 "$1" deps)"
+  cd "$DIR"
+  if [ -f rebar.config ]; then
+    edoc_r3 "$@"
+  elif [ -f mix.exs ]; then
+    popd
+    mix hex.docs offline "$(basename "$DIR")"
+  fi
+}
+
+edoc() (
+  set -ex
+
+  if [ -f rebar.config ]; then
+    edoc_r3 "$@"
+  elif [ -f mix.exs ]; then
+    edoc_mix "$@"
+  fi
+)
 
 # bat
 if command -v bat >/dev/null; then
